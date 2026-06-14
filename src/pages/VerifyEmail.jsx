@@ -1,6 +1,8 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Link, useSearchParams, useNavigate } from 'react-router-dom'
 import { authApi } from '../services/api'
+
+const RESEND_DELAY = 60
 
 function Logo() {
   return (
@@ -17,15 +19,17 @@ function Logo() {
 }
 
 export default function VerifyEmail() {
-  const [params] = useSearchParams()
-  const navigate = useNavigate()
-  const token = params.get('token')
+  const [params]  = useSearchParams()
+  const navigate  = useNavigate()
+  const token     = params.get('token')
 
-  const [phase,    setPhase]    = useState('loading') // 'loading' | 'success' | 'error'
-  const [email,    setEmail]    = useState('')
-  const [sending,  setSending]  = useState(false)
-  const [resent,   setResent]   = useState(false)
-  const [resendErr,setResendErr]= useState('')
+  const [phase,     setPhase]     = useState('loading')
+  const [email,     setEmail]     = useState('')
+  const [sending,   setSending]   = useState(false)
+  const [resent,    setResent]    = useState(false)
+  const [resendErr, setResendErr] = useState('')
+  const [countdown, setCountdown] = useState(0)
+  const timerRef = useRef(null)
 
   useEffect(() => {
     if (!token) { setPhase('error'); return }
@@ -34,15 +38,29 @@ export default function VerifyEmail() {
       .catch(() => setPhase('error'))
   }, [token])
 
+  const startCountdown = () => {
+    setCountdown(RESEND_DELAY)
+    clearInterval(timerRef.current)
+    timerRef.current = setInterval(() => {
+      setCountdown(prev => {
+        if (prev <= 1) { clearInterval(timerRef.current); return 0 }
+        return prev - 1
+      })
+    }, 1000)
+  }
+
+  useEffect(() => () => clearInterval(timerRef.current), [])
+
   const handleResend = async (e) => {
     e.preventDefault()
-    if (!email.trim()) return
+    if (!email.trim() || sending || countdown > 0) return
     setSending(true); setResendErr('')
     try {
       await authApi.resendVerification(email.trim().toLowerCase())
       setResent(true)
+      startCountdown()
     } catch (err) {
-      setResendErr(err.response?.data?.message || 'Erreur lors de l\'envoi.')
+      setResendErr(err.response?.data?.message || "Erreur lors de l'envoi.")
     } finally { setSending(false) }
   }
 
@@ -55,7 +73,6 @@ export default function VerifyEmail() {
 
         <div className="rounded-3xl border border-[#E8DDC7] bg-white p-8 shadow-soft">
 
-          {/* Loading */}
           {phase === 'loading' && (
             <div className="flex flex-col items-center gap-4 py-4">
               <div className="w-8 h-8 border-2 border-[#252840]/20 border-t-[#252840] rounded-full animate-spin" />
@@ -63,7 +80,6 @@ export default function VerifyEmail() {
             </div>
           )}
 
-          {/* Success */}
           {phase === 'success' && (
             <div className="text-center animate-fade-up">
               <span className="mx-auto grid h-16 w-16 place-items-center rounded-full bg-[rgba(61,92,40,0.15)] text-[#3D5C28] mb-5">
@@ -84,7 +100,6 @@ export default function VerifyEmail() {
             </div>
           )}
 
-          {/* Error */}
           {phase === 'error' && (
             <div className="animate-fade-up">
               <span className="mx-auto grid h-16 w-16 place-items-center rounded-full bg-red-50 text-red-400 mb-5 mx-auto block">
@@ -95,39 +110,47 @@ export default function VerifyEmail() {
               </span>
               <h1 className="text-2xl font-black tracking-tight text-[#252840] text-center">Lien invalide ou expiré</h1>
               <p className="mt-2 text-sm text-[#756B5B] mb-6 text-center">
-                Ce lien de vérification n'est plus valide. Rentre ton email pour en recevoir un nouveau.
+                Ce lien de vérification n'est plus valide. Entre ton email pour en recevoir un nouveau.
               </p>
 
-              {resent ? (
-                <div className="flex items-center gap-2 bg-[#3D5C28]/10 px-4 py-3 rounded-xl">
+              {resent && (
+                <div className="flex items-center gap-2 bg-[#3D5C28]/10 px-4 py-3 rounded-xl mb-3">
                   <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#3D5C28" strokeWidth="2" strokeLinecap="round"><path d="M2 7l3 3 7-6"/></svg>
                   <p className="text-sm font-semibold text-[#3D5C28]">Email de vérification envoyé !</p>
                 </div>
-              ) : (
-                <form onSubmit={handleResend} className="space-y-3">
-                  {resendErr && (
-                    <p className="text-red-500 text-sm bg-red-50 px-3 py-2 rounded-lg">{resendErr}</p>
-                  )}
-                  <div>
-                    <label className="block text-sm font-bold text-[#252840] mb-1">Ton adresse email</label>
-                    <input
-                      type="email"
-                      value={email}
-                      onChange={e => setEmail(e.target.value)}
-                      placeholder="toi@exemple.com"
-                      required
-                      className="w-full h-11 rounded-xl border border-[#E8DDC7] bg-[#FDFAF4] px-4 text-sm outline-none focus:border-[#C8864B] transition-colors"
-                    />
-                  </div>
-                  <button
-                    type="submit"
-                    disabled={sending}
-                    className="w-full py-3 rounded-full bg-[#252840] text-white text-sm font-bold border-none cursor-pointer hover:bg-[#363B6B] transition-colors disabled:opacity-50"
-                  >
-                    {sending ? 'Envoi…' : 'Renvoyer le lien'}
-                  </button>
-                </form>
               )}
+
+              <form onSubmit={handleResend} className="space-y-3">
+                {resendErr && (
+                  <p className="text-red-500 text-sm bg-red-50 px-3 py-2 rounded-lg">{resendErr}</p>
+                )}
+                <div>
+                  <label className="block text-sm font-bold text-[#252840] mb-1">Ton adresse email</label>
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={e => setEmail(e.target.value)}
+                    placeholder="toi@exemple.com"
+                    required
+                    className="w-full h-11 rounded-xl border border-[#E8DDC7] bg-[#FDFAF4] px-4 text-sm outline-none focus:border-[#C8864B] transition-colors"
+                  />
+                </div>
+                <button
+                  type="submit"
+                  disabled={sending || countdown > 0}
+                  className="w-full py-3 rounded-full bg-[#252840] text-white text-sm font-bold border-none cursor-pointer hover:bg-[#363B6B] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {sending
+                    ? 'Envoi…'
+                    : countdown > 0
+                      ? `Renvoyer dans 0:${String(countdown).padStart(2, '0')}`
+                      : 'Renvoyer le lien'}
+                </button>
+              </form>
+
+              <p className="mt-3 text-xs text-center text-[#B0A898]">
+                Pense à vérifier ton dossier spam si tu ne vois rien.
+              </p>
 
               <button
                 onClick={() => navigate('/')}

@@ -1,6 +1,8 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import api from '../services/api'
+
+const RESEND_DELAY = 60
 
 function Logo() {
   return (
@@ -17,21 +19,38 @@ function Logo() {
 }
 
 export default function ForgotPassword() {
-  const navigate = useNavigate()
-  const [email, setEmail] = useState('')
-  const [sent, setSent] = useState(false)
-  const [error, setError] = useState('')
-  const [loading, setLoading] = useState(false)
+  const navigate  = useNavigate()
+  const [email,    setEmail]    = useState('')
+  const [sent,     setSent]     = useState(false)
+  const [error,    setError]    = useState('')
+  const [loading,  setLoading]  = useState(false)
+  const [countdown, setCountdown] = useState(0)
+  const timerRef = useRef(null)
+
+  useEffect(() => () => clearInterval(timerRef.current), [])
+
+  const startCountdown = () => {
+    setCountdown(RESEND_DELAY)
+    clearInterval(timerRef.current)
+    timerRef.current = setInterval(() => {
+      setCountdown(prev => {
+        if (prev <= 1) { clearInterval(timerRef.current); return 0 }
+        return prev - 1
+      })
+    }, 1000)
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    if (loading || countdown > 0) return
     setError('')
     setLoading(true)
     try {
       await api.post('/auth/forgot-password', { email })
       setSent(true)
+      startCountdown()
     } catch (err) {
-      setError(err.response?.data?.message || 'Erreur lors de l\'envoi')
+      setError(err.response?.data?.message || "Erreur lors de l'envoi")
     } finally {
       setLoading(false)
     }
@@ -54,14 +73,30 @@ export default function ForgotPassword() {
                 </svg>
               </span>
               <h1 className="text-2xl font-black tracking-tight text-[#252840]">Email envoyé</h1>
-              <p className="mt-2 text-sm text-[#756B5B]">
+              <p className="mt-2 text-sm text-[#756B5B] leading-relaxed">
                 Si un compte existe pour{' '}
-                <span className="font-semibold text-[#252840]">{email || 'ton email'}</span>,
+                <span className="font-semibold text-[#252840]">{email}</span>,
                 tu recevras un lien de réinitialisation dans quelques minutes.
               </p>
+              <p className="mt-2 text-sm text-[#B0A898]">
+                Pense à vérifier ton dossier spam si tu ne vois rien.
+              </p>
+
+              <button
+                onClick={handleSubmit}
+                disabled={loading || countdown > 0}
+                className="mt-5 w-full py-2.5 rounded-full border border-[#E8DDC7] text-sm font-semibold text-[#756B5B] bg-transparent cursor-pointer hover:border-[#252840] hover:text-[#252840] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+              >
+                {loading
+                  ? 'Envoi…'
+                  : countdown > 0
+                    ? `Renvoyer dans 0:${String(countdown).padStart(2, '0')}`
+                    : 'Renvoyer le lien'}
+              </button>
+
               <Link
                 to="/"
-                className="mt-6 flex w-full items-center justify-center rounded-full bg-[#252840] px-4 py-3 text-sm font-bold text-white no-underline hover:bg-[#363B6B] transition-colors"
+                className="mt-4 flex w-full items-center justify-center rounded-full bg-[#252840] px-4 py-3 text-sm font-bold text-white no-underline hover:bg-[#363B6B] transition-colors"
               >
                 Retour à l'accueil
               </Link>
@@ -91,7 +126,7 @@ export default function ForgotPassword() {
                       type="email"
                       value={email}
                       onChange={e => setEmail(e.target.value)}
-                      placeholder="jimel@email.com"
+                      placeholder="toi@exemple.com"
                       required
                       className="w-full h-11 rounded-xl border border-[#E8DDC7] bg-[#FDFAF4] pl-10 pr-4 text-sm outline-none focus:border-[#C8864B] transition-colors"
                     />

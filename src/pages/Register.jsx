@@ -1,31 +1,61 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import useAuthStore from '../store/authStore'
 import api, { authApi } from '../services/api'
 
+const RESEND_DELAY = 60
+
 function ResendVerification({ email }) {
-  const [sent,  setSent]  = useState(false)
-  const [err,   setErr]   = useState('')
-  const [busy,  setBusy]  = useState(false)
+  const [sent,      setSent]      = useState(false)
+  const [err,       setErr]       = useState('')
+  const [busy,      setBusy]      = useState(false)
+  const [countdown, setCountdown] = useState(RESEND_DELAY)
+  const timerRef = useRef(null)
+
+  const startCountdown = () => {
+    setCountdown(RESEND_DELAY)
+    clearInterval(timerRef.current)
+    timerRef.current = setInterval(() => {
+      setCountdown(prev => {
+        if (prev <= 1) { clearInterval(timerRef.current); return 0 }
+        return prev - 1
+      })
+    }, 1000)
+  }
+
+  useEffect(() => {
+    startCountdown()
+    return () => clearInterval(timerRef.current)
+  }, [])
 
   const send = async () => {
-    if (!email) return
+    if (!email || countdown > 0 || busy) return
     setBusy(true); setErr('')
     try {
       await authApi.resendVerification(email)
       setSent(true)
+      startCountdown()
     } catch (e) {
       setErr(e.response?.data?.message || 'Erreur lors du renvoi.')
     } finally { setBusy(false) }
   }
 
-  if (sent) return <p className="mt-4 text-sm font-semibold text-[#3D5C28]">Email renvoyé !</p>
   return (
-    <div className="mt-4">
+    <div className="mt-5">
       {err && <p className="text-xs text-red-500 mb-2">{err}</p>}
-      <button onClick={send} disabled={busy}
-        className="text-sm font-semibold text-[#756B5B] bg-transparent border-none cursor-pointer hover:text-[#252840] transition-colors disabled:opacity-50">
-        {busy ? 'Envoi…' : 'Renvoyer l\'email de vérification'}
+      {sent && (
+        <p className="text-sm font-semibold text-[#3D5C28] mb-2">Email renvoyé !</p>
+      )}
+      <button
+        onClick={send}
+        disabled={countdown > 0 || busy}
+        className="text-sm font-semibold text-[#756B5B] bg-transparent border-none cursor-pointer hover:text-[#252840] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+      >
+        {busy
+          ? 'Envoi…'
+          : countdown > 0
+            ? `Renvoyer dans 0:${String(countdown).padStart(2, '0')}`
+            : "Renvoyer l'email de confirmation"}
       </button>
     </div>
   )
@@ -164,18 +194,24 @@ export default function Register() {
   if (step === 'verify-email') {
     return (
       <div className="min-h-screen bg-[#F8F4EA] flex items-center justify-center px-4 py-16">
-        <div className="w-full max-w-md text-center animate-fade-up">
-          <div className="mx-auto mb-6 grid h-20 w-20 place-items-center rounded-full bg-[rgba(61,92,40,0.12)] text-[#3D5C28]">
-            <svg width="36" height="36" viewBox="0 0 36 36" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-              <rect x="3" y="8" width="30" height="22" rx="3"/><path d="M3 15l15 9 15-9"/>
-            </svg>
+        <div className="w-full max-w-md animate-fade-up">
+          <div className="rounded-3xl border border-[#E8DDC7] bg-white p-10 shadow-soft text-center">
+            <div className="mx-auto mb-6 grid h-20 w-20 place-items-center rounded-full bg-[rgba(61,92,40,0.12)] text-[#3D5C28]">
+              <svg width="36" height="36" viewBox="0 0 36 36" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                <rect x="3" y="8" width="30" height="22" rx="3"/><path d="M3 15l15 9 15-9"/>
+              </svg>
+            </div>
+            <h1 className="text-2xl font-black tracking-tight text-[#252840]">Vérifie ta boîte mail !</h1>
+            <p className="mt-3 text-sm text-[#756B5B] leading-relaxed">
+              Un email de confirmation a été envoyé à{' '}
+              <strong className="text-[#252840]">{form.email}</strong>.
+              Clique sur le bouton qu'il contient pour activer ton compte.
+            </p>
+            <p className="mt-2 text-sm text-[#B0A898]">
+              Pense à vérifier ton dossier spam si tu ne vois rien.
+            </p>
+            <ResendVerification email={form.email} />
           </div>
-          <h1 className="text-3xl font-black tracking-tight text-[#252840]">Vérifie ta boîte mail !</h1>
-          <p className="mt-3 text-[#756B5B]">
-            Un lien de confirmation t'a été envoyé à <strong className="text-[#252840]">{form.email}</strong>.
-            Clique dessus pour activer ton compte.
-          </p>
-          <ResendVerification email={form.email} />
         </div>
       </div>
     )
