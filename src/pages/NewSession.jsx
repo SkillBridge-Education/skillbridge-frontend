@@ -108,29 +108,26 @@ export default function NewSession() {
     setLoading(true)
     try {
       const scheduledAt = new Date(`${form.date}T${form.time}:00`).toISOString()
-      const body = {
+
+      if (GROUP_SESSIONS_ENABLED && form.sessionMode === 'cadree' && form.invitedIds.length > 1) {
+        // Session de groupe avec plusieurs participants
+        const res = await api.post('/sessions/group', {
+          title:             form.title,
+          estimatedDuration: Number(form.duration),
+          scheduledAt,
+          learnerIds:        form.invitedIds,
+        })
+        navigate('/sessions')
+        return
+      }
+
+      // Session classique (1 learner)
+      const res = await api.post('/sessions', {
         title:             form.title,
         estimatedDuration: Number(form.duration),
         scheduledAt,
         learnerId:         form.invitedIds[0],
-      }
-      if (GROUP_SESSIONS_ENABLED) {
-        body.isOpen = form.sessionMode === 'ouverte'
-        if (form.sessionMode === 'cadree') {
-          body.maxParticipants = form.maxParticipants
-          body.invitedIds      = form.invitedIds.slice(1)
-        } else {
-          if (form.openLimit) body.maxParticipants = Number(form.openLimit)
-        }
-      }
-      const res = await api.post('/sessions', body)
-      if (GROUP_SESSIONS_ENABLED) {
-        const sessionId = res.data?.session?.id ?? res.data?.id
-        if (form.sessionMode === 'ouverte' && sessionId) {
-          setCreatedLink(`${window.location.origin}/sessions/${sessionId}`)
-          return
-        }
-      }
+      })
       navigate('/sessions')
     } catch (err) {
       setError(err.response?.data?.message || 'Erreur lors de la création')
@@ -261,8 +258,12 @@ export default function NewSession() {
               </button>
 
               {/* Carte Session ouverte */}
-              <button type="button" disabled
-                className="text-left p-5 rounded-2xl border-[2px] border-black/[0.06] bg-white/60 opacity-70 cursor-not-allowed transition-all">
+              <button type="button"
+                onClick={() => set('sessionMode', 'ouverte')}
+                className={`text-left p-5 rounded-2xl border-[2px] cursor-pointer transition-all bg-transparent
+                  ${form.sessionMode === 'ouverte'
+                    ? 'border-[#3D5C28] bg-[#EEF4E8]'
+                    : 'border-black/[0.09] hover:border-[#3D5C28]/40 bg-white'}`}>
                 <div className="flex items-center gap-3 mb-3">
                   <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-[#EEF4E8]">
                     <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="#3D5C28" strokeWidth="1.6" strokeLinecap="round">
@@ -272,7 +273,7 @@ export default function NewSession() {
                   </div>
                   <div>
                     <p className="text-[14px] font-bold text-[#1A1410]">Session ouverte</p>
-                    <span className="text-[10px] font-bold bg-[#ECEEF8] text-[#252840] px-2 py-0.5 rounded-full">Bientôt disponible</span>
+                    {form.sessionMode === 'ouverte' && <p className="text-[10px] text-[#3D5C28] font-semibold">Sélectionné</p>}
                   </div>
                 </div>
                 <p className="text-[12px] text-[#7A6E5C] leading-relaxed">
@@ -320,9 +321,9 @@ export default function NewSession() {
                   {form.invitedIds.length} participant{form.invitedIds.length > 1 ? 's' : ''} sélectionné{form.invitedIds.length > 1 ? 's' : ''}
                 </p>
               )}
-              {form.invitedIds.length > 1 && (
-                <p className="text-[12px] text-[#C8864B] bg-[#FBF1E7] px-4 py-3 rounded-xl">
-                  Les sessions multi-participants arrivent bientôt, seul le premier invité sera convié pour l'instant.
+              {GROUP_SESSIONS_ENABLED && form.invitedIds.length > 1 && (
+                <p className="text-[12px] text-[#3D5C28] bg-[#EEF4E8] px-4 py-3 rounded-xl">
+                  Session de groupe : {form.invitedIds.length} participants invités.
                 </p>
               )}
             </div>
@@ -344,7 +345,12 @@ export default function NewSession() {
           )}
 
           <button type="submit"
-            disabled={loading || !form.sessionMode || form.invitedIds.length === 0 || (balance !== null && balance < form.duration * form.creditsPerMin)}
+            disabled={
+              loading ||
+              !form.sessionMode ||
+              (form.sessionMode === 'cadree' && form.invitedIds.length === 0) ||
+              (balance !== null && balance < form.duration * form.creditsPerMin)
+            }
             className="w-full py-3 rounded-xl bg-[#252840] text-white text-[14px] font-bold border-none cursor-pointer hover:bg-[#363B6B] transition-all disabled:opacity-50">
             {loading ? 'Création…' : 'Créer la session'}
           </button>

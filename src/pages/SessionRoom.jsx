@@ -12,7 +12,7 @@ const fmt = (s) =>
 export default function SessionRoom() {
   const { id }      = useParams()
   const navigate    = useNavigate()
-  const { user }    = useAuthStore()
+  const { user, setUser } = useAuthStore()
   const addToast    = useToast()
   const iframeRef   = useRef(null)
   const intervalRef = useRef(null)
@@ -156,9 +156,14 @@ export default function SessionRoom() {
     try {
       const res = await api.post(`/sessions/${id}/end`, { durationSeconds: seconds })
       setEndResult({
-        creditsToTeacher: res.data.creditsToTeacher ?? null,
-        creditsRefunded:  res.data.creditsRefunded  ?? null,
+        creditsToTeacher: res.data.teacherCreditsPaid    ?? null,
+        creditsRefunded:  res.data.learnerCreditsRefunded ?? null,
       })
+      // Rafraîchir le solde dans la navbar
+      api.get('/users/me').then(r => {
+        const u = r.data.user ?? r.data
+        if (u) setUser(u)
+      }).catch(() => {})
     } catch (e) { console.warn('end error:', e) }
     setPhase('ended')
   }

@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 import {
   Bell, LogOut, Menu, X, Download,
   Home, Users, CalendarDays, MessageCircle, Coins,
+  UserPlus, CheckCheck,
 } from 'lucide-react'
 import useAuthStore from '../store/authStore'
 import CreditIcon from './CreditIcon'
@@ -66,17 +67,38 @@ function CreditPopover({ balance, onClose, placement = 'below' }) {
   )
 }
 
+function notifIcon(type) {
+  if (type === 'CONNECTION_REQUEST') return <UserPlus size={14} />
+  if (type === 'CONNECTION_ACCEPTED') return <Users size={14} />
+  if (type === 'MESSAGE_RECEIVED') return <MessageCircle size={14} />
+  if (type?.startsWith('SESSION_')) return <CalendarDays size={14} />
+  return <Bell size={14} />
+}
+
+function fmtNotifDate(iso) {
+  if (!iso) return ''
+  const d = new Date(iso)
+  const now = new Date()
+  const diff = Math.floor((now - d) / 1000)
+  if (diff < 60) return 'à l\'instant'
+  if (diff < 3600) return `il y a ${Math.floor(diff / 60)} min`
+  if (diff < 86400) return `il y a ${Math.floor(diff / 3600)} h`
+  return d.toLocaleDateString('fr', { day: '2-digit', month: 'short' })
+}
+
 function NotifPanel({ notifications, dismiss, dismissAll, onClose, placement = 'below' }) {
   const navigate = useNavigate()
   const cls = placement === 'left'
     ? 'animate-modal-in absolute top-0 right-full mr-3 w-80 rounded-2xl border border-[#E8DDC7] bg-white shadow-soft z-50 overflow-hidden'
     : 'animate-modal-in absolute top-full right-0 mt-2 w-80 rounded-2xl border border-[#E8DDC7] bg-white shadow-soft z-50 overflow-hidden'
 
+  const unread = notifications.filter(n => !n.read)
+
   if (notifications.length === 0) {
     return (
       <div className={cls.replace('overflow-hidden', 'p-5')}>
         <p className="text-sm font-bold text-[#252840] mb-1">Notifications</p>
-        <p className="text-xs text-[#756B5B]">Aucune nouvelle notification.</p>
+        <p className="text-xs text-[#756B5B]">Aucune notification.</p>
       </div>
     )
   }
@@ -84,18 +106,31 @@ function NotifPanel({ notifications, dismiss, dismissAll, onClose, placement = '
     <div className={cls}>
       <div className="flex items-center justify-between px-4 py-3 border-b border-[#F0EAE0]">
         <p className="text-sm font-black text-[#252840]">Notifications</p>
-        <button onClick={dismissAll} className="text-xs text-[#756B5B] bg-transparent border-none cursor-pointer hover:text-[#252840]">
-          Tout lire
-        </button>
+        {unread.length > 0 && (
+          <button onClick={dismissAll}
+            className="flex items-center gap-1 text-xs text-[#756B5B] bg-transparent border-none cursor-pointer hover:text-[#252840]">
+            <CheckCheck size={12} /> Tout lire
+          </button>
+        )}
       </div>
       <div className="max-h-72 overflow-y-auto">
         {notifications.map(n => (
           <button key={n.id}
-            className="w-full flex items-start gap-3 px-4 py-3 border-b border-[#F8F4EA] last:border-0 text-left hover:bg-[#FDFAF4] cursor-pointer bg-transparent transition-colors"
+            className={`w-full flex items-start gap-3 px-4 py-3 border-b border-[#F8F4EA] last:border-0 text-left cursor-pointer bg-transparent transition-colors ${
+              n.read ? 'hover:bg-[#FDFAF4]' : 'bg-[#FDFAF4] hover:bg-[#F8F4EA]'
+            }`}
             onClick={() => { dismiss(n.id); navigate(n.link); onClose() }}
           >
-            <span className="mt-1.5 flex-shrink-0 h-2 w-2 rounded-full bg-[#C8864B]" />
-            <p className="text-xs text-[#252840] leading-relaxed">{n.text}</p>
+            <span className={`mt-0.5 flex-shrink-0 flex items-center justify-center h-7 w-7 rounded-full ${
+              n.read ? 'bg-[#F0EAE0] text-[#B0A898]' : 'bg-[rgba(200,134,75,0.15)] text-[#C8864B]'
+            }`}>
+              {notifIcon(n.type)}
+            </span>
+            <div className="flex-1 min-w-0">
+              <p className="text-xs text-[#252840] leading-relaxed">{n.message}</p>
+              <p className="text-[10px] text-[#B0A898] mt-0.5">{fmtNotifDate(n.createdAt)}</p>
+            </div>
+            {!n.read && <span className="flex-shrink-0 mt-1.5 h-2 w-2 rounded-full bg-[#C8864B]" />}
           </button>
         ))}
       </div>

@@ -47,12 +47,19 @@ export const matchApi = {
 
 // ── Conversations ────────────────────────────────────────
 export const convApi = {
-  list:      ()         => api.get('/conversations').then(r => r.data.conversations ?? r.data),
-  messages:  (id)       => api.get(`/conversations/${id}/messages`).then(r => r.data.messages ?? r.data),
-  send:      (id, body) => api.post(`/conversations/${id}/messages`, { body }).then(r => r.data),
-  archive:   (id)       => api.patch(`/conversations/${id}/archive`).then(r => r.data),
-  unarchive: (id)       => api.patch(`/conversations/${id}/unarchive`).then(r => r.data),
-  destroy:   (id)       => api.delete(`/conversations/${id}`).then(r => r.data),
+  list:      ()              => api.get('/conversations').then(r => r.data.conversations ?? r.data),
+  messages:  (id)            => api.get(`/conversations/${id}/messages`).then(r => r.data.messages ?? r.data),
+  send:      (id, body)      => api.post(`/conversations/${id}/messages`, { body }).then(r => r.data),
+  sendFile:  (id, fileUrl)   => api.post(`/conversations/${id}/messages/file`, { fileUrl }).then(r => r.data),
+  archive:   (id)            => api.patch(`/conversations/${id}/archive`).then(r => r.data),
+  unarchive: (id)            => api.patch(`/conversations/${id}/unarchive`).then(r => r.data),
+  destroy:   (id)            => api.delete(`/conversations/${id}`).then(r => r.data),
+}
+
+// ── Notifications ─────────────────────────────────────────
+export const notifApi = {
+  list:     ()   => api.get('/notifications').then(r => r.data),
+  markRead: (id) => api.patch(`/notifications/${id}/read`).then(r => r.data),
 }
 
 // ── Sessions ─────────────────────────────────────────────

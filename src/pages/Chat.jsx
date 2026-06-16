@@ -205,34 +205,6 @@ export default function Chat() {
     finally { setSending(false) }
   }
 
-  const uploadFile = async (e) => {
-    const file = e.target.files?.[0]
-    if (!file || !activeId || !FILE_UPLOAD_ENABLED) return
-    e.target.value = ''
-    setShowAttach(false)
-    setUploading(true)
-    const form = new FormData()
-    form.append('file', file)
-    try {
-      const res = await api.post(`/conversations/${activeId}/files`, form, {
-        headers: { 'Content-Type': 'multipart/form-data' }
-      })
-      const d = res.data
-      const tmp = {
-        id: Date.now(), from: 'me', msgType: 'file',
-        fileUrl:  d.url ?? d.fileUrl,
-        fileName: d.fileName ?? file.name,
-        fileSize: d.fileSize ?? file.size,
-        fileType: d.fileType ?? file.type,
-        time: new Date().toLocaleTimeString('fr', { hour: '2-digit', minute: '2-digit' }),
-        rawCreatedAt: new Date().toISOString(),
-      }
-      setMessages(prev => ({ ...prev, [activeId]: [...(prev[activeId] ?? []), tmp] }))
-      addToast?.('Fichier envoyé', 'success')
-    } catch { addToast?.("Erreur lors de l'envoi du fichier", 'error') }
-    finally { setUploading(false) }
-  }
-
   const uploadCloudinary = async (file) => {
     const form = new FormData()
     form.append('file', file)
@@ -243,6 +215,31 @@ export default function Chat() {
     return { url: data.secure_url, fileType: file.type, fileName: file.name, fileSize: file.size }
   }
 
+  const sendFileToBackend = async (fileUrl, file, msgType) => {
+    await api.post(`/conversations/${activeId}/messages/file`, { fileUrl })
+    const tmp = {
+      id: Date.now(), from: 'me', msgType,
+      fileUrl, fileName: file.name, fileSize: file.size, fileType: file.type,
+      time: new Date().toLocaleTimeString('fr', { hour: '2-digit', minute: '2-digit' }),
+      rawCreatedAt: new Date().toISOString(),
+    }
+    setMessages(prev => ({ ...prev, [activeId]: [...(prev[activeId] ?? []), tmp] }))
+  }
+
+  const uploadFile = async (e) => {
+    const file = e.target.files?.[0]
+    if (!file || !activeId || !FILE_UPLOAD_ENABLED) return
+    e.target.value = ''
+    setShowAttach(false)
+    setUploading(true)
+    try {
+      const { url } = await uploadCloudinary(file)
+      await sendFileToBackend(url, file, 'file')
+      addToast?.('Fichier envoyé', 'success')
+    } catch { addToast?.("Erreur lors de l'envoi du fichier", 'error') }
+    finally { setUploading(false) }
+  }
+
   const handleImageUpload = async (e) => {
     const file = e.target.files?.[0]
     if (!file || !activeId || !FILE_UPLOAD_ENABLED) return
@@ -251,8 +248,7 @@ export default function Chat() {
     setUploading(true)
     try {
       const { url } = await uploadCloudinary(file)
-      const tmp = { id: Date.now(), from: 'me', msgType: 'image', fileUrl: url, fileName: file.name, fileSize: file.size, fileType: file.type, time: new Date().toLocaleTimeString('fr', { hour: '2-digit', minute: '2-digit' }), rawCreatedAt: new Date().toISOString() }
-      setMessages(prev => ({ ...prev, [activeId]: [...(prev[activeId] ?? []), tmp] }))
+      await sendFileToBackend(url, file, 'image')
       addToast?.('Image envoyée', 'success')
     } catch { addToast?.("Erreur lors de l'envoi de l'image", 'error') }
     finally { setUploading(false) }
@@ -266,9 +262,8 @@ export default function Chat() {
     setUploading(true)
     try {
       const { url } = await uploadCloudinary(file)
-      const tmp = { id: Date.now(), from: 'me', msgType: 'video', fileUrl: url, fileName: file.name, fileSize: file.size, fileType: file.type, time: new Date().toLocaleTimeString('fr', { hour: '2-digit', minute: '2-digit' }), rawCreatedAt: new Date().toISOString() }
-      setMessages(prev => ({ ...prev, [activeId]: [...(prev[activeId] ?? []), tmp] }))
-      addToast?.('Video envoyée', 'success')
+      await sendFileToBackend(url, file, 'video')
+      addToast?.('Vidéo envoyée', 'success')
     } catch { addToast?.("Erreur lors de l'envoi de la vidéo", 'error') }
     finally { setUploading(false) }
   }
