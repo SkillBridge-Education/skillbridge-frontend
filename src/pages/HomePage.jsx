@@ -6,7 +6,7 @@ import Reveal from '../components/Reveal'
 import TechIcon from '../components/TechIcon'
 import useAuthStore from '../store/authStore'
 
-const HERO_IMGS = ['/hero-1.png', '/hero-2.png', '/hero-3.png']
+const HERO_IMGS = ['/hero-1.webp', '/hero-2.webp', '/hero-3.webp']
 
 const PILLS = [
   'React', 'Python', 'Maths', 'Anglais', 'Design UI',
@@ -67,6 +67,7 @@ export default function HomePage() {
               src={src}
               alt=""
               aria-hidden="true"
+              loading={i === 0 ? 'eager' : 'lazy'}
               className="absolute inset-0 h-full w-full object-cover transition-opacity duration-[1200ms]"
               style={{ opacity: slide === i ? 1 : 0 }}
             />
@@ -218,7 +219,7 @@ export default function HomePage() {
                 className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-bold text-white shadow-lg transition hover:-translate-y-0.5 border-none cursor-pointer"
                 style={{ background: 'var(--ink)' }}
               >
-                Trouver quelqu'un à apprendre <ArrowRight className="h-4 w-4" />
+                Trouver quelqu'un qui enseigne <ArrowRight className="h-4 w-4" />
               </button>
             </div>
           </Reveal>

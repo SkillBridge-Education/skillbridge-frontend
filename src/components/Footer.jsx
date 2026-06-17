@@ -26,7 +26,7 @@ export default function Footer() {
           {/* Colonne 1 — Logo + tagline */}
           <div className="flex flex-col gap-4">
             <div>
-              <img src="/skillbridge-logo-dark.png" alt="SkillBridge" className="h-8 w-auto" />
+              <img src="/skillbridge-logo-dark.webp" alt="SkillBridge" className="h-8 w-auto" />
             </div>
             <p className="text-sm text-[rgba(248,244,234,0.7)] leading-relaxed max-w-[220px]">
               Partager ce qu'on sait.<br />Apprendre ce qu'on aime.

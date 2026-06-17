@@ -87,7 +87,7 @@ export default function AuthModal() {
         </button>
 
         <div className="flex justify-center mb-5">
-          <img src="/skillbridge-logo.png" alt="SkillBridge" className="h-8 w-auto" />
+          <img src="/skillbridge-logo.webp" alt="SkillBridge" className="h-8 w-auto" />
         </div>
 
         {modalMode === 'login' && (

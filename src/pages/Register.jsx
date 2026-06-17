@@ -253,7 +253,7 @@ export default function Register() {
       {/* Left panel — desktop only */}
       <div className="hidden lg:flex flex-col w-80 flex-shrink-0 bg-gradient-to-br from-[#252840] via-[#2D3158] to-[#363B6B] p-10">
         <div className="mb-12">
-          <img src="/skillbridge-logo-dark.png" alt="SkillBridge" className="h-10 w-auto" />
+          <img src="/skillbridge-logo-dark.webp" alt="SkillBridge" className="h-10 w-auto" />
         </div>
 
         <h2 className="text-2xl font-black text-white mb-2">Rejoins la communauté de l'échange.</h2>
@@ -286,7 +286,7 @@ export default function Register() {
           {/* Mobile logo */}
           <div className="flex justify-center mb-8 lg:hidden">
             <div className="flex items-center gap-2">
-              <img src="/skillbridge-logo.png" alt="SkillBridge" className="h-8 w-auto" />
+              <img src="/skillbridge-logo.webp" alt="SkillBridge" className="h-8 w-auto" />
             </div>
           </div>
 
