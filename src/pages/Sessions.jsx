@@ -1,15 +1,17 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import useAuthStore from '../store/authStore'
+import { sessionApi } from '../services/api'
 import api from '../services/api'
 import { useToast } from '../components/Toast'
 import CreditIcon from '../components/CreditIcon'
 
 const STATUS_STYLE = {
-  SCHEDULED: { bg: 'bg-[rgba(61,92,40,0.12)]',    text: 'text-[#3D5C28]', label: 'À venir'   },
-  ACTIVE:    { bg: 'bg-[rgba(200,134,75,0.15)]',  text: 'text-[#C8864B]', label: 'En direct' },
-  COMPLETED: { bg: 'bg-[rgba(37,40,64,0.1)]',     text: 'text-[#252840]', label: 'Terminée'  },
-  CANCELLED: { bg: 'bg-red-50',                   text: 'text-red-500',   label: 'Annulée'   },
+  PENDING_CONFIRMATION: { bg: 'bg-[rgba(200,134,75,0.12)]', text: 'text-[#C8864B]', label: 'En attente' },
+  SCHEDULED:            { bg: 'bg-[rgba(61,92,40,0.12)]',   text: 'text-[#3D5C28]', label: 'À venir'     },
+  ACTIVE:               { bg: 'bg-[rgba(200,134,75,0.15)]', text: 'text-[#C8864B]', label: 'En direct'   },
+  COMPLETED:            { bg: 'bg-[rgba(37,40,64,0.1)]',    text: 'text-[#252840]', label: 'Terminée'    },
+  CANCELLED:            { bg: 'bg-red-50',                  text: 'text-red-500',   label: 'Refusée'     },
 }
 
 function CalIcon() {
@@ -20,8 +22,97 @@ function CalIcon() {
   )
 }
 
-function SessionDetailModal({ session, user, onClose }) {
-  const [joining, setJoining] = useState(false)
+function EditSessionModal({ session, onClose, onSaved }) {
+  const addToast  = useToast()
+  const [saving,   setSaving]   = useState(false)
+  const [duration, setDuration] = useState(String(session.creditsReserved))
+  const [title,    setTitle]    = useState(session.title ?? '')
+  const [dateVal,  setDateVal]  = useState(
+    session.startsAt ? new Date(session.startsAt).toISOString().slice(0, 16) : ''
+  )
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    const dur = parseInt(duration, 10)
+    if (!Number.isInteger(dur) || dur <= 0) {
+      addToast?.('La durée doit être un entier positif', 'error')
+      return
+    }
+    setSaving(true)
+    try {
+      await sessionApi.update(session.id, {
+        estimatedDuration: dur,
+        scheduledAt: dateVal ? new Date(dateVal).toISOString() : undefined,
+        title: title.trim() || undefined,
+      })
+      addToast?.('Session re-proposée', 'success')
+      onSaved()
+      onClose()
+    } catch (e) {
+      addToast?.(e.response?.data?.message || 'Erreur lors de la modification', 'error')
+    } finally { setSaving(false) }
+  }
+
+  return (
+    <div className="fixed inset-0 z-[500] bg-black/50 backdrop-blur-sm flex items-center justify-center p-4" onClick={onClose}>
+      <div className="bg-white rounded-3xl p-8 w-[440px] max-w-full shadow-soft border border-[#E8DDC7] animate-fade-up"
+        onClick={e => e.stopPropagation()}>
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-xl font-black text-[#252840]">Modifier et re-proposer</h2>
+          <button onClick={onClose}
+            className="w-8 h-8 rounded-full bg-[#F8F4EA] border-none cursor-pointer text-[#756B5B] flex items-center justify-center hover:bg-[#E8DDC7] transition-colors flex-shrink-0">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M1 1l10 10M11 1L1 11"/></svg>
+          </button>
+        </div>
+
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          <div>
+            <label className="text-xs font-semibold text-[#756B5B] block mb-1">Titre</label>
+            <input
+              value={title}
+              onChange={e => setTitle(e.target.value)}
+              placeholder={session.title}
+              className="w-full h-10 px-4 rounded-2xl border border-[#E8DDC7] bg-[#FDFAF4] text-sm outline-none focus:border-[#C8864B] transition-colors"
+            />
+          </div>
+          <div>
+            <label className="text-xs font-semibold text-[#756B5B] block mb-1">Durée (crédits)</label>
+            <input
+              type="number"
+              min="1"
+              value={duration}
+              onChange={e => setDuration(e.target.value)}
+              className="w-full h-10 px-4 rounded-2xl border border-[#E8DDC7] bg-[#FDFAF4] text-sm outline-none focus:border-[#C8864B] transition-colors"
+            />
+          </div>
+          <div>
+            <label className="text-xs font-semibold text-[#756B5B] block mb-1">Date et heure</label>
+            <input
+              type="datetime-local"
+              value={dateVal}
+              onChange={e => setDateVal(e.target.value)}
+              className="w-full h-10 px-4 rounded-2xl border border-[#E8DDC7] bg-[#FDFAF4] text-sm outline-none focus:border-[#C8864B] transition-colors"
+            />
+          </div>
+          <div className="flex gap-3 pt-2">
+            <button type="submit" disabled={saving}
+              className="flex-1 py-3 rounded-full bg-[#C8864B] text-white text-sm font-bold border-none cursor-pointer hover:bg-[#B07030] transition-colors disabled:opacity-50">
+              {saving ? 'Enregistrement…' : 'Re-proposer'}
+            </button>
+            <button type="button" onClick={onClose}
+              className="px-5 py-3 rounded-full border border-[#E8DDC7] text-[#756B5B] text-sm font-semibold bg-transparent cursor-pointer hover:border-[#252840] transition-colors">
+              Annuler
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  )
+}
+
+function SessionDetailModal({ session, user, onClose, onAction }) {
+  const [joining,  setJoining]  = useState(false)
+  const [acting,   setActing]   = useState(null)
   const addToast = useToast()
   const navigate = useNavigate()
 
@@ -31,6 +122,8 @@ function SessionDetailModal({ session, user, onClose }) {
   const st          = STATUS_STYLE[session.status] ?? STATUS_STYLE.SCHEDULED
   const canJoin     = session.status === 'SCHEDULED' || session.status === 'ACTIVE'
 
+  const isLearnerPending = !isTeacher && session.status === 'PENDING_CONFIRMATION'
+
   const handleJoin = async () => {
     setJoining(true)
     try {
@@ -39,6 +132,30 @@ function SessionDetailModal({ session, user, onClose }) {
     } catch (e) {
       addToast?.(e.response?.data?.message || 'Impossible de rejoindre', 'error')
     } finally { setJoining(false) }
+  }
+
+  const handleAccept = async () => {
+    setActing('accept')
+    try {
+      await sessionApi.accept(session.id)
+      addToast?.('Session acceptée', 'success')
+      onAction()
+      onClose()
+    } catch (e) {
+      addToast?.(e.response?.data?.message || 'Erreur', 'error')
+    } finally { setActing(null) }
+  }
+
+  const handleRefuse = async () => {
+    setActing('refuse')
+    try {
+      await sessionApi.refuse(session.id)
+      addToast?.('Session refusée, crédits remboursés', 'info')
+      onAction()
+      onClose()
+    } catch (e) {
+      addToast?.(e.response?.data?.message || 'Erreur', 'error')
+    } finally { setActing(null) }
   }
 
   const formatDate = (iso) => {
@@ -68,12 +185,20 @@ function SessionDetailModal({ session, user, onClose }) {
           </div>
         </div>
 
+        {isLearnerPending && (
+          <div className="mb-5 p-4 rounded-2xl bg-[rgba(200,134,75,0.08)] border border-[rgba(200,134,75,0.25)]">
+            <p className="text-sm font-semibold text-[#C8864B] mb-1">Proposition en attente</p>
+            <p className="text-xs text-[#756B5B]">
+              {session.creditsReserved} crédits ont été réservés sur ton solde. Accepte ou refuse cette session.
+            </p>
+          </div>
+        )}
+
         <div className="flex flex-col gap-3 mb-6">
           {[
             { label: 'Date',             value: formatDate(session.startsAt) },
             { label: 'Durée estimée',    value: `${session.creditsReserved} min` },
             { label: 'Crédits réservés', value: `${session.creditsReserved} cr` },
-            { label: 'Visibilité',       value: session.isOpen ? 'Publique' : 'Privée' },
           ].map(row => (
             <div key={row.label} className="flex items-center justify-between py-2 border-b border-[#F0EAE0] last:border-0">
               <span className="text-xs text-[#756B5B] font-medium">{row.label}</span>
@@ -86,21 +211,34 @@ function SessionDetailModal({ session, user, onClose }) {
           </div>
         </div>
 
-        <div className="flex gap-3">
-          {canJoin && (
-            <button onClick={handleJoin} disabled={joining}
-              className="flex-1 py-3 rounded-full bg-[#C8864B] text-white text-sm font-bold border-none cursor-pointer hover:bg-[#B07030] transition-colors disabled:opacity-50 flex items-center justify-center gap-2">
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
-                <rect x="1" y="3" width="9" height="9" rx="2"/><path d="M10 5l4-2v8l-4-2"/>
-              </svg>
-              {joining ? 'Connexion…' : 'Rejoindre la session'}
+        {isLearnerPending ? (
+          <div className="flex gap-3">
+            <button onClick={handleAccept} disabled={!!acting}
+              className="flex-1 py-3 rounded-full bg-[#3D5C28] text-white text-sm font-bold border-none cursor-pointer hover:bg-[#2D4A1E] transition-colors disabled:opacity-50">
+              {acting === 'accept' ? 'Acceptation…' : 'Accepter'}
             </button>
-          )}
-          <button onClick={() => { navigate(`/sessions/${session.id}`); onClose() }}
-            className={`${canJoin ? 'px-5' : 'flex-1'} py-3 rounded-full border-2 border-[#252840] text-[#252840] text-sm font-bold bg-transparent cursor-pointer hover:bg-[#252840] hover:text-white transition-colors`}>
-            Ouvrir
-          </button>
-        </div>
+            <button onClick={handleRefuse} disabled={!!acting}
+              className="flex-1 py-3 rounded-full border-2 border-red-400 text-red-500 text-sm font-bold bg-transparent cursor-pointer hover:bg-red-50 transition-colors disabled:opacity-50">
+              {acting === 'refuse' ? 'Refus…' : 'Refuser'}
+            </button>
+          </div>
+        ) : (
+          <div className="flex gap-3">
+            {canJoin && (
+              <button onClick={handleJoin} disabled={joining}
+                className="flex-1 py-3 rounded-full bg-[#C8864B] text-white text-sm font-bold border-none cursor-pointer hover:bg-[#B07030] transition-colors disabled:opacity-50 flex items-center justify-center gap-2">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
+                  <rect x="1" y="3" width="9" height="9" rx="2"/><path d="M10 5l4-2v8l-4-2"/>
+                </svg>
+                {joining ? 'Connexion…' : 'Rejoindre'}
+              </button>
+            )}
+            <button onClick={() => { navigate(`/sessions/${session.id}`); onClose() }}
+              className={`${canJoin ? 'px-5' : 'flex-1'} py-3 rounded-full border-2 border-[#252840] text-[#252840] text-sm font-bold bg-transparent cursor-pointer hover:bg-[#252840] hover:text-white transition-colors`}>
+              Ouvrir
+            </button>
+          </div>
+        )}
       </div>
     </div>
   )
@@ -118,12 +256,13 @@ export default function Sessions() {
   const [confirmId,  setConfirmId]  = useState(null)
   const [cancelling, setCancelling] = useState(null)
   const [selected,   setSelected]   = useState(null)
+  const [editTarget, setEditTarget] = useState(null)
 
   const loadSessions = useCallback(async () => {
     if (!user) return
     try {
-      const res = await api.get('/sessions/mine')
-      setSessions(res.data.sessions ?? [])
+      const data = await sessionApi.list()
+      setSessions(data)
       setError('')
     } catch (e) {
       if (sessions.length === 0) setError(e.response?.data?.message || 'Erreur de chargement')
@@ -160,16 +299,23 @@ export default function Sessions() {
   return (
     <main className="min-h-screen" style={{ background: 'var(--cream)' }}>
 
-      {/* Detail modal */}
       {selected && (
         <SessionDetailModal
           session={selected}
           user={user}
           onClose={() => setSelected(null)}
+          onAction={loadSessions}
         />
       )}
 
-      {/* Cancel confirm modal */}
+      {editTarget && (
+        <EditSessionModal
+          session={editTarget}
+          onClose={() => setEditTarget(null)}
+          onSaved={loadSessions}
+        />
+      )}
+
       {confirmId && (
         <div className="fixed inset-0 z-[500] bg-black/50 flex items-center justify-center p-4">
           <div className="bg-white rounded-3xl p-8 w-[400px] max-w-full shadow-soft border border-[#E8DDC7]">
@@ -262,16 +408,19 @@ export default function Sessions() {
             const st          = STATUS_STYLE[s.status] ?? STATUS_STYLE.SCHEDULED
             const isLive      = s.status === 'ACTIVE'
             const isCancelled = s.status === 'CANCELLED'
-            const isCreator   = s.teacher?.id === user?.id
-            const canCancel   = isCreator && (s.status === 'SCHEDULED' || s.status === 'ACTIVE')
+            const isPending   = s.status === 'PENDING_CONFIRMATION'
+            const isTeacher   = s.teacher?.id === user?.id
+            const canCancel   = isTeacher && (s.status === 'SCHEDULED' || s.status === 'ACTIVE')
+            const canEdit     = isTeacher && (isCancelled || isPending)
+            const isLearnerPending = !isTeacher && isPending
 
             return (
               <article
                 key={s.id}
-                className={`card-lift cursor-pointer rounded-3xl bg-white p-6 shadow-sm transition-all ${
-                  isCancelled ? 'opacity-50' : isLive ? 'ring-2 ring-[#3D5C28]' : ''
-                }`}
-                onClick={() => !isCancelled && setSelected(s)}
+                className={`card-lift rounded-3xl bg-white p-6 shadow-sm transition-all ${
+                  isPending ? 'ring-2 ring-[#C8864B]' : isLive ? 'ring-2 ring-[#3D5C28]' : ''
+                } ${isCancelled ? 'opacity-60' : 'cursor-pointer'}`}
+                onClick={() => setSelected(s)}
               >
                 {/* Status + credits */}
                 <div className="flex items-start justify-between gap-2 mb-4">
@@ -287,7 +436,7 @@ export default function Sessions() {
                 {/* Partner */}
                 <div className="flex items-center gap-3 mb-4">
                   <div className="h-9 w-9 rounded-full flex items-center justify-center text-white font-bold text-xs flex-shrink-0"
-                    style={{ background: isLive ? '#3D5C28' : '#252840' }}>
+                    style={{ background: isLive ? '#3D5C28' : isPending ? '#C8864B' : '#252840' }}>
                     {partner?.firstName?.[0]}{partner?.lastName?.[0]}
                   </div>
                   <div className="text-sm min-w-0">
@@ -301,11 +450,25 @@ export default function Sessions() {
                   <span className="inline-flex items-center gap-1.5 text-xs text-[#756B5B]">
                     <CalIcon /> {formatDate(s.startsAt)}
                   </span>
-                  <div className="flex gap-2">
+                  <div className="flex gap-2 flex-wrap justify-end">
                     {isLive && (
                       <button onClick={e => { e.stopPropagation(); navigate(`/sessions/${s.id}`) }}
                         className="inline-flex items-center gap-1.5 rounded-full bg-[#C8864B] px-3 py-1.5 text-xs font-bold text-white border-none cursor-pointer hover:bg-[#B07030] transition-colors">
                         Rejoindre
+                      </button>
+                    )}
+                    {isLearnerPending && (
+                      <>
+                        <button onClick={e => { e.stopPropagation(); setSelected(s) }}
+                          className="rounded-full bg-[#3D5C28] px-3 py-1.5 text-xs font-bold text-white border-none cursor-pointer hover:bg-[#2D4A1E] transition-colors">
+                          Répondre
+                        </button>
+                      </>
+                    )}
+                    {canEdit && (
+                      <button onClick={e => { e.stopPropagation(); setEditTarget(s) }}
+                        className="rounded-full border border-[#C8864B] px-3 py-1.5 text-xs font-semibold text-[#C8864B] bg-transparent cursor-pointer hover:bg-[rgba(200,134,75,0.08)] transition-colors">
+                        Modifier
                       </button>
                     )}
                     {canCancel && (

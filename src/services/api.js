@@ -64,10 +64,13 @@ export const notifApi = {
 
 // ── Sessions ─────────────────────────────────────────────
 export const sessionApi = {
-  list:    ()       => api.get('/sessions/mine').then(r => r.data.sessions ?? r.data),
-  get:     (id)     => api.get(`/sessions/${id}`).then(r => r.data.session ?? r.data),
-  create:  (body)   => api.post('/sessions', body).then(r => r.data),
-  end:     (id, s)  => api.post(`/sessions/${id}/end`, { durationSeconds: s }).then(r => r.data),
+  list:    ()            => api.get('/sessions/mine').then(r => r.data.sessions ?? r.data),
+  get:     (id)          => api.get(`/sessions/${id}`).then(r => r.data.session ?? r.data),
+  create:  (body)        => api.post('/sessions', body).then(r => r.data),
+  end:     (id, s)       => api.post(`/sessions/${id}/end`, { durationSeconds: s }).then(r => r.data),
+  accept:  (id)          => api.post(`/sessions/${id}/accept`).then(r => r.data),
+  refuse:  (id)          => api.post(`/sessions/${id}/refuse`).then(r => r.data),
+  update:  (id, body)    => api.patch(`/sessions/${id}`, body).then(r => r.data),
 }
 
 export default api
