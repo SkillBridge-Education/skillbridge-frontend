@@ -111,8 +111,9 @@ function EditSessionModal({ session, onClose, onSaved }) {
 }
 
 function SessionDetailModal({ session, user, onClose, onAction }) {
-  const [joining,  setJoining]  = useState(false)
-  const [acting,   setActing]   = useState(null)
+  const [joining,       setJoining]       = useState(false)
+  const [acting,        setActing]        = useState(null)
+  const [learnerCredits, setLearnerCredits] = useState(null)
   const addToast = useToast()
   const navigate = useNavigate()
 
@@ -123,6 +124,14 @@ function SessionDetailModal({ session, user, onClose, onAction }) {
   const canJoin     = session.status === 'SCHEDULED' || session.status === 'ACTIVE'
 
   const isLearnerPending = !isTeacher && session.status === 'PENDING_CONFIRMATION'
+  const hasEnoughCredits = learnerCredits === null || learnerCredits >= session.creditsReserved
+
+  useEffect(() => {
+    if (!isLearnerPending) return
+    api.get('/users/me')
+      .then(res => setLearnerCredits(res.data.user?.credits ?? res.data.credits ?? null))
+      .catch(() => {})
+  }, [isLearnerPending])
 
   const handleJoin = async () => {
     setJoining(true)
@@ -138,6 +147,10 @@ function SessionDetailModal({ session, user, onClose, onAction }) {
     setActing('accept')
     try {
       await sessionApi.accept(session.id)
+      // Refresh learner balance in the auth store
+      const meRes = await api.get('/users/me')
+      const updatedUser = meRes.data.user ?? meRes.data
+      if (updatedUser) useAuthStore.getState().setUser(updatedUser)
       addToast?.('Session acceptée', 'success')
       onAction()
       onClose()
@@ -150,7 +163,7 @@ function SessionDetailModal({ session, user, onClose, onAction }) {
     setActing('refuse')
     try {
       await sessionApi.refuse(session.id)
-      addToast?.('Session refusée, crédits remboursés', 'info')
+      addToast?.('Session refusée', 'info')
       onAction()
       onClose()
     } catch (e) {
@@ -188,9 +201,19 @@ function SessionDetailModal({ session, user, onClose, onAction }) {
         {isLearnerPending && (
           <div className="mb-5 p-4 rounded-2xl bg-[rgba(200,134,75,0.08)] border border-[rgba(200,134,75,0.25)]">
             <p className="text-sm font-semibold text-[#C8864B] mb-1">Proposition en attente</p>
-            <p className="text-xs text-[#756B5B]">
-              {session.creditsReserved} crédits ont été réservés sur ton solde. Accepte ou refuse cette session.
+            <p className="text-xs text-[#756B5B] mb-2">
+              {session.creditsReserved} crédits seront réservés sur ton solde si tu acceptes.
             </p>
+            {learnerCredits !== null && (
+              <p className="text-xs text-[#756B5B]">
+                Ton solde actuel : <span className={`font-bold ${hasEnoughCredits ? 'text-[#3D5C28]' : 'text-red-500'}`}>{learnerCredits} cr</span>
+              </p>
+            )}
+            {!hasEnoughCredits && (
+              <p className="text-xs text-red-600 font-semibold mt-2 bg-red-50 rounded-lg px-3 py-2">
+                Tu n'as pas assez de crédits pour accepter.
+              </p>
+            )}
           </div>
         )}
 
@@ -213,8 +236,8 @@ function SessionDetailModal({ session, user, onClose, onAction }) {
 
         {isLearnerPending ? (
           <div className="flex gap-3">
-            <button onClick={handleAccept} disabled={!!acting}
-              className="flex-1 py-3 rounded-full bg-[#3D5C28] text-white text-sm font-bold border-none cursor-pointer hover:bg-[#2D4A1E] transition-colors disabled:opacity-50">
+            <button onClick={handleAccept} disabled={!!acting || !hasEnoughCredits}
+              className="flex-1 py-3 rounded-full bg-[#3D5C28] text-white text-sm font-bold border-none cursor-pointer hover:bg-[#2D4A1E] transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
               {acting === 'accept' ? 'Acceptation…' : 'Accepter'}
             </button>
             <button onClick={handleRefuse} disabled={!!acting}

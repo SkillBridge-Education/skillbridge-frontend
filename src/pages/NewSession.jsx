@@ -4,12 +4,11 @@ import api from '../services/api'
 import useAuthStore from '../store/authStore'
 import { GROUP_SESSIONS_ENABLED } from '../config/features'
 
-function CreditSummary({ duration, creditsPerMin, balance }) {
+function CreditSummary({ duration, creditsPerMin }) {
   const creditsNeeded = duration * creditsPerMin
-  const hasEnough     = balance === null || balance >= creditsNeeded
 
   return (
-    <div className={`rounded-xl px-5 py-4 flex flex-col gap-2 border ${hasEnough ? 'bg-[#ECEEF8] border-[#252840]/10' : 'bg-red-50 border-red-200'}`}>
+    <div className="rounded-xl px-5 py-4 flex flex-col gap-2 border bg-[#ECEEF8] border-[#252840]/10">
       <div className="flex items-start gap-3">
         <div className="mt-0.5 w-5 h-5 rounded-full bg-[#252840] flex items-center justify-center flex-shrink-0">
           <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
@@ -19,26 +18,13 @@ function CreditSummary({ duration, creditsPerMin, balance }) {
         </div>
         <div>
           <p className="text-[13px] font-bold text-[#252840]">
-            Durée : {duration} min — {creditsNeeded} crédit{creditsNeeded > 1 ? 's' : ''} réservé{creditsNeeded > 1 ? 's' : ''} à la création
+            Durée : {duration} min — {creditsNeeded} crédit{creditsNeeded > 1 ? 's' : ''} requis pour que l'apprenant accepte
           </p>
           <p className="text-[12px] text-[#756B5B] mt-0.5 leading-relaxed">
-            À la fin, ils sont versés à l'enseignant ; si la session est plus courte, la différence t'est remboursée.
+            Ces crédits sont débités chez l'apprenant à l'acceptation. À la fin, ils te sont versés au prorata ; la différence lui est remboursée.
           </p>
         </div>
       </div>
-      {balance !== null && (
-        <div className="flex items-center justify-between pt-2 border-t border-[#252840]/10">
-          <span className="text-[12px] text-[#756B5B]">Ton solde actuel</span>
-          <span className={`text-[12px] font-bold ${hasEnough ? 'text-[#3D5C28]' : 'text-red-500'}`}>
-            {balance} cr
-          </span>
-        </div>
-      )}
-      {!hasEnough && (
-        <p className="text-[12px] text-red-600 font-semibold bg-red-100 rounded-lg px-3 py-2">
-          Solde insuffisant — il te manque {creditsNeeded - balance} crédit{(creditsNeeded - balance) > 1 ? 's' : ''}.
-        </p>
-      )}
     </div>
   )
 }
@@ -53,7 +39,6 @@ export default function NewSession() {
   const [error,       setError]       = useState('')
   const [connections, setConnections] = useState([])
   const [createdLink, setCreatedLink] = useState(null)
-  const [balance,     setBalance]     = useState(null)
   const [form, setForm] = useState({
     title:          '',
     description:    '',
@@ -69,10 +54,6 @@ export default function NewSession() {
   })
 
   const set = (k, v) => setForm(p => ({ ...p, [k]: v }))
-
-  useEffect(() => {
-    api.get('/users/me').then(res => setBalance(res.data.user?.credits ?? res.data.credits ?? null)).catch(() => {})
-  }, [])
 
   useEffect(() => {
     if (!user) return
@@ -225,7 +206,7 @@ export default function NewSession() {
                 </select>
               </div>
             </div>
-            <CreditSummary duration={form.duration} creditsPerMin={form.creditsPerMin} balance={balance} />
+            <CreditSummary duration={form.duration} creditsPerMin={form.creditsPerMin} />
           </div>
 
           {/* Choix du mode */}
@@ -348,8 +329,7 @@ export default function NewSession() {
             disabled={
               loading ||
               !form.sessionMode ||
-              (form.sessionMode === 'cadree' && form.invitedIds.length === 0) ||
-              (balance !== null && balance < form.duration * form.creditsPerMin)
+              (form.sessionMode === 'cadree' && form.invitedIds.length === 0)
             }
             className="w-full py-3 rounded-xl bg-[#252840] text-white text-[14px] font-bold border-none cursor-pointer hover:bg-[#363B6B] transition-all disabled:opacity-50">
             {loading ? 'Création…' : 'Créer la session'}
