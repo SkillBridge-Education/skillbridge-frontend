@@ -4,6 +4,7 @@
 import { useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import useAuthStore from '../store/authStore'
+import { matchApi, getApiError } from '../services/api'
 
 const TAG_STYLES = {
   sand:  'bg-[#FAF5E8] text-[#3D3020] border border-[rgba(223,192,128,0.5)]',
@@ -74,6 +75,7 @@ export default function UserProfile() {
   const navigate = useNavigate()
   const { user, openModal } = useAuthStore()
   const [reqState, setReqState] = useState('idle') // idle | pending | accepted
+  const [reqError, setReqError] = useState('')
   const [comment, setComment] = useState('')
   const [comments, setComments] = useState([])
 
@@ -99,11 +101,18 @@ export default function UserProfile() {
     </main>
   )
 
-  const handleRequest = () => {
+  const handleRequest = async () => {
     if (!user) { openModal('login'); return }
+    setReqError('')
     setReqState('pending')
-    // TODO (Dev 2): POST /api/connections/request { to: profile.id }
-    // Quand accepté → Dev 2 crée la conversation dans Chat
+    try {
+      await matchApi.request({ receiverId: profile.id })
+      // Acceptance happens on the receiver's side (PATCH /matches/:id); the
+      // requester stays in "pending" until then.
+    } catch (err) {
+      setReqState('idle')
+      setReqError(getApiError(err))
+    }
   }
 
   const sendComment = () => {
@@ -165,6 +174,9 @@ export default function UserProfile() {
             </svg>
             Back
           </button>
+          {reqError && (
+            <span className="text-[12px] font-semibold text-red-600">{reqError}</span>
+          )}
         </div>
 
         <div className="grid grid-cols-[1fr_320px] gap-10 pb-16">
