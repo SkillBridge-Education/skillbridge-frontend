@@ -7,6 +7,7 @@ import {
 import useAuthStore from '../store/authStore'
 import { convApi, getApiError } from '../services/api'
 import api from '../services/api'
+import { getSocket } from '../services/socket'
 import { useToast } from '../components/Toast'
 import { FILE_UPLOAD_ENABLED, CHAT_DELETE_ENABLED, CHAT_PIN_ENABLED } from '../config/features'
 import ChatBackdrop from '../components/ChatBackdrop'
@@ -106,7 +107,6 @@ export default function Chat() {
   const [hoveredMsg,     setHoveredMsg]     = useState(null)
 
   const messagesEndRef = useRef(null)
-  const pollRef        = useRef(null)
   const fileRef        = useRef(null)
   const imageRef       = useRef(null)
   const videoRef       = useRef(null)
@@ -175,9 +175,37 @@ export default function Chat() {
   useEffect(() => {
     if (!activeId) return
     fetchMessages(activeId)
-    pollRef.current = setInterval(() => fetchMessages(activeId), 3000)
-    return () => clearInterval(pollRef.current)
   }, [activeId, fetchMessages])
+
+  // Realtime updates replace the previous polling: the backend emits
+  // `message:new` (see skillbridge-backend src/sockets/index.ts) to both
+  // participants right after a message is persisted.
+  useEffect(() => {
+    if (!user) return
+    const socket = getSocket()
+    if (!socket) return
+
+    const onNewMessage = ({ conversationId, message }) => {
+      const mapped = mapMessage(message, user.id)
+      setMessages(prev => {
+        const existing = prev[conversationId] ?? []
+        if (existing.some(m => m.id === mapped.id)) return prev
+        return { ...prev, [conversationId]: [...existing, mapped] }
+      })
+      setConversations(prev => prev.map(c => c.id === conversationId
+        ? {
+            ...c,
+            preview: mapped.text ?? c.preview,
+            time: mapped.time,
+            unread: conversationId === activeId ? 0 : c.unread + (mapped.from === 'them' ? 1 : 0),
+          }
+        : c
+      ))
+    }
+
+    socket.on('message:new', onNewMessage)
+    return () => socket.off('message:new', onNewMessage)
+  }, [user, activeId])
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -188,14 +216,23 @@ export default function Chat() {
     setSending(true)
     const text = input.trim()
     setInput('')
+    const tmpId = `tmp-${Date.now()}`
     const tmp = {
-      id: Date.now(), from: 'me', msgType: 'text', text,
+      id: tmpId, from: 'me', msgType: 'text', text,
       time: new Date().toLocaleTimeString('fr', { hour: '2-digit', minute: '2-digit' }),
       rawCreatedAt: new Date().toISOString(),
     }
     setMessages(prev => ({ ...prev, [activeId]: [...(prev[activeId] ?? []), tmp] }))
-    try { await convApi.send(activeId, text) }
-    catch (e) { console.error(getApiError(e)) }
+    try {
+      const realMessage = await convApi.send(activeId, text)
+      const mapped = mapMessage(realMessage, user.id)
+      // Swap the optimistic bubble for the real one so the later `message:new`
+      // echo (same id) gets deduped instead of appearing twice.
+      setMessages(prev => ({
+        ...prev,
+        [activeId]: (prev[activeId] ?? []).map(m => (m.id === tmpId ? mapped : m)),
+      }))
+    } catch (e) { console.error(getApiError(e)) }
     finally { setSending(false) }
   }
 
@@ -210,14 +247,21 @@ export default function Chat() {
   }
 
   const sendFileToBackend = async (fileUrl, file, msgType) => {
-    await api.post(`/conversations/${activeId}/messages/file`, { fileUrl })
+    const tmpId = `tmp-${Date.now()}`
     const tmp = {
-      id: Date.now(), from: 'me', msgType,
+      id: tmpId, from: 'me', msgType,
       fileUrl, fileName: file.name, fileSize: file.size, fileType: file.type,
       time: new Date().toLocaleTimeString('fr', { hour: '2-digit', minute: '2-digit' }),
       rawCreatedAt: new Date().toISOString(),
     }
     setMessages(prev => ({ ...prev, [activeId]: [...(prev[activeId] ?? []), tmp] }))
+
+    const { data: realMessage } = await api.post(`/conversations/${activeId}/messages/file`, { fileUrl })
+    const mapped = mapMessage(realMessage, user.id)
+    setMessages(prev => ({
+      ...prev,
+      [activeId]: (prev[activeId] ?? []).map(m => (m.id === tmpId ? mapped : m)),
+    }))
   }
 
   const uploadFile = async (e) => {

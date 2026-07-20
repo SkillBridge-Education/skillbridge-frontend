@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import { disconnectSocket } from '../services/socket'
 
 const useAuthStore = create((set) => ({
   user:      null,
@@ -15,6 +16,7 @@ const useAuthStore = create((set) => ({
 
   logout: () => {
     localStorage.removeItem('sb_token')
+    disconnectSocket()
     set({ user: null, token: null, authReady: true })
   },
 
