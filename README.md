@@ -22,15 +22,16 @@ Interface React de la plateforme de troc de savoirs peer-to-peer.
 git clone https://github.com/abidinetou-lgtm/skillbridge-frontend.git
 cd skillbridge-frontend
 
-# Installer
-npm install
+# Installer (corepack fournit pnpm avec Node 20+)
+corepack enable
+pnpm install
 
 # Configurer l'environnement
 cp .env.example .env
 # Modifier VITE_API_URL=http://localhost:5000
 
 # Lancer
-npm run dev
+pnpm dev
 # → http://localhost:5173 (port canonique, voir vite.config.js)
 ```
 
@@ -40,7 +41,7 @@ Le backend (voir `skillbridge-backend`) doit autoriser cette origine dans
 ## Tests
 
 ```bash
-npm test
+pnpm test
 ```
 
 Tests Vitest + React Testing Library (`src/**/*.test.jsx`) : rendu des pages
