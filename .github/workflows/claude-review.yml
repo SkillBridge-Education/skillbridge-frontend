@@ -1,0 +1,32 @@
+name: Claude Code Review
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      id-token: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # Requires the repo secret ANTHROPIC_API_KEY (Settings -> Secrets and
+      # variables -> Actions). Not created by this workflow file - see the
+      # frontend README for how to add it.
+      - uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          prompt: |
+            Review this pull request against the skillbridge-frontend codebase
+            (React 18, Vite, Tailwind, Zustand, Axios, Socket.IO client).
+            Focus on: correctness, broken UI states, unhandled API error
+            cases, and consistency with existing patterns (services/api.js,
+            authStore, ProtectedRoute). Post inline comments for concrete
+            issues; skip generic style nitpicks.

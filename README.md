@@ -156,6 +156,16 @@ quelle page), il n'y a pas de route `/login` dédiée.
 - Sessions de groupe → **gratuites**
 - Crédits transférés automatiquement à la fin de la session
 
+## CI/CD — GitHub Actions
+
+`.github/workflows/ci.yml` : sur chaque PR et push vers `main` — install
+pnpm, lint, `vite build`, tests.
+
+`.github/workflows/claude-review.yml` : revue automatique par Claude Code sur
+chaque PR (`anthropics/claude-code-action`). Nécessite le secret de repo
+`ANTHROPIC_API_KEY` (Settings → Secrets and variables → Actions → New
+repository secret) — à créer manuellement, jamais commité en clair.
+
 ## Déploiement
 
 Déployé sur **Vercel**.
