@@ -156,6 +156,30 @@ quelle page), il n'y a pas de route `/login` dédiée.
 - Sessions de groupe → **gratuites**
 - Crédits transférés automatiquement à la fin de la session
 
+## Sécurité — git-crypt
+
+Ce repo est prévu pour chiffrer `.env`/`.env.*` avec [git-crypt](https://github.com/AGWA/git-crypt)
+(voir `.gitattributes`). Tant que `git-crypt init` n'a pas été lancé, ces
+règles n'ont aucun effet — le filtre n'est pas encore enregistré. Une fois
+initialisé (clé GPG requise) :
+
+```bash
+git-crypt init
+git-crypt add-gpg-user <TON_KEY_ID>
+```
+
+**Ajouter un·e coéquipier·e :** iels génèrent et te partagent leur clé GPG
+publique, puis :
+
+```bash
+git-crypt add-gpg-user <LEUR_KEY_ID>
+```
+
+**Important :** git-crypt ne protège que ce qui est chiffré à partir de son
+activation — si `.env` a déjà été commité en clair par le passé, les secrets
+qu'il contenait restent compromis dans l'historique et doivent être
+régénérés manuellement (rotation), pas seulement chiffrés après coup.
+
 ## CI/CD — GitHub Actions
 
 `.github/workflows/ci.yml` : sur chaque PR et push vers `main` — install
