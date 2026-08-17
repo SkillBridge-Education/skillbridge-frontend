@@ -232,7 +232,7 @@ export default function Connection() {
                       {selected.teaches.map(s => (
                         <span key={s.id ?? s.name}
                           className="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold bg-white text-[#252840]">
-                          {s.isMatch && <Star className="h-3 w-3 fill-current text-[#C8864B] text-[#C8864B]" />}
+                          {s.isMatch && <Star className="h-3 w-3 fill-current text-[color:var(--warm-strong)] text-[color:var(--warm-strong)]" />}
                           {s.name}
                         </span>
                       ))}

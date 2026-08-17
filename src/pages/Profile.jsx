@@ -297,7 +297,7 @@ export default function Profile() {
               className="w-full h-11 px-4 rounded-full border border-[#E8DDC7] bg-[#FDFAF4] text-sm outline-none focus:border-[#C8864B] transition-colors mb-3" />
             {skillSearch.trim() && !ALL_SKILLS.some(s => s.toLowerCase() === skillSearch.toLowerCase()) && (
               <button onClick={() => handleAddSkill(skillSearch.trim(), addingSkill)} disabled={skillSaving}
-                className="w-full py-2 mb-2 rounded-full bg-[#C8864B] text-white text-sm font-bold border-none cursor-pointer hover:bg-[#B07030] transition-colors disabled:opacity-50">
+                className="w-full py-2 mb-2 rounded-full bg-warm-strong text-white text-sm font-bold border-none cursor-pointer hover:bg-warm-dk transition-colors disabled:opacity-50">
                 {t('profile.skillModal.addCustom', { skill: skillSearch.trim() })}
               </button>
             )}
@@ -377,7 +377,7 @@ export default function Profile() {
                 <Pencil size={13} /> {t('profile.edit')}
               </button>
               <button onClick={() => navigate('/sessions/new')}
-                className="inline-flex items-center gap-2 rounded-full bg-[#C8864B] px-4 py-2 text-sm font-bold text-white cursor-pointer border-none transition hover:-translate-y-0.5">
+                className="inline-flex items-center gap-2 rounded-full bg-warm-strong px-4 py-2 text-sm font-bold text-white cursor-pointer border-none transition hover:-translate-y-0.5">
                 <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"><path d="M6 1v10M1 6h10"/></svg>
                 {t('profile.newSession')}
               </button>
@@ -436,7 +436,7 @@ export default function Profile() {
               className={`rounded-full px-4 py-2 text-sm font-bold transition cursor-pointer ${
                 tab === key
                   ? 'bg-[#252840] text-white border-none'
-                  : 'border border-[#E8DDC7] bg-white text-[#252840] hover:border-[#C8864B] hover:text-[#C8864B]'
+                  : 'border border-[#E8DDC7] bg-white text-[#252840] hover:border-[#C8864B] hover:text-[color:var(--warm-strong)]'
               }`}>
               {t(`profile.tabs.${key}`)}
               {key === 'availability' && countSelected > 0 ? ` (${countSelected})` : ''}
@@ -452,19 +452,19 @@ export default function Profile() {
           {tab === 'skills' && (
             <div className="grid gap-6 md:grid-cols-2">
               <div>
-                <p className="text-xs font-bold uppercase tracking-wider text-[#C8864B] mb-3">{t('profile.skills.teaching', { count: teaches.length })}</p>
+                <p className="text-xs font-bold uppercase tracking-wider text-[color:var(--warm-strong)] mb-3">{t('profile.skills.teaching', { count: teaches.length })}</p>
                 <div className="flex flex-wrap gap-2">
                   {teaches.map(ts => (
-                    <span key={ts.id} className="inline-flex items-center gap-1.5 rounded-full bg-[rgba(200,134,75,0.12)] px-3 py-1.5 text-xs font-semibold text-[#C8864B]">
+                    <span key={ts.id} className="inline-flex items-center gap-1.5 rounded-full bg-[rgba(200,134,75,0.12)] px-3 py-1.5 text-xs font-semibold text-[color:var(--warm-strong)]">
                       {ts.skill?.name ?? ts}
                       <button onClick={() => handleRemoveSkill(ts.id, 'teach')}
-                        className="h-4 w-4 rounded-full bg-[#C8864B]/20 flex items-center justify-center cursor-pointer border-none hover:bg-red-400 hover:text-white transition-colors">
+                        className="h-4 w-4 rounded-full bg-warm-strong/20 flex items-center justify-center cursor-pointer border-none hover:bg-red-400 hover:text-white transition-colors">
                         <svg width="8" height="8" viewBox="0 0 8 8" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><path d="M1 1l6 6M7 1L1 7"/></svg>
                       </button>
                     </span>
                   ))}
                   <button onClick={() => setAddingSkill('teach')}
-                    className="inline-flex items-center gap-1 rounded-full border border-dashed border-[#E8DDC7] px-3 py-1.5 text-xs text-[#756B5B] cursor-pointer hover:border-[#C8864B] hover:text-[#C8864B] bg-transparent transition">
+                    className="inline-flex items-center gap-1 rounded-full border border-dashed border-[#E8DDC7] px-3 py-1.5 text-xs text-[#756B5B] cursor-pointer hover:border-[#C8864B] hover:text-[color:var(--warm-strong)] bg-transparent transition">
                     <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M5 1v8M1 5h8"/></svg>
                     Ajouter
                   </button>
@@ -584,7 +584,7 @@ export default function Profile() {
               </div>
               <div className="mt-4 flex items-center gap-3">
                 <button onClick={handleSaveAvail}
-                  className="px-6 py-3 rounded-full bg-[#C8864B] text-white text-sm font-bold border-none cursor-pointer hover:bg-[#B07030] transition-colors">
+                  className="px-6 py-3 rounded-full bg-warm-strong text-white text-sm font-bold border-none cursor-pointer hover:bg-warm-dk transition-colors">
                   {t('actions.save')}
                 </button>
                 {availSaved && (
@@ -615,7 +615,7 @@ export default function Profile() {
                     const partner   = isTeacher ? s.learner : s.teacher
                     const statusMap = {
                       SCHEDULED: { label: t('profile.status.scheduled'), cls: 'bg-[rgba(61,92,40,0.12)] text-[#3D5C28]' },
-                      ACTIVE:    { label: t('profile.status.active'),    cls: 'bg-[rgba(200,134,75,0.15)] text-[#C8864B]' },
+                      ACTIVE:    { label: t('profile.status.active'),    cls: 'bg-[rgba(200,134,75,0.15)] text-[color:var(--warm-strong)]' },
                       COMPLETED: { label: t('profile.status.completed'), cls: 'bg-[rgba(37,40,64,0.1)] text-[#252840]' },
                       CANCELLED: { label: t('profile.status.cancelled'), cls: 'bg-red-50 text-red-500' },
                     }
@@ -633,7 +633,7 @@ export default function Profile() {
                           </div>
                           <p className="text-xs text-[#756B5B]">{isTeacher ? t('profile.sessions.teaching') : t('profile.sessions.learning')} · {partner?.firstName} {partner?.lastName} · {formatDate(s.startsAt)}</p>
                         </div>
-                        <p className={`text-sm font-black flex-shrink-0 ${isTeacher ? 'text-[#3D5C28]' : 'text-[#C8864B]'}`}>
+                        <p className={`text-sm font-black flex-shrink-0 ${isTeacher ? 'text-[#3D5C28]' : 'text-[color:var(--warm-strong)]'}`}>
                           {isTeacher ? '+' : '-'}{s.creditsReserved} cr
                         </p>
                       </li>
@@ -671,7 +671,7 @@ export default function Profile() {
                             <p className="text-xs text-[#756B5B]">{isTeacher ? t('profile.transactions.givenTo') : t('profile.transactions.receivedFrom')} {partner?.firstName} {partner?.lastName} · {formatDate(s.actualEndedAt)}</p>
                           </div>
                         </div>
-                        <p className={`text-base font-black flex-shrink-0 ${isTeacher ? 'text-[#3D5C28]' : 'text-[#C8864B]'}`}>
+                        <p className={`text-base font-black flex-shrink-0 ${isTeacher ? 'text-[#3D5C28]' : 'text-[color:var(--warm-strong)]'}`}>
                           {delta > 0 ? '+' : ''}{delta} cr
                         </p>
                       </li>

@@ -23,7 +23,7 @@ export default function Report() {
       <main className="min-h-screen bg-cream">
         <div className="mx-auto max-w-2xl px-6 py-12">
 
-          <p className="text-xs font-bold uppercase tracking-widest text-warm">{t('report.eyebrow')}</p>
+          <p className="text-xs font-bold uppercase tracking-widest text-warm-strong">{t('report.eyebrow')}</p>
           <h1 className="mt-2 text-3xl font-black tracking-tight text-navy sm:text-4xl">{t('report.title')}</h1>
           <p className="mt-2 text-sm leading-relaxed text-[color:var(--muted-fg)]">{t('report.subtitle')}</p>
 

@@ -270,7 +270,7 @@ export default function BecomeSharer() {
                               className={`w-full h-[28px] rounded-lg text-[10px] font-bold transition-all border-none cursor-pointer
                                 ${active
                                   ? 'bg-[#3D5C28] text-white hover:bg-[#4E6035]'
-                                  : 'bg-[#F5F3EE] text-[#B0A898] hover:bg-[#E4EED8] hover:text-[#3D5C28]'}`}
+                                  : 'bg-[#F5F3EE] text-[color:var(--muted-fg)] hover:bg-[#E4EED8] hover:text-[#3D5C28]'}`}
                             >
                               {active ? t('member.available') : t('member.unavailable')}
                             </button>

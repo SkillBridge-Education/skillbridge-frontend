@@ -8,12 +8,12 @@ const RESEND_DELAY = 60
 function Logo() {
   return (
     <Link to="/" className="flex items-center gap-2 no-underline">
-      <span className="grid h-8 w-8 place-items-center rounded-lg bg-[#C8864B] text-white flex-shrink-0">
+      <span className="grid h-8 w-8 place-items-center rounded-lg bg-warm-strong text-white flex-shrink-0">
         <span className="text-sm font-black leading-none">S</span>
       </span>
       <span className="text-xl font-black tracking-tight">
         <span className="text-[#252840]">Skill</span>
-        <span className="text-[#C8864B]">Bridge</span>
+        <span className="text-[color:var(--warm-strong)]">Bridge</span>
       </span>
     </Link>
   )
@@ -82,7 +82,7 @@ export default function ForgotPassword() {
                   components={{ strong: <span className="font-semibold text-[#252840]" /> }}
                 />
               </p>
-              <p className="mt-2 text-sm text-[#B0A898]">
+              <p className="mt-2 text-sm text-[color:var(--muted-fg)]">
                 {t('auth.spamHint')}
               </p>
 
@@ -122,7 +122,7 @@ export default function ForgotPassword() {
                 <div>
                   <label className="block text-sm font-bold text-[#252840] mb-1">{t('auth.fields.email')}</label>
                   <div className="relative">
-                    <svg className="absolute left-3 top-1/2 -translate-y-1/2 text-[#B0A898]" width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round">
+                    <svg className="absolute left-3 top-1/2 -translate-y-1/2 text-[color:var(--muted-fg)]" width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round">
                       <rect x="2" y="4" width="14" height="11" rx="2"/>
                       <path d="M2 8l7 5 7-5"/>
                     </svg>
@@ -139,7 +139,7 @@ export default function ForgotPassword() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full py-3 rounded-full bg-[#C8864B] text-white text-sm font-bold border-none cursor-pointer hover:bg-[#B07030] transition-colors disabled:opacity-50"
+                  className="w-full py-3 rounded-full bg-warm-strong text-white text-sm font-bold border-none cursor-pointer hover:bg-warm-dk transition-colors disabled:opacity-50"
                 >
                   {loading ? t('actions.sending') : t('forgotPassword.submit')}
                 </button>

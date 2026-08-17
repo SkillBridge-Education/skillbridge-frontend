@@ -138,14 +138,14 @@ export default function AuthModal() {
             </div>
 
             <button type="submit" disabled={loading}
-              className="w-full py-3 rounded-xl border-none bg-[#C8864B] text-white text-sm font-bold cursor-pointer hover:bg-[#B07030] transition-colors disabled:opacity-50 mt-4">
+              className="w-full py-3 rounded-xl border-none bg-warm-strong text-white text-sm font-bold cursor-pointer hover:bg-warm-dk transition-colors disabled:opacity-50 mt-4">
               {loading ? t('auth.login.submitting') : t('auth.login.submit')}
             </button>
 
             <p className="text-center text-sm text-[#756B5B] mt-4">
               {t('auth.login.noAccount')}{' '}
               <button type="button" onClick={() => switchMode('register')}
-                className="text-[#252840] font-bold bg-transparent border-none cursor-pointer hover:text-[#C8864B] transition-colors">
+                className="text-[#252840] font-bold bg-transparent border-none cursor-pointer hover:text-[color:var(--warm-strong)] transition-colors">
                 {t('nav.register')}
               </button>
             </p>
@@ -191,14 +191,14 @@ export default function AuthModal() {
             </div>
 
             <button type="submit" disabled={loading}
-              className="w-full py-3 rounded-xl border-none bg-[#C8864B] text-white text-sm font-bold cursor-pointer hover:bg-[#B07030] transition-colors disabled:opacity-50">
+              className="w-full py-3 rounded-xl border-none bg-warm-strong text-white text-sm font-bold cursor-pointer hover:bg-warm-dk transition-colors disabled:opacity-50">
               {loading ? t('auth.register.submitting') : t('auth.register.submit')}
             </button>
 
             <p className="text-center text-sm text-[#756B5B] mt-4">
               {t('auth.register.hasAccount')}{' '}
               <button type="button" onClick={() => switchMode('login')}
-                className="text-[#252840] font-bold bg-transparent border-none cursor-pointer hover:text-[#C8864B] transition-colors">
+                className="text-[#252840] font-bold bg-transparent border-none cursor-pointer hover:text-[color:var(--warm-strong)] transition-colors">
                 {t('auth.register.switch')}
               </button>
             </p>

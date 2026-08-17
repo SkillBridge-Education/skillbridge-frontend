@@ -8,9 +8,9 @@ import { useToast } from '../components/Toast'
 import CreditIcon from '../components/CreditIcon'
 
 const STATUS_STYLE = {
-  PENDING_CONFIRMATION: { bg: 'bg-[rgba(200,134,75,0.12)]', text: 'text-[#C8864B]', labelKey: 'sessions.status.pending' },
+  PENDING_CONFIRMATION: { bg: 'bg-[rgba(200,134,75,0.12)]', text: 'text-[color:var(--warm-strong)]', labelKey: 'sessions.status.pending' },
   SCHEDULED:            { bg: 'bg-[rgba(61,92,40,0.12)]',   text: 'text-[#3D5C28]', labelKey: 'sessions.status.scheduled' },
-  ACTIVE:               { bg: 'bg-[rgba(200,134,75,0.15)]', text: 'text-[#C8864B]', labelKey: 'sessions.status.active' },
+  ACTIVE:               { bg: 'bg-[rgba(200,134,75,0.15)]', text: 'text-[color:var(--warm-strong)]', labelKey: 'sessions.status.active' },
   COMPLETED:            { bg: 'bg-[rgba(37,40,64,0.1)]',    text: 'text-[#252840]', labelKey: 'sessions.status.completed' },
   CANCELLED:            { bg: 'bg-red-50',                  text: 'text-red-500',   labelKey: 'sessions.status.cancelled' },
 }
@@ -98,7 +98,7 @@ function EditSessionModal({ session, onClose, onSaved }) {
           </div>
           <div className="flex gap-3 pt-2">
             <button type="submit" disabled={saving}
-              className="flex-1 py-3 rounded-full bg-[#C8864B] text-white text-sm font-bold border-none cursor-pointer hover:bg-[#B07030] transition-colors disabled:opacity-50">
+              className="flex-1 py-3 rounded-full bg-warm-strong text-white text-sm font-bold border-none cursor-pointer hover:bg-warm-dk transition-colors disabled:opacity-50">
               {saving ? t('actions.saving') : t('sessions.editModal.submit')}
             </button>
             <button type="button" onClick={onClose}
@@ -203,7 +203,7 @@ function SessionDetailModal({ session, user, onClose, onAction }) {
 
         {isLearnerPending && (
           <div className="mb-5 p-4 rounded-2xl bg-[rgba(200,134,75,0.08)] border border-[rgba(200,134,75,0.25)]">
-            <p className="text-sm font-semibold text-[#C8864B] mb-1">{t('sessions.detail.pending')}</p>
+            <p className="text-sm font-semibold text-[color:var(--warm-strong)] mb-1">{t('sessions.detail.pending')}</p>
             <p className="text-xs text-[#756B5B] mb-2">
               {session.creditsReserved} crédits seront réservés sur ton solde si tu acceptes.
             </p>
@@ -252,7 +252,7 @@ function SessionDetailModal({ session, user, onClose, onAction }) {
           <div className="flex gap-3">
             {canJoin && (
               <button onClick={handleJoin} disabled={joining}
-                className="flex-1 py-3 rounded-full bg-[#C8864B] text-white text-sm font-bold border-none cursor-pointer hover:bg-[#B07030] transition-colors disabled:opacity-50 flex items-center justify-center gap-2">
+                className="flex-1 py-3 rounded-full bg-warm-strong text-white text-sm font-bold border-none cursor-pointer hover:bg-warm-dk transition-colors disabled:opacity-50 flex items-center justify-center gap-2">
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
                   <rect x="1" y="3" width="9" height="9" rx="2"/><path d="M10 5l4-2v8l-4-2"/>
                 </svg>
@@ -390,7 +390,7 @@ export default function Sessions() {
           <div className="inline-flex rounded-full border border-[#E8DDC7] bg-[#F8F4EA] p-1 shadow-sm">
             <button onClick={() => setTab('teach')}
               className={`rounded-full px-6 py-2.5 text-sm font-bold border-none cursor-pointer transition-all ${
-                tab === 'teach' ? 'bg-[#C8864B] text-white shadow-sm' : 'bg-transparent text-[#756B5B] hover:text-[#252840]'
+                tab === 'teach' ? 'bg-warm-strong text-white shadow-sm' : 'bg-transparent text-[#756B5B] hover:text-[#252840]'
               }`}>
               {t('sessions.tabTeach')}
             </button>
@@ -481,7 +481,7 @@ export default function Sessions() {
                   <div className="flex gap-2 flex-wrap justify-end">
                     {isLive && (
                       <button onClick={e => { e.stopPropagation(); navigate(`/sessions/${s.id}`) }}
-                        className="inline-flex items-center gap-1.5 rounded-full bg-[#C8864B] px-3 py-1.5 text-xs font-bold text-white border-none cursor-pointer hover:bg-[#B07030] transition-colors">
+                        className="inline-flex items-center gap-1.5 rounded-full bg-warm-strong px-3 py-1.5 text-xs font-bold text-white border-none cursor-pointer hover:bg-warm-dk transition-colors">
                         {t('sessions.join')}
                       </button>
                     )}
@@ -495,7 +495,7 @@ export default function Sessions() {
                     )}
                     {canEdit && (
                       <button onClick={e => { e.stopPropagation(); setEditTarget(s) }}
-                        className="rounded-full border border-[#C8864B] px-3 py-1.5 text-xs font-semibold text-[#C8864B] bg-transparent cursor-pointer hover:bg-[rgba(200,134,75,0.08)] transition-colors">
+                        className="rounded-full border border-[#C8864B] px-3 py-1.5 text-xs font-semibold text-[color:var(--warm-strong)] bg-transparent cursor-pointer hover:bg-[rgba(200,134,75,0.08)] transition-colors">
                         {t('sessions.edit')}
                       </button>
                     )}

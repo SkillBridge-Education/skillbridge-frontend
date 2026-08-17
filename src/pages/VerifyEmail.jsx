@@ -8,12 +8,12 @@ const RESEND_DELAY = 60
 function Logo() {
   return (
     <Link to="/" className="flex items-center gap-2 no-underline">
-      <span className="grid h-8 w-8 place-items-center rounded-lg bg-[#C8864B] text-white flex-shrink-0">
+      <span className="grid h-8 w-8 place-items-center rounded-lg bg-warm-strong text-white flex-shrink-0">
         <span className="text-sm font-black leading-none">S</span>
       </span>
       <span className="text-xl font-black tracking-tight">
         <span className="text-[#252840]">Skill</span>
-        <span className="text-[#C8864B]">Bridge</span>
+        <span className="text-[color:var(--warm-strong)]">Bridge</span>
       </span>
     </Link>
   )
@@ -95,7 +95,7 @@ export default function VerifyEmail() {
               </p>
               <button
                 onClick={() => navigate('/')}
-                className="w-full py-3 rounded-full bg-[#C8864B] text-white text-sm font-bold border-none cursor-pointer hover:bg-[#B07030] transition-colors"
+                className="w-full py-3 rounded-full bg-warm-strong text-white text-sm font-bold border-none cursor-pointer hover:bg-warm-dk transition-colors"
               >
                 {t('nav.login')}
               </button>
@@ -153,7 +153,7 @@ export default function VerifyEmail() {
                 </button>
               </form>
 
-              <p className="mt-3 text-xs text-center text-[#B0A898]">
+              <p className="mt-3 text-xs text-center text-[color:var(--muted-fg)]">
                 {t('auth.spamHint')}
               </p>
 

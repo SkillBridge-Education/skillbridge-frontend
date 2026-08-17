@@ -41,7 +41,7 @@ function Card({ icon, title, description, children }) {
   return (
     <section className="rounded-3xl border border-[color:var(--border)] bg-white p-6 shadow-card sm:p-8">
       <div className="flex items-start gap-4">
-        <span className="mt-0.5 grid h-10 w-10 flex-shrink-0 place-items-center rounded-2xl bg-cream text-warm">
+        <span className="mt-0.5 grid h-10 w-10 flex-shrink-0 place-items-center rounded-2xl bg-cream text-warm-strong">
           {icon}
         </span>
         <div className="min-w-0 flex-1">
@@ -155,7 +155,7 @@ export default function Settings() {
       <main className="min-h-screen bg-cream">
         <div className="mx-auto max-w-3xl px-6 py-12">
 
-          <p className="text-xs font-bold uppercase tracking-widest text-warm">{t('settings.eyebrow')}</p>
+          <p className="text-xs font-bold uppercase tracking-widest text-warm-strong">{t('settings.eyebrow')}</p>
           <h1 className="mt-2 text-3xl font-black tracking-tight text-navy sm:text-4xl">
             {t('settings.title')}
           </h1>
@@ -298,7 +298,7 @@ export default function Settings() {
                           type="button"
                           disabled
                           aria-describedby="account-backend-note"
-                          className="cursor-not-allowed rounded-full border-none bg-warm px-4 py-2 text-sm font-bold text-white opacity-40"
+                          className="cursor-not-allowed rounded-full border-none bg-warm-strong px-4 py-2 text-sm font-bold text-white opacity-40"
                         >
                           {t('settings.account.export')}
                         </button>
@@ -331,7 +331,7 @@ export default function Settings() {
                   <p id="account-backend-note" className="mt-4 rounded-2xl bg-cream p-4 text-xs leading-relaxed text-[color:var(--muted-fg)]">
                     {t('settings.account.backendMissing')}
                     {' '}
-                    <Link to="/support" className="font-bold text-warm no-underline hover:underline">
+                    <Link to="/support" className="font-bold text-warm-strong no-underline hover:underline">
                       {t('settings.account.contactSupport')}
                     </Link>
                     {' '}

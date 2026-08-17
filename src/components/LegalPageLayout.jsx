@@ -27,7 +27,7 @@ export default function LegalPageLayout({ docKey, related = [] }) {
             {t('actions.backHome', { ns: 'common' })}
           </Link>
 
-          <p className="text-xs font-bold uppercase tracking-widest text-warm">{t('eyebrow')}</p>
+          <p className="text-xs font-bold uppercase tracking-widest text-warm-strong">{t('eyebrow')}</p>
           <h1 className="mt-2 text-3xl font-black tracking-tight text-navy sm:text-4xl">
             {t(`${docKey}.title`)}
           </h1>
@@ -41,11 +41,11 @@ export default function LegalPageLayout({ docKey, related = [] }) {
             className="mt-6 rounded-3xl border-2 border-warm bg-[rgba(200,134,75,0.1)] p-5 sm:p-6"
           >
             <div className="flex items-start gap-3">
-              <span className="mt-0.5 grid h-9 w-9 flex-shrink-0 place-items-center rounded-xl bg-warm text-white">
+              <span className="mt-0.5 grid h-9 w-9 flex-shrink-0 place-items-center rounded-xl bg-warm-strong text-white">
                 <AlertTriangle size={18} aria-hidden="true" />
               </span>
               <div>
-                <span className="inline-block rounded-full bg-warm px-2.5 py-0.5 text-[10px] font-black uppercase tracking-wider text-white">
+                <span className="inline-block rounded-full bg-warm-strong px-2.5 py-0.5 text-[10px] font-black uppercase tracking-wider text-white">
                   {t('disclaimer.badge')}
                 </span>
                 <p className="mt-2 text-sm font-bold leading-snug text-navy">
@@ -64,13 +64,13 @@ export default function LegalPageLayout({ docKey, related = [] }) {
 
           {/* Sommaire */}
           <nav aria-label={t('toc')} className="mt-8 rounded-3xl border border-[color:var(--border)] bg-white p-6 shadow-card">
-            <p className="text-xs font-bold uppercase tracking-widest text-warm">{t('toc')}</p>
+            <p className="text-xs font-bold uppercase tracking-widest text-warm-strong">{t('toc')}</p>
             <ol className="mt-4 grid gap-2 sm:grid-cols-2">
               {list.map((section, i) => (
                 <li key={slugify(i)}>
                   <a
                     href={`#${slugify(i)}`}
-                    className="text-sm text-[color:var(--muted-fg)] no-underline hover:text-warm transition-colors"
+                    className="text-sm text-[color:var(--muted-fg)] no-underline hover:text-warm-strong transition-colors"
                   >
                     {section.title}
                   </a>
@@ -110,7 +110,7 @@ export default function LegalPageLayout({ docKey, related = [] }) {
           {/* Documents liés */}
           {related.length > 0 && (
             <div className="mt-6 rounded-3xl border border-[color:var(--border)] bg-white p-6">
-              <p className="text-xs font-bold uppercase tracking-widest text-warm">{t('relatedTitle')}</p>
+              <p className="text-xs font-bold uppercase tracking-widest text-warm-strong">{t('relatedTitle')}</p>
               <div className="mt-4 flex flex-wrap gap-2">
                 {related.map(({ to, label }) => (
                   <Link

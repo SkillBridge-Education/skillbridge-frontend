@@ -357,7 +357,7 @@ export default function Chat() {
           <div className="px-5 py-4 border-b border-[#E8DDC7]">
             <h2 className="text-lg font-black text-[#252840] mb-3">{t('chat.title')}</h2>
             <div className="relative">
-              <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#B0A898]" />
+              <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[color:var(--muted-fg)]" />
               <input
                 value={search}
                 onChange={e => setSearch(e.target.value)}
@@ -389,12 +389,12 @@ export default function Chat() {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between">
                       <span className="text-sm font-semibold text-[#252840] truncate">{conv.name}</span>
-                      <span className="text-[10px] text-[#B0A898] flex-shrink-0 ml-1">{conv.time}</span>
+                      <span className="text-[10px] text-[color:var(--muted-fg)] flex-shrink-0 ml-1">{conv.time}</span>
                     </div>
                     <div className="flex items-center justify-between mt-0.5">
                       <span className="text-xs text-[#756B5B] truncate">{conv.preview || 'Démarrez la conversation'}</span>
                       {conv.unread > 0 && (
-                        <span className="ml-2 h-5 w-5 rounded-full bg-[#C8864B] text-white text-[10px] font-bold flex items-center justify-center flex-shrink-0">
+                        <span className="ml-2 h-5 w-5 rounded-full bg-warm-strong text-white text-[10px] font-bold flex items-center justify-center flex-shrink-0">
                           {conv.unread}
                         </span>
                       )}
@@ -419,7 +419,7 @@ export default function Chat() {
                     >
                       <Pin size={13} />
                       {t('chat.pin')}
-                      {!CHAT_PIN_ENABLED && <span className="ml-auto text-[10px] text-[#B0A898]">{t('chat.soon')}</span>}
+                      {!CHAT_PIN_ENABLED && <span className="ml-auto text-[10px] text-[color:var(--muted-fg)]">{t('chat.soon')}</span>}
                     </button>
                   </div>
                 )}
@@ -464,7 +464,7 @@ export default function Chat() {
                     <div key={gi} className="relative z-10">
                       <div className="flex items-center gap-3 my-4">
                         <div className="flex-1 h-px bg-[#E8DDC7]" />
-                        <span className="text-[10px] font-semibold text-[#B0A898] uppercase tracking-wide">{group.label}</span>
+                        <span className="text-[10px] font-semibold text-[color:var(--muted-fg)] uppercase tracking-wide">{group.label}</span>
                         <div className="flex-1 h-px bg-[#E8DDC7]" />
                       </div>
 
@@ -562,7 +562,7 @@ export default function Chat() {
                         >
                           <btn.Icon size={15} className="flex-shrink-0 text-[#756B5B]" />
                           {btn.label}
-                          {!FILE_UPLOAD_ENABLED && <span className="ml-auto text-[10px] text-[#B0A898]">{t('chat.soon')}</span>}
+                          {!FILE_UPLOAD_ENABLED && <span className="ml-auto text-[10px] text-[color:var(--muted-fg)]">{t('chat.soon')}</span>}
                         </button>
                       ))}
                     </div>
@@ -589,7 +589,7 @@ export default function Chat() {
                   />
 
                   <button onClick={send} disabled={sending}
-                    className="h-10 w-10 rounded-full bg-[#C8864B] text-white border-none cursor-pointer hover:bg-[#B07030] transition-colors disabled:opacity-50 flex items-center justify-center flex-shrink-0">
+                    className="h-10 w-10 rounded-full bg-warm-strong text-white border-none cursor-pointer hover:bg-warm-dk transition-colors disabled:opacity-50 flex items-center justify-center flex-shrink-0">
                     <Send size={16} />
                   </button>
                 </div>

@@ -157,7 +157,7 @@ export default function Credits() {
                       <div className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl ${
                         gain
                           ? 'bg-[rgba(63,107,76,0.12)] text-[#3D5C28]'
-                          : 'bg-[rgba(217,142,74,0.12)] text-[#C8864B]'
+                          : 'bg-[rgba(217,142,74,0.12)] text-[color:var(--warm-strong)]'
                       }`}>
                         {gain ? <ArrowDownLeft size={18} /> : <ArrowUpRight size={18} />}
                       </div>
@@ -169,7 +169,7 @@ export default function Credits() {
                           {t('credits.with', { name: h.with, date: h.date })}
                         </p>
                       </div>
-                      <span className={`text-lg font-extrabold tabular-nums ${gain ? 'text-[#3D5C28]' : 'text-[#C8864B]'}`}>
+                      <span className={`text-lg font-extrabold tabular-nums ${gain ? 'text-[#3D5C28]' : 'text-[color:var(--warm-strong)]'}`}>
                         {gain ? '+' : ''}{h.amount} {t('credits.unit')}
                       </span>
                     </li>

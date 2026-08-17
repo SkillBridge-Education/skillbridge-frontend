@@ -44,7 +44,7 @@ export default function AvailabilityGrid({ availability = {} }) {
             const anyAvail = slots.some(Boolean)
             return (
               <tr key={day.key}>
-                <td className={`text-[12px] font-bold py-[5px] pr-3 ${anyAvail ? 'text-[#1A1410]' : 'text-[#C0B8AC]'}`}>
+                <td className={`text-[12px] font-bold py-[5px] pr-3 ${anyAvail ? 'text-[#1A1410]' : 'text-[color:var(--muted-fg)]'}`}>
                   {t(day.labelKey)}
                 </td>
                 {slots.map((avail, i) => (
@@ -53,7 +53,7 @@ export default function AvailabilityGrid({ availability = {} }) {
                       className={`mx-auto w-[48px] h-[22px] rounded-md text-[10px] font-bold flex items-center justify-center transition-colors
                         ${avail
                           ? 'bg-[#E4EED8] text-[#3D5C28]'
-                          : 'bg-[#F5F3EE] text-[#C0B8AC]'
+                          : 'bg-[#F5F3EE] text-[color:var(--muted-fg)]'
                         }`}
                     >
                       {avail ? t('member.available') : t('member.unavailable')}

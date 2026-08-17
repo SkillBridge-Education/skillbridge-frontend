@@ -6,12 +6,12 @@ import api from '../services/api'
 function Logo() {
   return (
     <Link to="/" className="flex items-center gap-2 no-underline">
-      <span className="grid h-8 w-8 place-items-center rounded-lg bg-[#C8864B] text-white flex-shrink-0">
+      <span className="grid h-8 w-8 place-items-center rounded-lg bg-warm-strong text-white flex-shrink-0">
         <span className="text-sm font-black leading-none">S</span>
       </span>
       <span className="text-xl font-black tracking-tight">
         <span className="text-[#252840]">Skill</span>
-        <span className="text-[#C8864B]">Bridge</span>
+        <span className="text-[color:var(--warm-strong)]">Bridge</span>
       </span>
     </Link>
   )
@@ -69,7 +69,7 @@ export default function ResetPassword() {
               </p>
               <button
                 onClick={() => navigate('/')}
-                className="w-full py-3 rounded-full bg-[#C8864B] text-white text-sm font-bold border-none cursor-pointer hover:bg-[#B07030] transition-colors"
+                className="w-full py-3 rounded-full bg-warm-strong text-white text-sm font-bold border-none cursor-pointer hover:bg-warm-dk transition-colors"
               >
                 {t('nav.login')}
               </button>
@@ -126,7 +126,7 @@ export default function ResetPassword() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full py-3 rounded-full bg-[#C8864B] text-white text-sm font-bold border-none cursor-pointer hover:bg-[#B07030] transition-colors disabled:opacity-50"
+                  className="w-full py-3 rounded-full bg-warm-strong text-white text-sm font-bold border-none cursor-pointer hover:bg-warm-dk transition-colors disabled:opacity-50"
                 >
                   {loading ? t('resetPassword.submitting') : t('resetPassword.submit')}
                 </button>

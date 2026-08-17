@@ -77,7 +77,7 @@ export default function ReportForm({
     return (
       <div className="rounded-3xl border-2 border-warm bg-[rgba(200,134,75,0.1)] p-6 sm:p-8">
         <div className="flex items-start gap-3">
-          <span className="mt-0.5 grid h-9 w-9 flex-shrink-0 place-items-center rounded-xl bg-warm text-white">
+          <span className="mt-0.5 grid h-9 w-9 flex-shrink-0 place-items-center rounded-xl bg-warm-strong text-white">
             <AlertTriangle size={18} aria-hidden="true" />
           </span>
           <div className="min-w-0">
@@ -89,7 +89,7 @@ export default function ReportForm({
         </div>
 
         <div className="mt-5 rounded-2xl border border-[color:var(--border)] bg-white p-4">
-          <p className="text-xs font-bold uppercase tracking-widest text-warm">{t('report.summary')}</p>
+          <p className="text-xs font-bold uppercase tracking-widest text-warm-strong">{t('report.summary')}</p>
           <ul className="mt-3 flex flex-col gap-1.5">
             {lines.map((line, i) => (
               <li key={i} className="text-sm leading-relaxed text-[color:var(--muted-fg)] break-words">{line}</li>
@@ -100,7 +100,7 @@ export default function ReportForm({
         <div className="mt-5 flex flex-col gap-3 sm:flex-row">
           <a
             href={mailto}
-            className="flex flex-1 items-center justify-center gap-2 rounded-full bg-warm px-5 py-3 text-sm font-bold text-white no-underline hover:bg-warm-dk transition-colors"
+            className="flex flex-1 items-center justify-center gap-2 rounded-full bg-warm-strong px-5 py-3 text-sm font-bold text-white no-underline hover:bg-warm-dk transition-colors"
           >
             <Mail size={15} aria-hidden="true" />
             {t('report.openMail')}
@@ -202,7 +202,7 @@ export default function ReportForm({
 
       <button
         type="submit"
-        className="w-full cursor-pointer rounded-full border-none bg-warm py-3 text-sm font-bold text-white hover:bg-warm-dk transition-colors"
+        className="w-full cursor-pointer rounded-full border-none bg-warm-strong py-3 text-sm font-bold text-white hover:bg-warm-dk transition-colors"
       >
         {t('report.submit')}
       </button>

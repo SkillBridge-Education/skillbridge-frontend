@@ -220,7 +220,7 @@ export default function Register() {
                 components={{ strong: <strong className="text-[#252840]" /> }}
               />
             </p>
-            <p className="mt-2 text-sm text-[#B0A898]">
+            <p className="mt-2 text-sm text-[color:var(--muted-fg)]">
               {t('auth.spamHint')}
             </p>
             <ResendVerification email={form.email} />
@@ -248,7 +248,7 @@ export default function Register() {
           </div>
           <div className="mt-6 flex flex-col gap-3">
             <button onClick={() => navigate('/connection')}
-              className="w-full py-3 rounded-full bg-[#C8864B] text-white font-bold border-none cursor-pointer hover:bg-[#B07030] transition-colors">
+              className="w-full py-3 rounded-full bg-warm-strong text-white font-bold border-none cursor-pointer hover:bg-warm-dk transition-colors">
               {t('register.done.explore')}
             </button>
             <button onClick={() => navigate('/profile')}
@@ -277,7 +277,7 @@ export default function Register() {
             <div key={stepKey} className="flex items-start gap-4">
               <div className={`h-8 w-8 rounded-full flex items-center justify-center text-sm font-black flex-shrink-0 transition-all ${
                 i < step ? 'bg-[rgba(61,92,40,0.9)] text-white' :
-                i === step ? 'bg-[#C8864B] text-white' :
+                i === step ? 'bg-warm-strong text-white' :
                 'bg-white/10 text-white/40'
               }`}>
                 {i < step
@@ -336,7 +336,7 @@ export default function Register() {
                   {avatar ? (
                     <img src={avatar} alt={t('a11y.avatarPreview')} className="w-full h-full object-cover" />
                   ) : (
-                    <div className="flex flex-col items-center gap-1 text-[#B0A898]">
+                    <div className="flex flex-col items-center gap-1 text-[color:var(--muted-fg)]">
                       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
                         <path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/>
                         <circle cx="12" cy="13" r="4"/>
@@ -408,12 +408,12 @@ export default function Register() {
               </div>
 
               <button onClick={handleStep0}
-                className="w-full py-3 rounded-full bg-[#C8864B] text-white font-bold border-none cursor-pointer hover:bg-[#B07030] transition-colors">
+                className="w-full py-3 rounded-full bg-warm-strong text-white font-bold border-none cursor-pointer hover:bg-warm-dk transition-colors">
                 {t('register.continue')}
               </button>
               <p className="text-center text-xs text-[#756B5B] mt-4">
                 {t('auth.register.hasAccount')}{' '}
-                <button onClick={() => navigate('/')} className="font-bold text-[#252840] bg-transparent border-none cursor-pointer hover:text-[#C8864B]">
+                <button onClick={() => navigate('/')} className="font-bold text-[#252840] bg-transparent border-none cursor-pointer hover:text-[color:var(--warm-strong)]">
                   {t('nav.login')}
                 </button>
               </p>
@@ -431,7 +431,7 @@ export default function Register() {
                 {[['teaches', t('register.skills.teaches')], ['wants', t('register.skills.wants')]].map(([v, l], i) => (
                   <div key={v} className="flex items-center gap-2 flex-1">
                     <div className={`flex-1 h-1 rounded-full transition-all ${form[v].length > 0 ? 'bg-[#C8864B]' : skillToggle === v ? 'bg-[#252840]' : 'bg-[#E8DDC7]'}`} />
-                    <span className={`text-[10px] font-bold whitespace-nowrap ${form[v].length > 0 ? 'text-[#C8864B]' : skillToggle === v ? 'text-[#252840]' : 'text-[#B0A898]'}`}>
+                    <span className={`text-[10px] font-bold whitespace-nowrap ${form[v].length > 0 ? 'text-[color:var(--warm-strong)]' : skillToggle === v ? 'text-[#252840]' : 'text-[color:var(--muted-fg)]'}`}>
                       {i + 1}. {l}
                     </span>
                   </div>
@@ -454,7 +454,7 @@ export default function Register() {
 
               {/* Search */}
               <div className="relative mb-4">
-                <svg className="absolute left-3 top-1/2 -translate-y-1/2 text-[#B0A898]" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round">
+                <svg className="absolute left-3 top-1/2 -translate-y-1/2 text-[color:var(--muted-fg)]" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round">
                   <circle cx="7" cy="7" r="5"/><path d="M12 12l2 2"/>
                 </svg>
                 <input
@@ -493,13 +493,13 @@ export default function Register() {
                   className="flex-1 h-10 rounded-full border border-[#E8DDC7] bg-[#FDFAF4] px-4 text-sm outline-none focus:border-[#C8864B] transition-colors"
                 />
                 <button onClick={addCustomSkill} aria-label={t('register.skills.addCustom')}
-                  className="h-10 w-10 rounded-full bg-[#C8864B] text-white border-none cursor-pointer hover:bg-[#B07030] transition-colors flex items-center justify-center flex-shrink-0">
+                  className="h-10 w-10 rounded-full bg-warm-strong text-white border-none cursor-pointer hover:bg-warm-dk transition-colors flex items-center justify-center flex-shrink-0">
                   <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><path d="M7 1v12M1 7h12"/></svg>
                 </button>
               </div>
 
               {(form.teaches.length === 0 || form.wants.length === 0) && !loading && (
-                <p className="text-xs text-[#C8864B] bg-[rgba(200,134,75,0.1)] rounded-xl px-4 py-2 mb-1">
+                <p className="text-xs text-[color:var(--warm-strong)] bg-[rgba(200,134,75,0.1)] rounded-xl px-4 py-2 mb-1">
                   {t('register.skills.hint')}
                 </p>
               )}
@@ -511,7 +511,7 @@ export default function Register() {
                 </button>
                 <button onClick={handleStep1}
                   disabled={loading}
-                  className="flex-1 py-3 rounded-full bg-[#C8864B] text-white font-bold border-none cursor-pointer hover:bg-[#B07030] transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                  className="flex-1 py-3 rounded-full bg-warm-strong text-white font-bold border-none cursor-pointer hover:bg-warm-dk transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
                   {loading ? t('register.skills.creating') : t('register.continue')}
                 </button>
               </div>
@@ -566,7 +566,7 @@ export default function Register() {
                   {t('register.back')}
                 </button>
                 <button onClick={handleStep2}
-                  className="flex-1 py-3 rounded-full bg-[#C8864B] text-white font-bold border-none cursor-pointer hover:bg-[#B07030] transition-colors">
+                  className="flex-1 py-3 rounded-full bg-warm-strong text-white font-bold border-none cursor-pointer hover:bg-warm-dk transition-colors">
                   {t('register.availability.finish')}
                 </button>
               </div>

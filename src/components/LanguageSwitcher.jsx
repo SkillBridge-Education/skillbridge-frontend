@@ -28,7 +28,7 @@ export default function LanguageSwitcher() {
           >
             <span aria-hidden="true" className="text-lg leading-none">{flag}</span>
             <span className="flex-1">{nativeName}</span>
-            {active && <Check size={16} className="text-warm flex-shrink-0" aria-hidden="true" />}
+            {active && <Check size={16} className="text-warm-strong flex-shrink-0" aria-hidden="true" />}
           </button>
         )
       })}

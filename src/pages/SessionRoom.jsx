@@ -356,7 +356,7 @@ export default function SessionRoom() {
               )}
 
               <button onClick={() => navigate('/sessions')}
-                className="px-8 py-3 rounded-full bg-[#C8864B] text-white font-bold border-none cursor-pointer hover:bg-[#B07030] transition-colors">
+                className="px-8 py-3 rounded-full bg-warm-strong text-white font-bold border-none cursor-pointer hover:bg-warm-dk transition-colors">
                 {t('sessionRoom.backToSessions')}
               </button>
             </div>

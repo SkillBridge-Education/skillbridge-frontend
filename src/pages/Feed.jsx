@@ -53,7 +53,7 @@ export default function Feed() {
 
       {/* Header */}
       <div className="bg-white border-b border-black/[0.09] px-8 md:px-20 py-10">
-        <p className="text-[11px] font-bold tracking-[1.2px] uppercase text-[#C8864B] mb-2">{t('feed.eyebrow')}</p>
+        <p className="text-[11px] font-bold tracking-[1.2px] uppercase text-[color:var(--warm-strong)] mb-2">{t('feed.eyebrow')}</p>
         <h1 className="text-[38px] font-black tracking-[-1.5px] text-[#1A1410] leading-[1.05]">
           <Trans i18nKey="feed.title" components={{ highlight: <span className="text-[#252840]" /> }} />
         </h1>
@@ -84,7 +84,7 @@ export default function Feed() {
             <div className="w-9 h-9 rounded-full bg-[#252840] text-white flex items-center justify-center font-bold text-[13px] flex-shrink-0">
               {initials}
             </div>
-            <span className="text-[14px] text-[#B0A898]">{t('feed.composerPlaceholder')}</span>
+            <span className="text-[14px] text-[color:var(--muted-fg)]">{t('feed.composerPlaceholder')}</span>
             <svg className="ml-auto text-[#7A6E5C]" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round">
               <path d="M8 1v14M1 8h14"/>
             </svg>
@@ -184,7 +184,7 @@ export default function Feed() {
                 <div className="flex items-center gap-4 pt-3 border-t border-black/[0.06]">
                   <button onClick={() => toggleLike(post.id)} aria-label={t('feed.like')} aria-pressed={liked.has(post.id)}
                     className={`flex items-center gap-2 text-[12px] font-semibold bg-transparent border-none cursor-pointer transition-all
-                      ${liked.has(post.id) ? 'text-[#C8864B]' : 'text-[#7A6E5C] hover:text-[#1A1410]'}`}>
+                      ${liked.has(post.id) ? 'text-[color:var(--warm-strong)]' : 'text-[#7A6E5C] hover:text-[#1A1410]'}`}>
                     <svg width="14" height="14" viewBox="0 0 14 14" fill={liked.has(post.id) ? '#C8864B' : 'none'} stroke="currentColor" strokeWidth="1.5">
                       <path d="M7 12S1 8.5 1 4.5a3 3 0 0 1 6-1 3 3 0 0 1 6 1C13 8.5 7 12 7 12z"/>
                     </svg>

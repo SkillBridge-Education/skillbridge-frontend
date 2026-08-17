@@ -22,7 +22,7 @@ function StarRating({ value, t }) {
       <span className="text-[11px] text-[#7A6E5C] ml-1 font-semibold">
         {hasRating ? value.toFixed(1) : '—'}
       </span>
-      <span className="text-[10px] text-[#B0A898] ml-1">{t('member.rateAfter')}</span>
+      <span className="text-[10px] text-[color:var(--muted-fg)] ml-1">{t('member.rateAfter')}</span>
     </div>
   )
 }
@@ -49,7 +49,7 @@ function AvailBadge({ availability }) {
     )
   }
   return (
-    <span className="inline-flex items-center gap-1 px-2 py-[3px] rounded-full bg-[#F5F3EE] text-[#B0A898] text-[10px] font-bold">
+    <span className="inline-flex items-center gap-1 px-2 py-[3px] rounded-full bg-[#F5F3EE] text-[color:var(--muted-fg)] text-[10px] font-bold">
       <span className="w-[6px] h-[6px] rounded-full bg-[#C0B8AC] inline-block" />
       Indisponible
     </span>
@@ -93,7 +93,7 @@ export default function MemberCard({ member, onClick, connectionState, onReserve
       <div className="flex flex-col gap-[6px]">
         {member.teaches?.length > 0 && (
           <div className="flex items-center gap-1 flex-wrap">
-            <span className="text-[10px] font-bold uppercase tracking-[0.5px] text-[#C8864B] mr-1">{t('member.shares')}</span>
+            <span className="text-[10px] font-bold uppercase tracking-[0.5px] text-[color:var(--warm-strong)] mr-1">{t('member.shares')}</span>
             {member.teaches.slice(0, 2).map(skill => (
               <span key={skill} className="px-2 py-[2px] rounded-full bg-[#FAF5E8] text-[#3D3020] border border-[rgba(223,192,128,0.5)] text-[11px] font-semibold">
                 {skill}

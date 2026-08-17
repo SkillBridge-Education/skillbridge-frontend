@@ -52,7 +52,7 @@ function CreditPopover({ balance, onClose, placement = 'below' }) {
           { icon: <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"><path d="M1 7h12M8 3l5 4-5 4"/></svg>, text: t('creditsPopover.rule4') },
         ].map((item, i) => (
           <div key={i} className="flex items-start gap-2.5">
-            <span className="mt-0.5 flex-shrink-0 text-[#C8864B]">{item.icon}</span>
+            <span className="mt-0.5 flex-shrink-0 text-[color:var(--warm-strong)]">{item.icon}</span>
             <p className="text-xs text-[#756B5B] leading-relaxed">{item.text}</p>
           </div>
         ))}
@@ -63,7 +63,7 @@ function CreditPopover({ balance, onClose, placement = 'below' }) {
           <span className="text-sm font-black text-[#252840]">{balance} {t('creditsPopover.unit')}</span>
           <span className="text-xs text-[#756B5B]">{t('creditsPopover.balance')}</span>
         </div>
-        <Link to="/credits" onClick={onClose} className="text-xs font-bold text-[#C8864B] no-underline hover:underline">
+        <Link to="/credits" onClick={onClose} className="text-xs font-bold text-[color:var(--warm-strong)] no-underline hover:underline">
           {t('creditsPopover.seeCredits')}
         </Link>
       </div>
@@ -127,13 +127,13 @@ function NotifPanel({ notifications, dismiss, dismissAll, onClose, placement = '
             onClick={() => { dismiss(n.id); navigate(n.link); onClose() }}
           >
             <span className={`mt-0.5 flex-shrink-0 flex items-center justify-center h-7 w-7 rounded-full ${
-              n.read ? 'bg-[#F0EAE0] text-[#B0A898]' : 'bg-[rgba(200,134,75,0.15)] text-[#C8864B]'
+              n.read ? 'bg-[#F0EAE0] text-[color:var(--muted-fg)]' : 'bg-[rgba(200,134,75,0.15)] text-[color:var(--warm-strong)]'
             }`}>
               {notifIcon(n.type)}
             </span>
             <div className="flex-1 min-w-0">
               <p className="text-xs text-[#252840] leading-relaxed">{n.message}</p>
-              <p className="text-[10px] text-[#B0A898] mt-0.5">{fmtNotifDate(n.createdAt, t, i18n.language)}</p>
+              <p className="text-[10px] text-[color:var(--muted-fg)] mt-0.5">{fmtNotifDate(n.createdAt, t, i18n.language)}</p>
             </div>
             {!n.read && <span className="flex-shrink-0 mt-1.5 h-2 w-2 rounded-full bg-[#C8864B]" />}
           </button>
@@ -238,7 +238,7 @@ export default function Navbar() {
             {visibleLinks.map(({ to, labelKey }) => (
               <Link key={to} to={to} onClick={closeAll}
                 className={`relative px-3 py-2 text-sm font-medium transition-colors duration-150 no-underline ${
-                  isActive(to) ? 'text-[#C8864B]' : 'text-[#252840] hover:text-[#C8864B]'
+                  isActive(to) ? 'text-[color:var(--warm-strong)]' : 'text-[#252840] hover:text-[color:var(--warm-strong)]'
                 }`}
               >
                 {t(labelKey)}
@@ -253,7 +253,7 @@ export default function Navbar() {
           <div className="hidden items-center gap-2 lg:flex">
             {installPrompt && (
               <button onClick={handleInstall}
-                className="flex items-center gap-2 px-4 py-2 rounded-full bg-[#C8864B] text-white text-sm font-semibold border-none cursor-pointer hover:bg-[#B07030] transition-colors">
+                className="flex items-center gap-2 px-4 py-2 rounded-full bg-warm-strong text-white text-sm font-semibold border-none cursor-pointer hover:bg-warm-dk transition-colors">
                 <Download size={14} /> {t('nav.install')}
               </button>
             )}
@@ -266,7 +266,7 @@ export default function Navbar() {
                     className="relative h-9 w-9 grid place-items-center rounded-full bg-transparent border border-[#E8DDC7] text-[#756B5B] hover:border-[#252840] hover:text-[#252840] cursor-pointer transition-colors">
                     <Bell size={15} />
                     {unreadCount > 0 && (
-                      <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-[#C8864B] text-white text-[9px] font-black flex items-center justify-center">
+                      <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-warm-strong text-white text-[9px] font-black flex items-center justify-center">
                         {unreadCount > 9 ? '9+' : unreadCount}
                       </span>
                     )}
@@ -299,7 +299,7 @@ export default function Navbar() {
                   {t('nav.login')}
                 </button>
                 <button onClick={() => navigate('/register')}
-                  className="px-4 py-2 rounded-full bg-[#C8864B] text-white text-sm font-bold border-none cursor-pointer hover:bg-[#B07030] transition-colors">
+                  className="px-4 py-2 rounded-full bg-warm-strong text-white text-sm font-bold border-none cursor-pointer hover:bg-warm-dk transition-colors">
                   {t('nav.register')}
                 </button>
               </>
@@ -377,7 +377,7 @@ export default function Navbar() {
               >
                 <Bell size={18} />
                 {unreadCount > 0 && (
-                  <span className="absolute top-1 right-1 h-3.5 w-3.5 rounded-full bg-[#C8864B] text-white text-[8px] font-black flex items-center justify-center">
+                  <span className="absolute top-1 right-1 h-3.5 w-3.5 rounded-full bg-warm-strong text-white text-[8px] font-black flex items-center justify-center">
                     {unreadCount > 9 ? '9+' : unreadCount}
                   </span>
                 )}
@@ -461,8 +461,8 @@ export default function Navbar() {
             {user ? (
               <div className="flex flex-col gap-2">
                 {unreadCount > 0 && (
-                  <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-[rgba(200,134,75,0.1)] text-sm font-semibold text-[#C8864B]">
-                    <span className="h-5 w-5 rounded-full bg-[#C8864B] text-white text-[10px] font-black flex items-center justify-center flex-shrink-0">{unreadCount}</span>
+                  <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-[rgba(200,134,75,0.1)] text-sm font-semibold text-[color:var(--warm-strong)]">
+                    <span className="h-5 w-5 rounded-full bg-warm-strong text-white text-[10px] font-black flex items-center justify-center flex-shrink-0">{unreadCount}</span>
                     {unreadCount > 1 ? t('nav.unreadOther') : t('nav.unreadOne')}
                   </div>
                 )}
@@ -482,7 +482,7 @@ export default function Navbar() {
                   {t('nav.login')}
                 </button>
                 <button onClick={() => { navigate('/register'); setMenuOpen(false) }}
-                  className="px-4 py-3 rounded-xl bg-[#C8864B] text-white text-sm font-bold border-none cursor-pointer hover:bg-[#B07030] transition-colors">
+                  className="px-4 py-3 rounded-xl bg-warm-strong text-white text-sm font-bold border-none cursor-pointer hover:bg-warm-dk transition-colors">
                   {t('nav.registerFree')}
                 </button>
               </div>

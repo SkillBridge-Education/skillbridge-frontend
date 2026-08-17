@@ -141,7 +141,7 @@ export default function ProfileModal({ member, onClose }) {
           {/* Skills partage */}
           {member.teaches?.length > 0 && (
             <div>
-              <p className="text-[11px] font-bold uppercase tracking-[0.6px] text-[#C8864B] mb-2">{t('member.shares')}</p>
+              <p className="text-[11px] font-bold uppercase tracking-[0.6px] text-[color:var(--warm-strong)] mb-2">{t('member.shares')}</p>
               <div className="flex flex-wrap gap-2">
                 {member.teaches.map(skill => (
                   <span key={skill} className="px-3 py-[5px] rounded-full bg-[#FAF5E8] text-[#3D3020] border border-[rgba(223,192,128,0.5)] text-[12px] font-semibold">
@@ -202,7 +202,7 @@ export default function ProfileModal({ member, onClose }) {
                                       ? 'bg-[#252840] text-white'
                                       : avail
                                       ? 'bg-[#E4EED8] text-[#3D5C28] hover:bg-[#3D5C28] hover:text-white'
-                                      : 'bg-[#F5F3EE] text-[#C0B8AC] cursor-not-allowed'
+                                      : 'bg-[#F5F3EE] text-[color:var(--muted-fg)] cursor-not-allowed'
                                     }`}
                                 >
                                   {isSelected ? t('member.chosen') : avail ? t('member.available') : t('member.unavailable')}

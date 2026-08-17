@@ -26,7 +26,7 @@ export default function Help() {
       <main className="min-h-screen bg-cream">
         <div className="mx-auto max-w-3xl px-6 py-12">
 
-          <p className="text-xs font-bold uppercase tracking-widest text-warm">{t('help.eyebrow')}</p>
+          <p className="text-xs font-bold uppercase tracking-widest text-warm-strong">{t('help.eyebrow')}</p>
           <h1 className="mt-2 text-3xl font-black tracking-tight text-navy sm:text-4xl">{t('help.title')}</h1>
           <p className="mt-2 max-w-xl text-sm leading-relaxed text-[color:var(--muted-fg)]">{t('help.subtitle')}</p>
 
@@ -70,7 +70,7 @@ export default function Help() {
                       <ChevronDown
                         size={18}
                         aria-hidden="true"
-                        className={`flex-shrink-0 text-warm transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
+                        className={`flex-shrink-0 text-warm-strong transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
                       />
                     </button>
                   </h2>
@@ -87,7 +87,7 @@ export default function Help() {
           {/* Toujours bloqué ? */}
           <div className="mt-8 rounded-3xl border border-[color:var(--border)] bg-white p-6 shadow-card sm:p-8">
             <div className="flex items-start gap-4">
-              <span className="mt-0.5 grid h-10 w-10 flex-shrink-0 place-items-center rounded-2xl bg-cream text-warm">
+              <span className="mt-0.5 grid h-10 w-10 flex-shrink-0 place-items-center rounded-2xl bg-cream text-warm-strong">
                 <LifeBuoy size={18} aria-hidden="true" />
               </span>
               <div className="min-w-0">
@@ -96,7 +96,7 @@ export default function Help() {
                 <div className="mt-5 flex flex-col gap-3 sm:flex-row">
                   <Link
                     to="/support"
-                    className="flex-1 rounded-full bg-warm px-5 py-3 text-center text-sm font-bold text-white no-underline hover:bg-warm-dk transition-colors"
+                    className="flex-1 rounded-full bg-warm-strong px-5 py-3 text-center text-sm font-bold text-white no-underline hover:bg-warm-dk transition-colors"
                   >
                     {t('help.contactCta')}
                   </Link>

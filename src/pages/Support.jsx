@@ -56,14 +56,14 @@ export default function Support() {
       <main className="min-h-screen bg-cream">
         <div className="mx-auto max-w-2xl px-6 py-12">
 
-          <p className="text-xs font-bold uppercase tracking-widest text-warm">{t('support.eyebrow')}</p>
+          <p className="text-xs font-bold uppercase tracking-widest text-warm-strong">{t('support.eyebrow')}</p>
           <h1 className="mt-2 text-3xl font-black tracking-tight text-navy sm:text-4xl">{t('support.title')}</h1>
           <p className="mt-2 text-sm leading-relaxed text-[color:var(--muted-fg)]">{t('support.subtitle')}</p>
 
           {sent ? (
             <div className="mt-8 rounded-3xl border-2 border-warm bg-[rgba(200,134,75,0.1)] p-6 sm:p-8">
               <div className="flex items-start gap-3">
-                <span className="mt-0.5 grid h-9 w-9 flex-shrink-0 place-items-center rounded-xl bg-warm text-white">
+                <span className="mt-0.5 grid h-9 w-9 flex-shrink-0 place-items-center rounded-xl bg-warm-strong text-white">
                   <AlertTriangle size={18} aria-hidden="true" />
                 </span>
                 <div className="min-w-0">
@@ -84,7 +84,7 @@ export default function Support() {
               <div className="mt-5 flex flex-col gap-3 sm:flex-row">
                 <a
                   href={mailto}
-                  className="flex flex-1 items-center justify-center gap-2 rounded-full bg-warm px-5 py-3 text-sm font-bold text-white no-underline hover:bg-warm-dk transition-colors"
+                  className="flex flex-1 items-center justify-center gap-2 rounded-full bg-warm-strong px-5 py-3 text-sm font-bold text-white no-underline hover:bg-warm-dk transition-colors"
                 >
                   <Mail size={15} aria-hidden="true" />
                   {t('support.openMail')}
@@ -171,7 +171,7 @@ export default function Support() {
 
               <button
                 type="submit"
-                className="w-full cursor-pointer rounded-full border-none bg-warm py-3 text-sm font-bold text-white hover:bg-warm-dk transition-colors"
+                className="w-full cursor-pointer rounded-full border-none bg-warm-strong py-3 text-sm font-bold text-white hover:bg-warm-dk transition-colors"
               >
                 {t('support.submit')}
               </button>
