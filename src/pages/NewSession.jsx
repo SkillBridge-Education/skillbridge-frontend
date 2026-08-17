@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import api from '../services/api'
 import useAuthStore from '../store/authStore'
 import { GROUP_SESSIONS_ENABLED } from '../config/features'
 
 function CreditSummary({ duration, creditsPerMin }) {
+  const { t } = useTranslation()
   const creditsNeeded = duration * creditsPerMin
 
   return (
@@ -18,10 +20,10 @@ function CreditSummary({ duration, creditsPerMin }) {
         </div>
         <div>
           <p className="text-[13px] font-bold text-[#252840]">
-            Durée : {duration} min — {creditsNeeded} crédit{creditsNeeded > 1 ? 's' : ''} requis pour que l'apprenant accepte
+            {t('newSession.costSummary', { duration, count: creditsNeeded })}
           </p>
           <p className="text-[12px] text-[#756B5B] mt-0.5 leading-relaxed">
-            Ces crédits sont débités chez l'apprenant à l'acceptation. À la fin, ils te sont versés au prorata ; la différence lui est remboursée.
+            {t('newSession.costHint')}
           </p>
         </div>
       </div>
@@ -32,6 +34,7 @@ function CreditSummary({ duration, creditsPerMin }) {
 const CATEGORIES = ['Mathematics','Languages','Music','Programming','Design','Cooking','Science','Art','Sport','Other']
 
 export default function NewSession() {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const [params] = useSearchParams()
   const { user } = useAuthStore()
@@ -80,9 +83,9 @@ export default function NewSession() {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    if (!form.sessionMode) { setError('Sélectionnez un mode de session'); return }
+    if (!form.sessionMode) { setError(t('newSession.errors.mode')); return }
     if (form.sessionMode === 'cadree' && form.invitedIds.length === 0) {
-      setError('Invitez au moins un participant pour une session cadrée')
+      setError(t('newSession.errors.invite'))
       return
     }
     setError('')
@@ -111,7 +114,7 @@ export default function NewSession() {
       })
       navigate('/sessions')
     } catch (err) {
-      setError(err.response?.data?.message || 'Erreur lors de la création')
+      setError(err.response?.data?.message || t('newSession.errors.failed'))
     } finally {
       setLoading(false)
     }
@@ -131,19 +134,19 @@ export default function NewSession() {
             <line x1="12" y1="2" x2="12" y2="15"/>
           </svg>
         </div>
-        <h2 className="text-[22px] font-black text-[#1A1410] mb-2">Session créée !</h2>
-        <p className="text-[14px] text-[#7A6E5C] mb-6">Partagez ce lien pour inviter des participants.</p>
+        <h2 className="text-[22px] font-black text-[#1A1410] mb-2">{t('newSession.createdTitle')}</h2>
+        <p className="text-[14px] text-[#7A6E5C] mb-6">{t('newSession.createdText')}</p>
         <div className="bg-[#F8F4EA] rounded-xl px-4 py-3 flex items-center gap-3 mb-5">
           <p className="flex-1 text-[12px] text-[#252840] font-mono truncate">{createdLink}</p>
           <button
             onClick={() => navigator.clipboard?.writeText(createdLink)}
             className="px-3 py-1 rounded-lg bg-[#252840] text-white text-[11px] font-bold border-none cursor-pointer hover:bg-[#363B6B] transition-all flex-shrink-0">
-            Copier
+            {t('actions.copy')}
           </button>
         </div>
         <button onClick={() => navigate('/sessions')}
           className="w-full py-3 rounded-xl bg-[#252840] text-white text-[14px] font-bold border-none cursor-pointer hover:bg-[#363B6B] transition-all">
-          Voir mes sessions →
+          {t('newSession.seeSessions')}
         </button>
       </div>
     </main>
@@ -155,11 +158,11 @@ export default function NewSession() {
         <button onClick={() => navigate(-1)}
           className="flex items-center gap-2 text-[13px] text-[#7A6E5C] font-medium bg-transparent border-none cursor-pointer hover:text-[#1A1410] transition-all mb-6">
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"><path d="M9 2L4 7l5 5"/></svg>
-          Retour
+          {t('newSession.back')}
         </button>
 
-        <h1 className="text-[28px] font-black tracking-tight text-[#1A1410] mb-2">Nouvelle session</h1>
-        <p className="text-[14px] text-[#7A6E5C] mb-8">Planifiez une session d'enseignement ou d'apprentissage</p>
+        <h1 className="text-[28px] font-black tracking-tight text-[#1A1410] mb-2">{t('newSession.title')}</h1>
+        <p className="text-[14px] text-[#7A6E5C] mb-8">{t('newSession.subtitle')}</p>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-6">
           {error && <p className="text-red-500 text-[13px] bg-red-50 px-4 py-3 rounded-xl">{error}</p>}
@@ -167,42 +170,42 @@ export default function NewSession() {
           {/* Infos de base */}
           <div className="bg-white rounded-2xl border border-black/[0.09] p-6 flex flex-col gap-5">
             <div>
-              <label className={labelClass}>Titre de la session</label>
-              <input className={inputClass} placeholder="ex. Maths — Dérivées & Intégrales"
+              <label className={labelClass}>{t('newSession.sessionTitle')}</label>
+              <input className={inputClass} placeholder={t('newSession.titlePlaceholder')}
                 value={form.title} onChange={e => set('title', e.target.value)} required />
             </div>
             <div>
-              <label className={labelClass}>Description</label>
-              <textarea className={`${inputClass} resize-none h-20`} placeholder="Ce que vous allez couvrir…"
+              <label className={labelClass}>{t('newSession.description')}</label>
+              <textarea className={`${inputClass} resize-none h-20`} placeholder={t('newSession.descriptionPlaceholder')}
                 value={form.description} onChange={e => set('description', e.target.value)} />
             </div>
             <div>
-              <label className={labelClass}>Catégorie</label>
+              <label className={labelClass}>{t('newSession.category')}</label>
               <select className={inputClass} value={form.category} onChange={e => set('category', e.target.value)}>
                 {CATEGORIES.map(c => <option key={c}>{c}</option>)}
               </select>
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className={labelClass}>Date</label>
+                <label className={labelClass}>{t('newSession.date')}</label>
                 <input type="date" className={inputClass} value={form.date} onChange={e => set('date', e.target.value)} required />
               </div>
               <div>
-                <label className={labelClass}>Heure</label>
+                <label className={labelClass}>{t('newSession.time')}</label>
                 <input type="time" className={inputClass} value={form.time} onChange={e => set('time', e.target.value)} required />
               </div>
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className={labelClass}>Durée (min)</label>
+                <label className={labelClass}>{t('newSession.duration')}</label>
                 <select className={inputClass} value={form.duration} onChange={e => set('duration', Number(e.target.value))}>
-                  {[30,45,60,90,120].map(d => <option key={d} value={d}>{d} min</option>)}
+                  {[30,45,60,90,120].map(d => <option key={d} value={d}>{t('newSession.durationOption', { count: d })}</option>)}
                 </select>
               </div>
               <div>
-                <label className={labelClass}>Crédits / minute</label>
+                <label className={labelClass}>{t('newSession.creditsPerMinute')}</label>
                 <select className={inputClass} value={form.creditsPerMin} onChange={e => set('creditsPerMin', Number(e.target.value))}>
-                  {[1,2,3].map(n => <option key={n} value={n}>{n} cr/min</option>)}
+                  {[1,2,3].map(n => <option key={n} value={n}>{t('newSession.creditsOption', { count: n })}</option>)}
                 </select>
               </div>
             </div>
@@ -211,7 +214,7 @@ export default function NewSession() {
 
           {/* Choix du mode */}
           <div>
-            <p className="text-[13px] font-bold text-[#1A1410] mb-3">Mode de session</p>
+            <p className="text-[13px] font-bold text-[#1A1410] mb-3">{t('newSession.mode')}</p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
 
               {/* Carte Session cadrée */}
@@ -229,12 +232,12 @@ export default function NewSession() {
                     </svg>
                   </div>
                   <div>
-                    <p className="text-[14px] font-bold text-[#1A1410]">Session cadrée</p>
-                    {form.sessionMode === 'cadree' && <p className="text-[10px] text-[#252840] font-semibold">Sélectionné</p>}
+                    <p className="text-[14px] font-bold text-[#1A1410]">{t('newSession.modeClosed')}</p>
+                    {form.sessionMode === 'cadree' && <p className="text-[10px] text-[#252840] font-semibold">{t('newSession.selected')}</p>}
                   </div>
                 </div>
                 <p className="text-[12px] text-[#7A6E5C] leading-relaxed">
-                  Vous invitez des participants précis parmi vos connexions. Accès limité aux personnes invitées.
+                  {t('newSession.modeClosedText')}
                 </p>
               </button>
 
@@ -253,12 +256,12 @@ export default function NewSession() {
                     </svg>
                   </div>
                   <div>
-                    <p className="text-[14px] font-bold text-[#1A1410]">Session ouverte</p>
-                    {form.sessionMode === 'ouverte' && <p className="text-[10px] text-[#3D5C28] font-semibold">Sélectionné</p>}
+                    <p className="text-[14px] font-bold text-[#1A1410]">{t('newSession.modeOpen')}</p>
+                    {form.sessionMode === 'ouverte' && <p className="text-[10px] text-[#3D5C28] font-semibold">{t('newSession.selected')}</p>}
                   </div>
                 </div>
                 <p className="text-[12px] text-[#7A6E5C] leading-relaxed">
-                  Toute personne avec le lien peut rejoindre. Un lien de partage est généré après création.
+                  {t('newSession.modeOpenText')}
                 </p>
               </button>
             </div>
@@ -267,10 +270,10 @@ export default function NewSession() {
           {/* Contenu mode cadrée */}
           {form.sessionMode === 'cadree' && (
             <div className="bg-white rounded-2xl border border-black/[0.09] p-6 flex flex-col gap-4">
-              <p className="text-[13px] font-bold text-[#1A1410]">Inviter des participants</p>
+              <p className="text-[13px] font-bold text-[#1A1410]">{t('newSession.invite')}</p>
               {connections.length === 0 ? (
                 <div className="bg-[#F8F4EA] rounded-xl p-4 text-[13px] text-[#7A6E5C]">
-                  Aucune connexion acceptée pour le moment. Connectez-vous à des membres d'abord.
+                  {t('newSession.noConnections')}
                 </div>
               ) : (
                 <div className="flex flex-col gap-2 max-h-[200px] overflow-y-auto">
@@ -291,7 +294,7 @@ export default function NewSession() {
               )}
               {GROUP_SESSIONS_ENABLED && (
                 <div>
-                  <label className={labelClass}>Nombre max de participants (2–10)</label>
+                  <label className={labelClass}>{t('newSession.maxParticipants')}</label>
                   <input type="number" min="2" max="10" className={inputClass}
                     value={form.maxParticipants}
                     onChange={e => set('maxParticipants', Math.min(10, Math.max(2, Number(e.target.value))))} />
@@ -299,12 +302,12 @@ export default function NewSession() {
               )}
               {form.invitedIds.length > 0 && (
                 <p className="text-[12px] text-[#3D5C28] font-semibold">
-                  {form.invitedIds.length} participant{form.invitedIds.length > 1 ? 's' : ''} sélectionné{form.invitedIds.length > 1 ? 's' : ''}
+                  {t('newSession.selectedCount', { count: form.invitedIds.length })}
                 </p>
               )}
               {GROUP_SESSIONS_ENABLED && form.invitedIds.length > 1 && (
                 <p className="text-[12px] text-[#3D5C28] bg-[#EEF4E8] px-4 py-3 rounded-xl">
-                  Session de groupe : {form.invitedIds.length} participants invités.
+                  {t('newSession.groupSession', { count: form.invitedIds.length })}
                 </p>
               )}
             </div>
@@ -313,14 +316,14 @@ export default function NewSession() {
           {/* Contenu mode ouverte */}
           {GROUP_SESSIONS_ENABLED && form.sessionMode === 'ouverte' && (
             <div className="bg-white rounded-2xl border border-black/[0.09] p-6 flex flex-col gap-4">
-              <p className="text-[13px] font-bold text-[#1A1410]">Paramètres de la session ouverte</p>
+              <p className="text-[13px] font-bold text-[#1A1410]">{t('newSession.openSettings')}</p>
               <div>
-                <label className={labelClass}>Limite de participants (optionnel)</label>
+                <label className={labelClass}>{t('newSession.openLimit')}</label>
                 <input type="number" min="2" max="50" className={inputClass}
-                  placeholder="Laisser vide = illimité"
+                  placeholder={t('newSession.openLimitPlaceholder')}
                   value={form.openLimit}
                   onChange={e => set('openLimit', e.target.value)} />
-                <p className="text-[11px] text-[#7A6E5C] mt-1">Un lien de partage sera généré après création de la session.</p>
+                <p className="text-[11px] text-[#7A6E5C] mt-1">{t('newSession.openLinkHint')}</p>
               </div>
             </div>
           )}
@@ -332,7 +335,7 @@ export default function NewSession() {
               (form.sessionMode === 'cadree' && form.invitedIds.length === 0)
             }
             className="w-full py-3 rounded-xl bg-[#252840] text-white text-[14px] font-bold border-none cursor-pointer hover:bg-[#363B6B] transition-all disabled:opacity-50">
-            {loading ? 'Création…' : 'Créer la session'}
+            {loading ? t('newSession.creating') : t('newSession.submit')}
           </button>
         </form>
       </div>
