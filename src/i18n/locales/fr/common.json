@@ -720,5 +720,42 @@
       "skills": "Sélectionnez au moins une compétence.",
       "generic": "Une erreur est survenue."
     }
+  },
+  "categories": {
+    "all": "Tous les membres",
+    "allShort": "Tous",
+    "languages": "Langues & Communication",
+    "tech": "Tech & Code",
+    "design": "Design & Créativité",
+    "music": "Musique & Arts",
+    "science": "Sciences & Maths",
+    "wellness": "Sport & Bien-être",
+    "business": "Business & Finance"
+  },
+  "connection": {
+    "eyebrow": "Connexions",
+    "title": "Avec qui veux-tu apprendre aujourd'hui ?",
+    "searchPlaceholder": "Cherche par nom, matière, techno…",
+    "tabDiscover": "Découvrir",
+    "tabRequests": "Demandes",
+    "teaches": "Enseigne",
+    "wants": "Veut apprendre",
+    "availability": "Disponibilités",
+    "availabilityHint": "Choisis un ou plusieurs créneaux.",
+    "free": "Libre",
+    "loginToBook": "Connectez-vous pour réserver",
+    "sendRequest": "Envoyer une demande de réservation",
+    "wantsToConnect": "souhaite se connecter avec vous",
+    "loginToSee": "Connecte-toi pour voir les membres",
+    "noMatch": "Aucun·e camarade ne correspond. Essaie un autre filtre.",
+    "matchesGoals": "Correspond à vos objectifs",
+    "requestSent": "Demande envoyée",
+    "book": "Réserver",
+    "toasts": {
+      "requestSent": "Demande envoyée",
+      "requestError": "Erreur lors de la demande",
+      "accepted": "Connexion acceptée",
+      "genericError": "Erreur"
+    }
   }
 }

@@ -720,5 +720,42 @@
       "skills": "Pick at least one skill.",
       "generic": "Something went wrong."
     }
+  },
+  "categories": {
+    "all": "All members",
+    "allShort": "All",
+    "languages": "Languages & Communication",
+    "tech": "Tech & Code",
+    "design": "Design & Creativity",
+    "music": "Music & Arts",
+    "science": "Science & Maths",
+    "wellness": "Sport & Well-being",
+    "business": "Business & Finance"
+  },
+  "connection": {
+    "eyebrow": "Connections",
+    "title": "Who do you want to learn with today?",
+    "searchPlaceholder": "Search by name, subject, technology…",
+    "tabDiscover": "Discover",
+    "tabRequests": "Requests",
+    "teaches": "Teaches",
+    "wants": "Wants to learn",
+    "availability": "Availability",
+    "availabilityHint": "Pick one or more slots.",
+    "free": "Free",
+    "loginToBook": "Log in to book",
+    "sendRequest": "Send a booking request",
+    "wantsToConnect": "wants to connect with you",
+    "loginToSee": "Log in to see members",
+    "noMatch": "No classmate matches. Try another filter.",
+    "matchesGoals": "Matches your goals",
+    "requestSent": "Request sent",
+    "book": "Book",
+    "toasts": {
+      "requestSent": "Request sent",
+      "requestError": "Could not send the request",
+      "accepted": "Connection accepted",
+      "genericError": "Error"
+    }
   }
 }
