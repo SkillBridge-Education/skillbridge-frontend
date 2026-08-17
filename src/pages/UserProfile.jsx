@@ -3,8 +3,10 @@
 // Cliqué depuis Connection.jsx → affiche tout le profil + bouton demande de connexion
 import { useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import useAuthStore from '../store/authStore'
 import { matchApi, getApiError } from '../services/api'
+import ReportDialog from '../components/ReportDialog'
 
 const TAG_STYLES = {
   sand:  'bg-[#FAF5E8] text-[#3D3020] border border-[rgba(223,192,128,0.5)]',
@@ -73,11 +75,13 @@ function PostThumb({ color, text, likes, time }) {
 export default function UserProfile() {
   const { id } = useParams()
   const navigate = useNavigate()
+  const { t } = useTranslation()
   const { user, openModal } = useAuthStore()
   const [reqState, setReqState] = useState('idle') // idle | pending | accepted
   const [reqError, setReqError] = useState('')
   const [comment, setComment] = useState('')
   const [comments, setComments] = useState([])
+  const [reportOpen, setReportOpen] = useState(false)
 
   // TODO: Dev 2 remplacera par un appel API
   const profile = USERS_DATA[id]
@@ -174,10 +178,26 @@ export default function UserProfile() {
             </svg>
             Back
           </button>
+          {/* Signalement contextuel — réutilise le formulaire de /report */}
+          <button onClick={() => setReportOpen(true)}
+            className="flex items-center gap-2 px-5 py-[10px] rounded-xl border-[1.5px] border-black/[0.09] text-[color:var(--muted-fg)] text-[13px] font-semibold bg-transparent cursor-pointer hover:border-red-300 hover:text-red-500 transition-all">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round">
+              <path d="M2.5 1v12M2.5 2h8l-1.5 2.5L10.5 7h-8" />
+            </svg>
+            {t('report.openButton')}
+          </button>
           {reqError && (
             <span className="text-[12px] font-semibold text-red-600">{reqError}</span>
           )}
         </div>
+
+        <ReportDialog
+          open={reportOpen}
+          onClose={() => setReportOpen(false)}
+          targetType="profile"
+          target={profile.name}
+          reporterEmail={user?.email ?? ''}
+        />
 
         <div className="grid grid-cols-[1fr_320px] gap-10 pb-16">
           {/* Left */}
