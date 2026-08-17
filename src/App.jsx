@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { useEffect } from 'react'
+import SkipLink        from './components/SkipLink'
 import Navbar          from './components/Navbar'
 import BottomNav       from './components/BottomNav'
 import CookieBanner    from './components/CookieBanner'
@@ -59,12 +60,15 @@ export default function App() {
   return (
     <BrowserRouter>
       <ToastProvider>
+        <SkipLink />
         <Navbar />
         {/* Spacer for fixed navbar */}
         <div className="h-16 flex-shrink-0" aria-hidden="true" />
         <CookieBanner />
         <AuthModal />
-        <div className="pb-16 md:pb-0">
+        {/* tabIndex={-1} : cible programmable du lien d'évitement, sans
+            ajouter la zone à l'ordre de tabulation. */}
+        <div id="main-content" tabIndex={-1} className="pb-16 md:pb-0">
         <Routes>
           <Route path="/"                  element={<HomePage />} />
           <Route path="/register"          element={<RegisterPage />} />

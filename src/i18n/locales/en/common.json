@@ -904,5 +904,16 @@
       "ratingError": "Could not send the rating.",
       "limitError": "Could not change the limit."
     }
+  },
+  "a11y": {
+    "skipToContent": "Skip to main content",
+    "closeDialog": "Close the dialog",
+    "openMenu": "Open the menu",
+    "closeMenu": "Close the menu",
+    "notifications": "Notifications, {{count}} unread",
+    "errorPrefix": "Error:",
+    "requiredField": "required",
+    "loading": "Loading",
+    "rateStars": "Rate {{count}} out of 5"
   }
 }

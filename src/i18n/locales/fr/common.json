@@ -904,5 +904,16 @@
       "ratingError": "Erreur lors de l'envoi de la note.",
       "limitError": "Erreur lors de la modification de la limite."
     }
+  },
+  "a11y": {
+    "skipToContent": "Aller au contenu principal",
+    "closeDialog": "Fermer la fenêtre",
+    "openMenu": "Ouvrir le menu",
+    "closeMenu": "Fermer le menu",
+    "notifications": "Notifications, {{count}} non lues",
+    "errorPrefix": "Erreur :",
+    "requiredField": "obligatoire",
+    "loading": "Chargement en cours",
+    "rateStars": "Noter {{count}} sur 5"
   }
 }

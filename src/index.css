@@ -26,6 +26,12 @@
   --navy-dark:   #1A1410;
   --border:      #E8DDC7;
   --muted-fg:    #756B5B;
+  /* Orange accessible — voir tailwind.config.js (5,05:1 sur blanc). */
+  --warm-strong: #A05F26;
+  /* Bordure de champ de formulaire : --border (1,35:1) est décoratif et ne
+     suffit pas pour délimiter un champ (WCAG 1.4.11 exige 3:1).
+     #9E8C68 donne 3,28:1 sur blanc et 3,15:1 sur light-cream. */
+  --field-border: #9E8C68;
 
   /* Lovable brand tokens */
   --ink:              #252840;
@@ -57,6 +63,42 @@
 }
 
 h1, h2, h3 { letter-spacing: -0.03em; }
+
+/* ── Focus visible ──────────────────────────────────────────────
+   Beaucoup de composants posent `outline: none` via Tailwind pour styler
+   eux-mêmes le focus, ce qui laissait la navigation clavier sans repère.
+   On rétablit un anneau net sur TOUT élément focusable, uniquement au
+   clavier (:focus-visible), avec un décalage pour rester lisible sur les
+   fonds sombres comme sur les fonds clairs. */
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 3px solid var(--focus-ring, #1A1410);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+/* Sur fond sombre, l'anneau passe en clair pour rester visible. */
+.focus-ring-light :where(a, button, input, select, textarea, [tabindex]):focus-visible,
+:where(a, button, input, select, textarea, [tabindex]).focus-ring-light:focus-visible {
+  --focus-ring: #FFFFFF;
+}
+
+/* ── Lien d'évitement ──
+   Hors écran tant qu'il n'a pas le focus, puis ramené en haut à gauche. */
+.skip-link {
+  position: absolute;
+  left: 0.75rem;
+  top: -100vh;
+  z-index: 9999;
+  padding: 0.75rem 1.25rem;
+  border-radius: 0 0 0.75rem 0.75rem;
+  background: #252840;
+  color: #F8F4EA;
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+.skip-link:focus {
+  top: 0;
+}
 
 /* ── Carrousel infini communauté ── */
 @keyframes scroll-left {

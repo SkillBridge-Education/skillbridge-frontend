@@ -15,6 +15,12 @@ export default {
         card:        '#FFFFFF',
         warm:        '#C8864B',
         'warm-dk':   '#8C5A1E',
+        // Variante accessible du orange de marque. #C8864B ne donne que 3,01:1
+        // avec du blanc (et 2,74:1 en texte sur cream) : sous le seuil AA de
+        // 4,5:1. `warm-strong` monte à 5,05:1 sur blanc et 4,60:1 sur cream.
+        // À utiliser dès qu'il porte du texte ou une bordure signifiante ;
+        // `warm` reste le orange de marque pour les aplats décoratifs.
+        'warm-strong': '#A05F26',
         night:       '#252840',
         // Project brand tokens
         navy:        '#252840',
