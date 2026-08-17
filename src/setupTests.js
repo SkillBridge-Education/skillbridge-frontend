@@ -1,4 +1,11 @@
 import '@testing-library/jest-dom/vitest'
+import i18n from './i18n'
+
+// jsdom annonce une locale en-US : on force le français (langue par défaut de
+// l'app) pour que les tests soient déterministes quelle que soit la machine.
+// `await` au niveau module : Vitest attend la fin du setup avant de lancer les
+// tests, donc aucun rendu ne peut partir en anglais.
+await i18n.changeLanguage('fr')
 
 // jsdom doesn't implement matchMedia; HomePage's reduced-motion check needs it.
 if (!window.matchMedia) {

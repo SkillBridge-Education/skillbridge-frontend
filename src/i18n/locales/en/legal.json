@@ -1,0 +1,348 @@
+{
+  "eyebrow": "Legal information",
+  "disclaimer": {
+    "badge": "Template",
+    "title": "⚠️ Template document — must be reviewed by a lawyer before going live",
+    "text": "This page is a working template and is deliberately incomplete. Every item between square brackets (for example [PUBLISHER NAME], [ADDRESS], [DPO CONTACT]) must be replaced with the publisher's real information, and the whole document must be validated by a legal professional before publication. As it stands, this document has no legal value and binds no one."
+  },
+  "lastUpdated": "Last updated: [LAST UPDATED DATE]",
+  "toc": "Contents",
+  "relatedTitle": "Related documents",
+  "notice": {
+    "title": "Legal notice",
+    "intro": "In accordance with French law no. 2004-575 of 21 June 2004 on confidence in the digital economy (LCEN), the following information is made available to users of the SkillBridge service.",
+    "sections": [
+      {
+        "title": "1. Publisher",
+        "body": [
+          "The SkillBridge service is published by:"
+        ],
+        "items": [
+          "Legal name: [PUBLISHER NAME]",
+          "Legal form: [LEGAL FORM — company, non-profit, etc.]",
+          "Share capital: [SHARE CAPITAL]",
+          "Registered office: [FULL ADDRESS]",
+          "Registration: trade register [CITY] no. [REGISTRATION NUMBER] — SIRET [SIRET NUMBER]",
+          "VAT number: [VAT NUMBER]",
+          "Contact email: [CONTACT EMAIL]",
+          "Phone: [PHONE NUMBER]"
+        ]
+      },
+      {
+        "title": "2. Publication director",
+        "body": [
+          "The publication director is [PUBLICATION DIRECTOR NAME], acting as [ROLE].",
+          "Any request regarding editorial content can be sent to [PUBLICATION DIRECTOR EMAIL]."
+        ]
+      },
+      {
+        "title": "3. Hosting provider",
+        "body": [
+          "The service is hosted by:"
+        ],
+        "items": [
+          "Name: [HOSTING PROVIDER NAME]",
+          "Address: [HOSTING PROVIDER ADDRESS]",
+          "Phone: [HOSTING PROVIDER PHONE]",
+          "Server location: [HOSTING COUNTRY / REGION]"
+        ]
+      },
+      {
+        "title": "4. Intellectual property",
+        "body": [
+          "The overall structure of the service, its texts, graphics, logo and visual identity are the property of [PUBLISHER NAME] or are used under licence.",
+          "Any reproduction, representation or adaptation, in whole or in part, without prior written authorisation is prohibited and constitutes infringement under articles L. 335-2 et seq. of the French intellectual property code.",
+          "Content published by users remains the property of its authors, under the conditions described in the terms of service."
+        ]
+      },
+      {
+        "title": "5. External links",
+        "body": [
+          "The service may contain links to third-party sites. [PUBLISHER NAME] has no control over those sites and accepts no responsibility for their content or their personal data practices."
+        ]
+      },
+      {
+        "title": "6. Reporting illegal content",
+        "body": [
+          "In accordance with article 6 of the LCEN and regulation (EU) 2022/2065 on digital services (DSA), any user may report content they consider illegal.",
+          "Contact point for reports: [REPORTING EMAIL]. A reporting form is also available from within the service.",
+          "A report must state the nature of the content, where it is located and why it should be removed. Manifestly abusive reports may engage the liability of their author."
+        ]
+      },
+      {
+        "title": "7. Protection of minors",
+        "body": [
+          "The service is aimed at high-school students. Age requirements, parental consent obligations and moderation measures are detailed in the terms of service and the privacy policy.",
+          "[TO BE COMPLETED: moderation setup, age verification means, alert procedure.]"
+        ]
+      },
+      {
+        "title": "8. Personal data and cookies",
+        "body": [
+          "The processing of personal data is described in the privacy policy, which also details the use of cookies and trackers.",
+          "Data protection officer (DPO) contact: [DPO CONTACT]."
+        ]
+      },
+      {
+        "title": "9. Applicable law and disputes",
+        "body": [
+          "This legal notice is governed by French law.",
+          "In accordance with articles L. 611-1 et seq. of the French consumer code, users may use the following consumer mediation service free of charge: [MEDIATOR NAME AND CONTACT DETAILS].",
+          "The European online dispute resolution platform is available at the address published by the European Commission.",
+          "Failing an amicable settlement, the competent courts shall be those designated by the applicable rules of law."
+        ]
+      }
+    ]
+  },
+  "privacy": {
+    "title": "Privacy policy",
+    "intro": "This policy explains which personal data are collected when using SkillBridge, why they are collected, how long they are kept and which rights you can exercise. It is written in accordance with regulation (EU) 2016/679 (GDPR) and the French Data Protection Act.",
+    "sections": [
+      {
+        "title": "1. Data controller",
+        "body": [
+          "The data controller is [PUBLISHER NAME], [LEGAL FORM], whose registered office is located at [FULL ADDRESS].",
+          "Data protection officer (DPO): [DPO CONTACT].",
+          "For any question about your data: [GDPR CONTACT EMAIL]."
+        ]
+      },
+      {
+        "title": "2. Data we collect",
+        "body": [
+          "We only collect the data required to run the service:"
+        ],
+        "items": [
+          "Account data: first name, last name, email address, password (stored hashed), account creation date.",
+          "Profile data: photo, banner, skills taught and sought, availability, description.",
+          "Created content: messages exchanged, scheduled sessions, reports submitted.",
+          "Service usage data: credit balance and history, sessions attended or taught.",
+          "Technical data: IP address, browser type, connection logs, session identifiers. [TO BE COMPLETED according to the actual logging configuration.]",
+          "Optional data: any information you choose to add to your profile."
+        ]
+      },
+      {
+        "title": "3. Purposes and legal bases",
+        "body": [
+          "Each processing operation relies on a legal basis set out in article 6 of the GDPR:"
+        ],
+        "items": [
+          "Account creation and management, matching between members, credit balance keeping — performance of the contract (art. 6.1.b).",
+          "Service security, fraud and abuse prevention, moderation of reports — legitimate interest (art. 6.1.f).",
+          "Optional notifications and non-essential audience measurement — consent (art. 6.1.a), which can be withdrawn at any time.",
+          "Retention of connection logs and response to legal requests — legal obligation (art. 6.1.c)."
+        ]
+      },
+      {
+        "title": "4. Minors",
+        "body": [
+          "The service is aimed at high-school students, some of whom are minors.",
+          "In France, article 45 of the Data Protection Act sets at 15 the age from which a minor may consent alone to the processing of their data for an information society service. Below that age, consent must be given jointly by the minor and by the holder(s) of parental authority.",
+          "[TO BE COMPLETED: minimum age chosen by the publisher, how parental authorisation is collected and verified, specific information provided to parents.]"
+        ]
+      },
+      {
+        "title": "5. Recipients and processors",
+        "body": [
+          "Data are accessible to authorised staff of [PUBLISHER NAME] and to technical providers acting as processors within the meaning of article 28 of the GDPR:"
+        ],
+        "items": [
+          "Hosting: [HOSTING PROVIDER NAME] — [COUNTRY]",
+          "Transactional emails: [EMAIL PROVIDER NAME] — [COUNTRY]",
+          "Image storage: [STORAGE PROVIDER NAME] — [COUNTRY]",
+          "Session video calls: [VIDEO PROVIDER NAME] — [COUNTRY]",
+          "Audience measurement: [ANALYTICS TOOL NAME, IF ANY]"
+        ]
+      },
+      {
+        "title": "6. Transfers outside the European Union",
+        "body": [
+          "[TO BE COMPLETED: state whether data are transferred outside the EU, to which countries, and on which basis — adequacy decision, standard contractual clauses, supplementary measures.]",
+          "If no transfer takes place, this section must say so explicitly."
+        ]
+      },
+      {
+        "title": "7. Retention periods",
+        "body": [
+          "Data are not kept longer than necessary:"
+        ],
+        "items": [
+          "Active account: for as long as the service is used.",
+          "Inactive account: deletion or anonymisation after [PERIOD — e.g. 2 years] without login, following prior notice.",
+          "After account deletion: erasure within [PERIOD — e.g. 30 days], except for legal retention obligations.",
+          "Connection logs: [PERIOD — e.g. 12 months], in line with legal obligations.",
+          "Reports and moderation records: [PERIOD].",
+          "Billing data, if any: 10 years (accounting obligation)."
+        ]
+      },
+      {
+        "title": "8. Security",
+        "body": [
+          "Technical and organisational measures are in place to protect data: password hashing, encrypted communications (HTTPS), access control, logging.",
+          "[TO BE COMPLETED: measures actually implemented — backups, penetration testing, incident management policy and notification of data breaches to the supervisory authority within 72 hours.]"
+        ]
+      },
+      {
+        "title": "9. Your rights",
+        "body": [
+          "Under articles 15 to 22 of the GDPR, you have the following rights:"
+        ],
+        "items": [
+          "Right of access: obtain a copy of the data concerning you.",
+          "Right to rectification: correct inaccurate or incomplete data.",
+          "Right to erasure: request the deletion of your data.",
+          "Right to restriction of processing.",
+          "Right to object, in particular to processing based on legitimate interest.",
+          "Right to data portability: receive your data in a structured, machine-readable format.",
+          "Right to withdraw your consent at any time, without affecting processing already carried out.",
+          "Right to give instructions about what happens to your data after your death."
+        ]
+      },
+      {
+        "title": "10. How to exercise your rights",
+        "body": [
+          "These rights can be exercised from the Settings page of the service, or by email to [GDPR CONTACT EMAIL] / [DPO CONTACT].",
+          "An answer is provided within one month, extendable by two months for complex requests. Proof of identity may be requested in case of reasonable doubt.",
+          "If you believe your rights are not being respected, you may lodge a complaint with the French supervisory authority CNIL (3 place de Fontenoy, TSA 80715, 75334 Paris Cedex 07, cnil.fr) or with the authority of your country of residence."
+        ]
+      },
+      {
+        "title": "11. Cookies and trackers",
+        "body": [
+          "The service uses cookies and similar technologies:"
+        ],
+        "items": [
+          "Strictly necessary cookies: session maintenance, security, language and preference storage. They do not require consent.",
+          "Audience measurement cookies: [TO BE COMPLETED — tool used, lifetime, whether exempt from consent].",
+          "Advertising cookies: [NONE / TO BE COMPLETED].",
+          "Consent storage duration: [PERIOD — CNIL recommendation: 6 months].",
+          "The choice made in the banner can be changed at any time from the browser settings or the Settings page."
+        ]
+      },
+      {
+        "title": "12. Changes to this policy",
+        "body": [
+          "This policy may be updated to reflect legal or technical changes. In case of a substantial change, users are informed by email or through a visible notice in the service.",
+          "The date of the last update is shown at the top of this page."
+        ]
+      }
+    ]
+  },
+  "terms": {
+    "title": "Terms of service",
+    "intro": "These terms of service define the rules for accessing and using SkillBridge. By creating an account, you declare that you have read and accepted them.",
+    "sections": [
+      {
+        "title": "1. Purpose",
+        "body": [
+          "SkillBridge is a skill-exchange platform for high-school students. It lets members offer skills, look for skills, exchange messages and organise learning sessions paid for with internal credits.",
+          "The service is published by [PUBLISHER NAME] (see the legal notice)."
+        ]
+      },
+      {
+        "title": "2. Who can use the service",
+        "body": [
+          "The service is aimed at high-school students aged [MINIMUM AGE] to [MAXIMUM AGE].",
+          "[TO BE COMPLETED: exact age requirements, need for parental authorisation below 15, verification process.]",
+          "Users undertake to provide accurate information when signing up and to keep it up to date."
+        ]
+      },
+      {
+        "title": "3. User account",
+        "body": [
+          "Creating an account requires a valid email address, verified through a confirmation link.",
+          "The account is personal: sharing credentials is prohibited. Users are responsible for keeping their password confidential and for any activity carried out from their account.",
+          "Any suspicious use must be reported without delay to [CONTACT EMAIL]."
+        ]
+      },
+      {
+        "title": "4. Credits",
+        "body": [
+          "Credits are an internal unit of the service. They have no monetary value and cannot be bought, sold, converted into money or transferred outside the service.",
+          "One credit corresponds to one minute of session. Credits are reserved when a session is created, then transferred to the teacher once it ends, in proportion to the time actually spent.",
+          "Balances are capped at 500 credits. [TO BE COMPLETED: what happens to credits when an account is deleted or suspended.]"
+        ]
+      },
+      {
+        "title": "5. Rules of conduct",
+        "body": [
+          "Everyone must be able to learn safely. The following are prohibited:"
+        ],
+        "items": [
+          "harassment, insults, threats and intimidation;",
+          "hateful, racist, sexist, homophobic or discriminatory speech;",
+          "sexual, violent or shocking content;",
+          "any sexual solicitation, in particular towards a minor;",
+          "impersonation and fake accounts;",
+          "spam, advertising and requests for money;",
+          "publishing someone else's personal data without their consent;",
+          "any illegal activity or activity contrary to public order."
+        ]
+      },
+      {
+        "title": "6. User-generated content",
+        "body": [
+          "Users retain the rights to the content they publish. They grant [PUBLISHER NAME] a non-exclusive, royalty-free licence to host and display that content, limited to what is necessary to operate the service and for the duration of publication.",
+          "Users warrant that they hold the rights required for the content they publish."
+        ]
+      },
+      {
+        "title": "7. Reporting and moderation",
+        "body": [
+          "A reporting form is available from within the service and from the footer. Every report is reviewed within [HANDLING TIME].",
+          "The publisher may remove content that is manifestly illegal or contrary to these terms, and informs the author of the measure and of the means of redress, in accordance with regulation (EU) 2022/2065 (DSA).",
+          "[TO BE COMPLETED: moderation organisation, internal complaint-handling procedure, deadlines.]"
+        ]
+      },
+      {
+        "title": "8. Sanctions",
+        "body": [
+          "In case of breach, the publisher may, depending on severity: issue a warning, remove content, restrict access to certain features, suspend and then terminate the account.",
+          "Facts that may constitute a criminal offence can be reported to the competent authorities."
+        ]
+      },
+      {
+        "title": "9. Sessions between members and liability",
+        "body": [
+          "Sessions are organised directly between members. The publisher provides a matching tool: it is neither a teacher, nor an employer, nor the organiser of the sessions, and does not guarantee the quality or accuracy of the educational content exchanged.",
+          "The publisher has a best-efforts obligation regarding service availability. It cannot be held liable for indirect damages. [TO BE COMPLETED AND VALIDATED: limitation of liability clauses, whose enforceability against consumers and minors must be checked.]"
+        ]
+      },
+      {
+        "title": "10. Service availability",
+        "body": [
+          "The service may be interrupted for maintenance, updates or security reasons. The publisher endeavours to inform users of planned interruptions.",
+          "No availability level is guaranteed. [TO BE COMPLETED if a service commitment is offered.]"
+        ]
+      },
+      {
+        "title": "11. Personal data",
+        "body": [
+          "The processing of personal data is described in the privacy policy, which forms an integral part of these terms."
+        ]
+      },
+      {
+        "title": "12. Duration, termination and account deletion",
+        "body": [
+          "These terms apply for as long as the account exists. Users may delete their account at any time from the Settings page, without reason or cost.",
+          "The publisher may terminate an account in case of serious or repeated breach, after informing the user except in an emergency or where required by law.",
+          "[TO BE COMPLETED: consequences of deletion on scheduled sessions, messages and credits.]"
+        ]
+      },
+      {
+        "title": "13. Changes to these terms",
+        "body": [
+          "These terms may be amended. Users are informed at least [NOTICE PERIOD] before the new terms take effect. Continuing to use the service after that date constitutes acceptance.",
+          "Users who disagree may delete their account."
+        ]
+      },
+      {
+        "title": "14. Applicable law and disputes",
+        "body": [
+          "These terms are governed by French law.",
+          "In case of difficulty, users are invited to contact [CONTACT EMAIL] to seek an amicable solution. They may also use the consumer mediation service free of charge: [MEDIATOR NAME AND CONTACT DETAILS].",
+          "Failing an agreement, the dispute shall be brought before the competent courts in accordance with the applicable rules of law."
+        ]
+      }
+    ]
+  }
+}

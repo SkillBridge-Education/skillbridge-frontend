@@ -1,0 +1,306 @@
+{
+  "app": {
+    "name": "SkillBridge",
+    "taglineLine1": "Partager ce qu'on sait.",
+    "taglineLine2": "Apprendre ce qu'on aime."
+  },
+  "actions": {
+    "save": "Enregistrer",
+    "saving": "Enregistrement…",
+    "saved": "Préférences enregistrées",
+    "cancel": "Annuler",
+    "send": "Envoyer",
+    "sending": "Envoi…",
+    "close": "Fermer",
+    "back": "Retour",
+    "backHome": "Retour à l'accueil",
+    "loading": "Chargement…",
+    "comingSoon": "Bientôt disponible",
+    "copy": "Copier",
+    "copied": "Copié",
+    "required": "Champ obligatoire"
+  },
+  "nav": {
+    "home": "Accueil",
+    "connections": "Connexions",
+    "sessions": "Sessions",
+    "messages": "Messages",
+    "credits": "Crédits",
+    "profile": "Profil",
+    "myProfile": "Mon profil",
+    "settings": "Paramètres",
+    "login": "Se connecter",
+    "loginShort": "Connexion",
+    "register": "S'inscrire",
+    "registerFree": "S'inscrire gratuitement",
+    "logout": "Se déconnecter",
+    "install": "Installer l'app",
+    "menu": "Menu",
+    "unreadOne": "notification non lue",
+    "unreadOther": "notifications non lues",
+    "creditsCount": "{{count}} crédits"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "empty": "Aucune notification.",
+    "markAllRead": "Tout lire",
+    "justNow": "à l'instant",
+    "minutesAgo": "il y a {{count}} min",
+    "hoursAgo": "il y a {{count}} h"
+  },
+  "creditsPopover": {
+    "title": "Comment fonctionnent les crédits",
+    "rule1": "1 crédit = 1 minute de cours",
+    "rule2": "Quand tu réserves une session, les crédits sont mis de côté",
+    "rule3": "À la fin, l'enseignant les reçoit — et si la session est plus courte que prévu, la différence t'est remboursée",
+    "rule4": "Plafond : 500 crédits. Au plafond, apprends pour les dépenser.",
+    "balance": "solde actuel",
+    "seeCredits": "Voir mes crédits →",
+    "unit": "cr"
+  },
+  "auth": {
+    "login": {
+      "title": "Bienvenue !",
+      "subtitle": "Connectez-vous pour continuer vos échanges",
+      "submit": "Se connecter",
+      "submitting": "Connexion…",
+      "forgot": "Mot de passe oublié ?",
+      "noAccount": "Pas encore de compte ?",
+      "unverified": "Ton email n'est pas encore vérifié. Vérifie ta boîte mail ou renvoie le lien depuis /verify-email."
+    },
+    "register": {
+      "title": "Rejoindre SkillBridge",
+      "subtitle": "Créez votre compte et commencez à échanger",
+      "submit": "Créer mon compte",
+      "submitting": "Création du compte…",
+      "hasAccount": "Déjà un compte ?",
+      "switch": "Se connecter"
+    },
+    "fields": {
+      "email": "Email",
+      "emailPlaceholder": "vous@exemple.com",
+      "password": "Mot de passe",
+      "passwordWithMin": "Mot de passe (min. 8 caractères)",
+      "passwordPlaceholder": "••••••••",
+      "firstName": "Prénom",
+      "firstNamePlaceholder": "Alice",
+      "lastName": "Nom",
+      "lastNamePlaceholder": "Martin"
+    }
+  },
+  "cookies": {
+    "text": "Nous utilisons des cookies pour améliorer ton expérience. En utilisant SkillBridge, tu acceptes notre <privacy>politique de confidentialité</privacy> et nos <terms>conditions générales d'utilisation</terms>.",
+    "accept": "Accepter",
+    "decline": "Refuser"
+  },
+  "footer": {
+    "navigation": "Navigation",
+    "legal": "Légal",
+    "help": "Aide",
+    "legalNotice": "Mentions légales",
+    "privacy": "Politique de confidentialité",
+    "terms": "CGU",
+    "settings": "Paramètres",
+    "helpCenter": "Aide / FAQ",
+    "support": "Contacter l'assistance",
+    "report": "Signaler un contenu",
+    "credits": "SkillBridge · HETIC Fast Tracks 2026 · Jimel · Yanis · Mahamane · Yahia"
+  },
+  "language": {
+    "label": "Langue",
+    "fr": "Français",
+    "en": "English",
+    "select": "Choisir la langue"
+  },
+  "settings": {
+    "eyebrow": "Ton compte",
+    "title": "Paramètres",
+    "subtitle": "Gère ta langue, tes notifications, ta confidentialité et tes données personnelles.",
+    "localOnly": "Ces préférences sont enregistrées sur cet appareil uniquement. La synchronisation avec ton compte arrivera avec l'API de préférences.",
+    "language": {
+      "title": "Langue",
+      "description": "Choisis la langue de l'interface. Ton choix est mémorisé sur cet appareil."
+    },
+    "notifications": {
+      "title": "Notifications",
+      "description": "Choisis ce dont tu veux être prévenu.",
+      "email": "Notifications par email",
+      "emailHint": "Un résumé de tes demandes de connexion et de tes sessions à venir.",
+      "push": "Notifications sur l'appareil",
+      "pushHint": "Des alertes sur ce navigateur quand il se passe quelque chose.",
+      "messages": "Nouveaux messages",
+      "messagesHint": "Être prévenu à chaque message reçu.",
+      "sessionReminders": "Rappels de session",
+      "sessionRemindersHint": "Un rappel avant le début de chaque session."
+    },
+    "privacy": {
+      "title": "Confidentialité",
+      "description": "Contrôle ce que les autres membres voient de toi.",
+      "visibility": "Visibilité de mon profil",
+      "visibilityPublic": "Public",
+      "visibilityPublicHint": "Ton profil est visible par tous les visiteurs, même sans compte.",
+      "visibilityMembers": "Membres inscrits",
+      "visibilityMembersHint": "Seuls les membres connectés voient ton profil.",
+      "visibilityConnections": "Mes connexions",
+      "visibilityConnectionsHint": "Seules les personnes avec qui tu es connecté voient ton profil.",
+      "suggestions": "Apparaître dans les suggestions",
+      "suggestionsHint": "Ton profil peut être proposé à d'autres membres qui cherchent ta compétence.",
+      "availability": "Afficher mes disponibilités",
+      "availabilityHint": "Les autres membres voient les créneaux où tu es disponible."
+    },
+    "account": {
+      "title": "Mon compte",
+      "description": "Exporte ou supprime tes données personnelles (RGPD, articles 15 et 17).",
+      "loggedOut": "Connecte-toi pour exporter tes données ou supprimer ton compte.",
+      "export": "Exporter mes données",
+      "exportHint": "Recevoir une copie de tes données personnelles dans un format lisible par machine.",
+      "delete": "Supprimer mon compte",
+      "deleteHint": "Suppression définitive de ton compte, de ton profil, de tes sessions et de tes messages. Cette action est irréversible.",
+      "backendMissing": "Cette action a besoin d'un endpoint backend qui n'existe pas encore. En attendant, écris à l'assistance : elle traite les demandes manuellement.",
+      "contactSupport": "Passer par l'assistance",
+      "logout": "Se déconnecter"
+    },
+    "legal": {
+      "title": "Informations légales",
+      "description": "Les documents qui encadrent l'utilisation de SkillBridge."
+    }
+  },
+  "help": {
+    "eyebrow": "Centre d'aide",
+    "title": "Aide & questions fréquentes",
+    "subtitle": "Les réponses aux questions qu'on nous pose le plus souvent. Si tu ne trouves pas, l'assistance est là.",
+    "searchPlaceholder": "Rechercher une question…",
+    "noResults": "Aucune question ne correspond à ta recherche.",
+    "stillStuck": "Tu ne trouves pas ta réponse ?",
+    "stillStuckText": "L'équipe répond aux demandes sous [DÉLAI DE RÉPONSE] jours ouvrés.",
+    "contactCta": "Contacter l'assistance",
+    "reportCta": "Signaler un utilisateur ou un contenu",
+    "faq": [
+      {
+        "q": "Qu'est-ce que SkillBridge ?",
+        "a": "SkillBridge est une plateforme d'échange de compétences entre lycéens. Tu enseignes ce que tu sais, tu gagnes des crédits, et tu dépenses ces crédits pour apprendre ce qui t'intéresse auprès d'autres membres. Aucun argent réel n'est échangé."
+      },
+      {
+        "q": "Comment fonctionnent les crédits ?",
+        "a": "1 crédit = 1 minute de cours. Tu reçois 120 crédits à l'inscription. Quand tu réserves une session, les crédits sont mis de côté ; à la fin, l'enseignant reçoit les crédits réellement consommés et la différence t'est remboursée. Le solde est plafonné à 500 crédits pour encourager les échanges."
+      },
+      {
+        "q": "Faut-il un âge minimum pour s'inscrire ?",
+        "a": "SkillBridge s'adresse aux lycéens de 15 à 18 ans. En dessous de 15 ans, la loi française exige l'autorisation d'un titulaire de l'autorité parentale pour le traitement des données personnelles. Les conditions exactes sont précisées dans les CGU."
+      },
+      {
+        "q": "Comment trouver quelqu'un avec qui échanger ?",
+        "a": "Va dans Connexions : tu y verras des suggestions basées sur les compétences que tu cherches et celles que tu proposes. Envoie une demande de connexion, puis discutez dans la messagerie avant de planifier une session."
+      },
+      {
+        "q": "Comment se déroule une session ?",
+        "a": "Une session se crée depuis l'onglet Sessions. L'autre personne l'accepte, puis vous vous retrouvez dans la salle de session à l'heure prévue. Le minuteur décompte le temps réellement passé, et les crédits sont transférés à la fin."
+      },
+      {
+        "q": "J'ai oublié mon mot de passe, que faire ?",
+        "a": "Depuis l'écran de connexion, clique sur « Mot de passe oublié ? » et saisis ton adresse email. Tu recevras un lien de réinitialisation valable quelques minutes. Pense à vérifier tes spams."
+      },
+      {
+        "q": "Quelqu'un se comporte mal, comment le signaler ?",
+        "a": "Utilise le formulaire de signalement, accessible depuis le pied de page et depuis cette page. Décris précisément la situation : chaque signalement est examiné par l'équipe de modération. En cas de danger immédiat, contacte le 3018 (violences numériques) ou le 17."
+      },
+      {
+        "q": "Comment supprimer mon compte ou récupérer mes données ?",
+        "a": "Rends-toi dans Paramètres, section « Mon compte ». L'export et la suppression automatiques arrivent bientôt ; en attendant, l'assistance traite ces demandes manuellement, dans les délais prévus par le RGPD."
+      },
+      {
+        "q": "SkillBridge est-il payant ?",
+        "a": "Non. L'inscription et l'utilisation sont gratuites, et les crédits ne s'achètent pas : ils se gagnent en enseignant. Aucun moyen de paiement ne t'est demandé."
+      }
+    ]
+  },
+  "support": {
+    "eyebrow": "Assistance",
+    "title": "Contacter l'assistance",
+    "subtitle": "Un bug, une question, un problème de compte ? Décris-nous ça, on te répond par email.",
+    "fields": {
+      "topic": "Sujet de la demande",
+      "topicPlaceholder": "Choisis un sujet",
+      "email": "Ton email",
+      "emailPlaceholder": "toi@exemple.com",
+      "emailHint": "C'est à cette adresse que la réponse sera envoyée.",
+      "subject": "Objet",
+      "subjectPlaceholder": "Résume ta demande en une phrase",
+      "message": "Message",
+      "messagePlaceholder": "Décris ce qui se passe, avec le maximum de détails (ce que tu faisais, ce que tu attendais, ce qui s'est passé)."
+    },
+    "topics": {
+      "account": "Compte et connexion",
+      "credits": "Crédits",
+      "sessions": "Sessions et messagerie",
+      "bug": "Bug ou problème technique",
+      "privacy": "Données personnelles (RGPD)",
+      "report": "Signalement d'un utilisateur ou d'un contenu",
+      "other": "Autre"
+    },
+    "errors": {
+      "topic": "Sélectionne un sujet dans la liste.",
+      "email": "Entre une adresse email valide.",
+      "subject": "Donne un objet à ta demande.",
+      "message": "Décris ta demande en 20 caractères minimum."
+    },
+    "submit": "Envoyer ma demande",
+    "pendingTitle": "Envoi automatique pas encore disponible",
+    "pendingText": "Le formulaire est prêt, mais l'endpoint backend qui reçoit les demandes n'existe pas encore. Ta demande n'a donc PAS été transmise. Utilise le bouton ci-dessous : il ouvre ton logiciel de mail avec le message déjà rempli.",
+    "openMail": "Ouvrir mon email pré-rempli",
+    "editRequest": "Modifier ma demande",
+    "responseTime": "Délai de réponse annoncé : [DÉLAI DE RÉPONSE] jours ouvrés.",
+    "emergency": "Urgence : en cas de danger immédiat, appelle le 17 (police) ou le 3018 (violences numériques, gratuit et anonyme). SkillBridge n'est pas un service d'urgence."
+  },
+  "report": {
+    "eyebrow": "Modération",
+    "title": "Signaler un utilisateur ou un contenu",
+    "subtitle": "Les signalements sont confidentiels : la personne signalée n'est pas informée de ton identité.",
+    "openButton": "Signaler",
+    "targetUser": "Utilisateur signalé",
+    "fields": {
+      "targetType": "Que veux-tu signaler ?",
+      "target": "Qui ou quoi ?",
+      "targetPlaceholder": "Pseudo, nom du membre, ou lien vers le contenu",
+      "reason": "Motif du signalement",
+      "reasonPlaceholder": "Choisis un motif",
+      "details": "Ce qui s'est passé",
+      "detailsPlaceholder": "Décris les faits : quand, où (message, profil, session), et ce qui a été dit ou fait.",
+      "contact": "Ton email (facultatif)",
+      "contactPlaceholder": "toi@exemple.com",
+      "contactHint": "Uniquement si tu veux être tenu au courant de la suite donnée."
+    },
+    "targetTypes": {
+      "user": "Un utilisateur",
+      "message": "Un message",
+      "profile": "Un profil ou une photo",
+      "session": "Une session",
+      "other": "Autre chose"
+    },
+    "reasons": {
+      "harassment": "Harcèlement, insultes ou intimidation",
+      "sexual": "Contenu à caractère sexuel",
+      "hate": "Propos haineux ou discriminatoires",
+      "violence": "Violence ou menaces",
+      "danger": "Personne en danger ou automutilation",
+      "spam": "Spam ou publicité",
+      "scam": "Arnaque ou demande d'argent",
+      "fake": "Faux compte ou usurpation d'identité",
+      "minor": "Comportement inapproprié envers un mineur",
+      "other": "Autre motif"
+    },
+    "errors": {
+      "target": "Indique qui ou quoi tu signales.",
+      "reason": "Sélectionne un motif dans la liste.",
+      "details": "Décris les faits en 20 caractères minimum."
+    },
+    "submit": "Envoyer le signalement",
+    "pendingTitle": "Signalement non transmis",
+    "pendingText": "L'envoi automatique des signalements n'est pas encore branché (endpoint backend à créer). Ton signalement n'a PAS été reçu par l'équipe. Transmets-le par email avec le bouton ci-dessous — il est déjà rédigé pour toi.",
+    "openMail": "Envoyer par email",
+    "editReport": "Modifier mon signalement",
+    "summary": "Résumé de ton signalement",
+    "emergency": "Si une personne est en danger immédiat, n'attends pas : 17 (police), 119 (enfance en danger), 3018 (violences numériques).",
+    "confidential": "Ton signalement est confidentiel. Les abus de signalement peuvent entraîner des sanctions."
+  }
+}

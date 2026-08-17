@@ -1,0 +1,306 @@
+{
+  "app": {
+    "name": "SkillBridge",
+    "taglineLine1": "Share what you know.",
+    "taglineLine2": "Learn what you love."
+  },
+  "actions": {
+    "save": "Save",
+    "saving": "Saving…",
+    "saved": "Preferences saved",
+    "cancel": "Cancel",
+    "send": "Send",
+    "sending": "Sending…",
+    "close": "Close",
+    "back": "Back",
+    "backHome": "Back to home",
+    "loading": "Loading…",
+    "comingSoon": "Coming soon",
+    "copy": "Copy",
+    "copied": "Copied",
+    "required": "Required field"
+  },
+  "nav": {
+    "home": "Home",
+    "connections": "Connections",
+    "sessions": "Sessions",
+    "messages": "Messages",
+    "credits": "Credits",
+    "profile": "Profile",
+    "myProfile": "My profile",
+    "settings": "Settings",
+    "login": "Log in",
+    "loginShort": "Log in",
+    "register": "Sign up",
+    "registerFree": "Sign up for free",
+    "logout": "Log out",
+    "install": "Install the app",
+    "menu": "Menu",
+    "unreadOne": "unread notification",
+    "unreadOther": "unread notifications",
+    "creditsCount": "{{count}} credits"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "empty": "No notifications.",
+    "markAllRead": "Mark all read",
+    "justNow": "just now",
+    "minutesAgo": "{{count}} min ago",
+    "hoursAgo": "{{count}} h ago"
+  },
+  "creditsPopover": {
+    "title": "How credits work",
+    "rule1": "1 credit = 1 minute of teaching",
+    "rule2": "When you book a session, the credits are set aside",
+    "rule3": "At the end, the teacher receives them — and if the session runs short, the difference is refunded to you",
+    "rule4": "Cap: 500 credits. At the cap, learn something to spend them.",
+    "balance": "current balance",
+    "seeCredits": "See my credits →",
+    "unit": "cr"
+  },
+  "auth": {
+    "login": {
+      "title": "Welcome back!",
+      "subtitle": "Log in to keep exchanging skills",
+      "submit": "Log in",
+      "submitting": "Logging in…",
+      "forgot": "Forgot your password?",
+      "noAccount": "No account yet?",
+      "unverified": "Your email is not verified yet. Check your inbox or resend the link from /verify-email."
+    },
+    "register": {
+      "title": "Join SkillBridge",
+      "subtitle": "Create your account and start exchanging",
+      "submit": "Create my account",
+      "submitting": "Creating account…",
+      "hasAccount": "Already have an account?",
+      "switch": "Log in"
+    },
+    "fields": {
+      "email": "Email",
+      "emailPlaceholder": "you@example.com",
+      "password": "Password",
+      "passwordWithMin": "Password (min. 8 characters)",
+      "passwordPlaceholder": "••••••••",
+      "firstName": "First name",
+      "firstNamePlaceholder": "Alice",
+      "lastName": "Last name",
+      "lastNamePlaceholder": "Martin"
+    }
+  },
+  "cookies": {
+    "text": "We use cookies to improve your experience. By using SkillBridge you agree to our <privacy>privacy policy</privacy> and our <terms>terms of service</terms>.",
+    "accept": "Accept",
+    "decline": "Decline"
+  },
+  "footer": {
+    "navigation": "Navigation",
+    "legal": "Legal",
+    "help": "Help",
+    "legalNotice": "Legal notice",
+    "privacy": "Privacy policy",
+    "terms": "Terms of service",
+    "settings": "Settings",
+    "helpCenter": "Help / FAQ",
+    "support": "Contact support",
+    "report": "Report content",
+    "credits": "SkillBridge · HETIC Fast Tracks 2026 · Jimel · Yanis · Mahamane · Yahia"
+  },
+  "language": {
+    "label": "Language",
+    "fr": "Français",
+    "en": "English",
+    "select": "Choose a language"
+  },
+  "settings": {
+    "eyebrow": "Your account",
+    "title": "Settings",
+    "subtitle": "Manage your language, notifications, privacy and personal data.",
+    "localOnly": "These preferences are stored on this device only. Syncing with your account will come with the preferences API.",
+    "language": {
+      "title": "Language",
+      "description": "Pick the interface language. Your choice is remembered on this device."
+    },
+    "notifications": {
+      "title": "Notifications",
+      "description": "Choose what you want to be told about.",
+      "email": "Email notifications",
+      "emailHint": "A digest of your connection requests and upcoming sessions.",
+      "push": "Device notifications",
+      "pushHint": "Alerts in this browser when something happens.",
+      "messages": "New messages",
+      "messagesHint": "Get notified for every message you receive.",
+      "sessionReminders": "Session reminders",
+      "sessionRemindersHint": "A reminder before each session starts."
+    },
+    "privacy": {
+      "title": "Privacy",
+      "description": "Control what other members can see about you.",
+      "visibility": "Profile visibility",
+      "visibilityPublic": "Public",
+      "visibilityPublicHint": "Your profile is visible to every visitor, even without an account.",
+      "visibilityMembers": "Registered members",
+      "visibilityMembersHint": "Only logged-in members can see your profile.",
+      "visibilityConnections": "My connections",
+      "visibilityConnectionsHint": "Only people you are connected with can see your profile.",
+      "suggestions": "Appear in suggestions",
+      "suggestionsHint": "Your profile can be suggested to members looking for your skill.",
+      "availability": "Show my availability",
+      "availabilityHint": "Other members can see the time slots when you are available."
+    },
+    "account": {
+      "title": "My account",
+      "description": "Export or delete your personal data (GDPR, articles 15 and 17).",
+      "loggedOut": "Log in to export your data or delete your account.",
+      "export": "Export my data",
+      "exportHint": "Receive a copy of your personal data in a machine-readable format.",
+      "delete": "Delete my account",
+      "deleteHint": "Permanently deletes your account, profile, sessions and messages. This cannot be undone.",
+      "backendMissing": "This action needs a backend endpoint that does not exist yet. In the meantime, write to support: requests are handled manually.",
+      "contactSupport": "Go through support",
+      "logout": "Log out"
+    },
+    "legal": {
+      "title": "Legal information",
+      "description": "The documents that govern the use of SkillBridge."
+    }
+  },
+  "help": {
+    "eyebrow": "Help center",
+    "title": "Help & frequently asked questions",
+    "subtitle": "Answers to the questions we get the most. If you can't find yours, support is here.",
+    "searchPlaceholder": "Search a question…",
+    "noResults": "No question matches your search.",
+    "stillStuck": "Still can't find your answer?",
+    "stillStuckText": "The team answers requests within [RESPONSE TIME] business days.",
+    "contactCta": "Contact support",
+    "reportCta": "Report a user or content",
+    "faq": [
+      {
+        "q": "What is SkillBridge?",
+        "a": "SkillBridge is a skill-exchange platform for high-school students. You teach what you know, you earn credits, and you spend those credits to learn from other members. No real money is ever exchanged."
+      },
+      {
+        "q": "How do credits work?",
+        "a": "1 credit = 1 minute of teaching. You get 120 credits when you sign up. When you book a session the credits are set aside; at the end the teacher receives the credits actually spent and the difference is refunded to you. Balances are capped at 500 credits to encourage exchanges."
+      },
+      {
+        "q": "Is there a minimum age to sign up?",
+        "a": "SkillBridge is aimed at high-school students aged 15 to 18. Below 15, French law requires the authorisation of a parent or guardian to process personal data. The exact conditions are set out in the terms of service."
+      },
+      {
+        "q": "How do I find someone to exchange with?",
+        "a": "Go to Connections: you will see suggestions based on the skills you are looking for and the ones you offer. Send a connection request, then chat in the messaging area before scheduling a session."
+      },
+      {
+        "q": "How does a session work?",
+        "a": "You create a session from the Sessions tab. The other person accepts it, then you both meet in the session room at the agreed time. The timer counts the time actually spent, and credits are transferred at the end."
+      },
+      {
+        "q": "I forgot my password, what should I do?",
+        "a": "From the login screen, click \"Forgot your password?\" and enter your email address. You will get a reset link valid for a few minutes. Remember to check your spam folder."
+      },
+      {
+        "q": "Someone is behaving badly, how do I report it?",
+        "a": "Use the report form, available from the footer and from this page. Describe the situation precisely: every report is reviewed by the moderation team. If someone is in immediate danger, call 3018 (online violence) or 17 in France."
+      },
+      {
+        "q": "How do I delete my account or get my data back?",
+        "a": "Go to Settings, \"My account\" section. Automatic export and deletion are coming soon; in the meantime support handles these requests manually, within the deadlines set by the GDPR."
+      },
+      {
+        "q": "Is SkillBridge free?",
+        "a": "Yes. Signing up and using the platform are free, and credits cannot be bought: they are earned by teaching. We never ask for a payment method."
+      }
+    ]
+  },
+  "support": {
+    "eyebrow": "Support",
+    "title": "Contact support",
+    "subtitle": "A bug, a question, an account problem? Tell us about it and we'll answer by email.",
+    "fields": {
+      "topic": "Request topic",
+      "topicPlaceholder": "Pick a topic",
+      "email": "Your email",
+      "emailPlaceholder": "you@example.com",
+      "emailHint": "This is the address we will reply to.",
+      "subject": "Subject",
+      "subjectPlaceholder": "Sum up your request in one sentence",
+      "message": "Message",
+      "messagePlaceholder": "Describe what is happening, with as much detail as possible (what you were doing, what you expected, what happened)."
+    },
+    "topics": {
+      "account": "Account and login",
+      "credits": "Credits",
+      "sessions": "Sessions and messaging",
+      "bug": "Bug or technical problem",
+      "privacy": "Personal data (GDPR)",
+      "report": "Reporting a user or content",
+      "other": "Something else"
+    },
+    "errors": {
+      "topic": "Select a topic from the list.",
+      "email": "Enter a valid email address.",
+      "subject": "Give your request a subject.",
+      "message": "Describe your request in at least 20 characters."
+    },
+    "submit": "Send my request",
+    "pendingTitle": "Automatic sending is not available yet",
+    "pendingText": "The form is ready, but the backend endpoint that receives requests does not exist yet. Your request has therefore NOT been sent. Use the button below: it opens your mail app with the message already written.",
+    "openMail": "Open my pre-filled email",
+    "editRequest": "Edit my request",
+    "responseTime": "Stated response time: [RESPONSE TIME] business days.",
+    "emergency": "Emergency: if someone is in immediate danger, call 17 (police) or 3018 (online violence, free and anonymous) in France. SkillBridge is not an emergency service."
+  },
+  "report": {
+    "eyebrow": "Moderation",
+    "title": "Report a user or content",
+    "subtitle": "Reports are confidential: the reported person is never told who reported them.",
+    "openButton": "Report",
+    "targetUser": "Reported user",
+    "fields": {
+      "targetType": "What do you want to report?",
+      "target": "Who or what?",
+      "targetPlaceholder": "Username, member name, or link to the content",
+      "reason": "Reason for the report",
+      "reasonPlaceholder": "Pick a reason",
+      "details": "What happened",
+      "detailsPlaceholder": "Describe the facts: when, where (message, profile, session), and what was said or done.",
+      "contact": "Your email (optional)",
+      "contactPlaceholder": "you@example.com",
+      "contactHint": "Only if you want to be kept informed of the outcome."
+    },
+    "targetTypes": {
+      "user": "A user",
+      "message": "A message",
+      "profile": "A profile or a photo",
+      "session": "A session",
+      "other": "Something else"
+    },
+    "reasons": {
+      "harassment": "Harassment, insults or intimidation",
+      "sexual": "Sexual content",
+      "hate": "Hate speech or discrimination",
+      "violence": "Violence or threats",
+      "danger": "Someone in danger or self-harm",
+      "spam": "Spam or advertising",
+      "scam": "Scam or request for money",
+      "fake": "Fake account or impersonation",
+      "minor": "Inappropriate behaviour towards a minor",
+      "other": "Another reason"
+    },
+    "errors": {
+      "target": "Tell us who or what you are reporting.",
+      "reason": "Select a reason from the list.",
+      "details": "Describe the facts in at least 20 characters."
+    },
+    "submit": "Send the report",
+    "pendingTitle": "Report not sent",
+    "pendingText": "Automatic sending of reports is not wired up yet (backend endpoint still to be built). Your report has NOT reached the team. Send it by email with the button below — it is already written for you.",
+    "openMail": "Send by email",
+    "editReport": "Edit my report",
+    "summary": "Summary of your report",
+    "emergency": "If someone is in immediate danger, do not wait: 17 (police), 119 (child protection), 3018 (online violence) in France.",
+    "confidential": "Your report is confidential. Abusive reports may lead to sanctions."
+  }
+}

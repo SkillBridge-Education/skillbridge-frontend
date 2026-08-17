@@ -9,6 +9,9 @@ export default mergeConfig(
       environment: 'jsdom',
       globals: true,
       setupFiles: ['./src/setupTests.js'],
+      // Les machines de dev (Windows) sont lentes quand plusieurs fichiers de
+      // test tournent en parallèle : 5 s par défaut rendait la suite instable.
+      testTimeout: 15000,
     },
   })
 )
