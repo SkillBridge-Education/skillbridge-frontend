@@ -86,7 +86,141 @@
       "firstNamePlaceholder": "Alice",
       "lastName": "Last name",
       "lastNamePlaceholder": "Martin"
+    },
+    "spamHint": "Remember to check your spam folder if you see nothing.",
+    "resendIn": "Resend in 0:{{seconds}}"
+  },
+  "days": {
+    "mon": "Monday",
+    "tue": "Tuesday",
+    "wed": "Wednesday",
+    "thu": "Thursday",
+    "fri": "Friday"
+  },
+  "daysShort": {
+    "mon": "Mon",
+    "tue": "Tue",
+    "wed": "Wed",
+    "thu": "Thu",
+    "fri": "Fri"
+  },
+  "slots": {
+    "morning": "Morning",
+    "noon": "Midday",
+    "evening": "Evening"
+  },
+  "slotHints": {
+    "morning": "8am–12pm",
+    "noon": "12pm–2pm",
+    "evening": "6pm–10pm"
+  },
+  "register": {
+    "aside": {
+      "title": "Join the skill-exchange community.",
+      "subtitle": "Share what you know, learn what you love."
+    },
+    "steps": {
+      "account": { "label": "Account", "desc": "Personal information" },
+      "skills": { "label": "Skills", "desc": "Teaching & learning" },
+      "availability": { "label": "Availability", "desc": "Your free slots" }
+    },
+    "account": {
+      "title": "Create your account",
+      "subtitle": "This information will be visible on your profile.",
+      "photo": "Photo",
+      "addPhoto": "Add a profile picture",
+      "emailPlaceholder": "alice@example.com",
+      "passwordPlaceholder": "8 characters minimum",
+      "bio": "Bio (optional)",
+      "bioPlaceholder": "Tell us what you are passionate about…"
+    },
+    "skills": {
+      "title": "Your skills",
+      "subtitle": "What you can teach and what you want to learn.",
+      "teaches": "I teach",
+      "wants": "I learn",
+      "searchPlaceholder": "Search a skill…",
+      "customPlaceholder": "Add a custom skill…",
+      "addCustom": "Add this skill",
+      "hint": "Add at least one skill to teach AND one to learn to continue.",
+      "creating": "Creating…"
+    },
+    "availability": {
+      "title": "Your availability",
+      "subtitle": "Select the slots when you are free to exchange.",
+      "finish": "Finish signing up →",
+      "toggleSlot": "{{day}} — {{slot}}"
+    },
+    "continue": "Continue →",
+    "back": "Back",
+    "errors": {
+      "firstName": "First name is required",
+      "lastName": "Last name is required",
+      "email": "Email is required",
+      "password": "Password: 8 characters minimum",
+      "bothSkills": "Add at least one skill to teach AND one to learn to continue",
+      "teaches": "Add at least one skill to teach",
+      "wants": "Add at least one skill to learn",
+      "failed": "Sign-up failed"
+    },
+    "verify": {
+      "title": "Check your inbox!",
+      "text": "A confirmation email has been sent to <strong>{{email}}</strong>. Click the button it contains to activate your account.",
+      "resent": "Email resent!",
+      "resend": "Resend the confirmation email",
+      "resendError": "Could not resend the email."
+    },
+    "done": {
+      "title": "Welcome to SkillBridge!",
+      "subtitle": "Your account is ready. You can now find peers and start learning.",
+      "welcomeCredits": "Welcome credits",
+      "creditsHint": "free credits · 2 hours of learning",
+      "explore": "Explore members",
+      "completeProfile": "Complete my profile →"
     }
+  },
+  "forgotPassword": {
+    "title": "Reset your password",
+    "subtitle": "Enter your email address and we will send you a reset link.",
+    "emailPlaceholder": "you@example.com",
+    "submit": "Send the link",
+    "error": "Could not send the email",
+    "sentTitle": "Email sent",
+    "sentText": "If an account exists for <strong>{{email}}</strong>, you will receive a reset link within a few minutes.",
+    "resend": "Resend the link",
+    "backToLogin": "Back to login"
+  },
+  "resetPassword": {
+    "title": "New password",
+    "subtitle": "Choose a new, secure password.",
+    "newPassword": "New password",
+    "newPasswordPlaceholder": "8 characters minimum",
+    "confirmPassword": "Confirm the password",
+    "confirmPasswordPlaceholder": "Repeat the password",
+    "submit": "Reset the password",
+    "submitting": "Resetting…",
+    "doneTitle": "Password reset!",
+    "doneText": "Your password has been updated. You can now log in.",
+    "invalidTitle": "Invalid link",
+    "invalidText": "This link is invalid or has expired.",
+    "requestNewLink": "Request a new link",
+    "errors": {
+      "invalidLink": "Invalid or expired link.",
+      "tooShort": "The password must be at least 8 characters long.",
+      "mismatch": "The passwords do not match.",
+      "failed": "Could not reset the password"
+    }
+  },
+  "verifyEmail": {
+    "checking": "Verifying…",
+    "successTitle": "Email verified!",
+    "successText": "Your email address has been confirmed. You can now log in.",
+    "errorTitle": "Invalid or expired link",
+    "errorText": "This verification link is no longer valid. Enter your email to get a new one.",
+    "resent": "Verification email sent!",
+    "emailLabel": "Your email address",
+    "resend": "Resend the link",
+    "resendError": "Could not send the email."
   },
   "cookies": {
     "text": "We use cookies to improve your experience. By using SkillBridge you agree to our <privacy>privacy policy</privacy> and our <terms>terms of service</terms>.",

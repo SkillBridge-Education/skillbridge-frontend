@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { Trans, useTranslation } from 'react-i18next'
 import api from '../services/api'
 
 const RESEND_DELAY = 60
@@ -20,6 +21,7 @@ function Logo() {
 
 export default function ForgotPassword() {
   const navigate  = useNavigate()
+  const { t }     = useTranslation()
   const [email,    setEmail]    = useState('')
   const [sent,     setSent]     = useState(false)
   const [error,    setError]    = useState('')
@@ -50,7 +52,7 @@ export default function ForgotPassword() {
       setSent(true)
       startCountdown()
     } catch (err) {
-      setError(err.response?.data?.message || "Erreur lors de l'envoi")
+      setError(err.response?.data?.message || t('forgotPassword.error'))
     } finally {
       setLoading(false)
     }
@@ -72,14 +74,16 @@ export default function ForgotPassword() {
                   <path d="M2 11l14 9 14-9"/>
                 </svg>
               </span>
-              <h1 className="text-2xl font-black tracking-tight text-[#252840]">Email envoyé</h1>
+              <h1 className="text-2xl font-black tracking-tight text-[#252840]">{t('forgotPassword.sentTitle')}</h1>
               <p className="mt-2 text-sm text-[#756B5B] leading-relaxed">
-                Si un compte existe pour{' '}
-                <span className="font-semibold text-[#252840]">{email}</span>,
-                tu recevras un lien de réinitialisation dans quelques minutes.
+                <Trans
+                  i18nKey="forgotPassword.sentText"
+                  values={{ email }}
+                  components={{ strong: <span className="font-semibold text-[#252840]" /> }}
+                />
               </p>
               <p className="mt-2 text-sm text-[#B0A898]">
-                Pense à vérifier ton dossier spam si tu ne vois rien.
+                {t('auth.spamHint')}
               </p>
 
               <button
@@ -88,26 +92,26 @@ export default function ForgotPassword() {
                 className="mt-5 w-full py-2.5 rounded-full border border-[#E8DDC7] text-sm font-semibold text-[#756B5B] bg-transparent cursor-pointer hover:border-[#252840] hover:text-[#252840] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 {loading
-                  ? 'Envoi…'
+                  ? t('actions.sending')
                   : countdown > 0
-                    ? `Renvoyer dans 0:${String(countdown).padStart(2, '0')}`
-                    : 'Renvoyer le lien'}
+                    ? t('auth.resendIn', { seconds: String(countdown).padStart(2, '0') })
+                    : t('forgotPassword.resend')}
               </button>
 
               <Link
                 to="/"
                 className="mt-4 flex w-full items-center justify-center rounded-full bg-[#252840] px-4 py-3 text-sm font-bold text-white no-underline hover:bg-[#363B6B] transition-colors"
               >
-                Retour à l'accueil
+                {t('actions.backHome')}
               </Link>
             </div>
           ) : (
             <>
               <h1 className="text-2xl font-black tracking-tight text-[#252840]">
-                Réinitialise ton mot de passe
+                {t('forgotPassword.title')}
               </h1>
               <p className="mt-2 text-sm text-[#756B5B] mb-6">
-                Entre ton adresse email et nous t'enverrons un lien de réinitialisation.
+                {t('forgotPassword.subtitle')}
               </p>
 
               {error && (
@@ -116,7 +120,7 @@ export default function ForgotPassword() {
 
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                  <label className="block text-sm font-bold text-[#252840] mb-1">Email</label>
+                  <label className="block text-sm font-bold text-[#252840] mb-1">{t('auth.fields.email')}</label>
                   <div className="relative">
                     <svg className="absolute left-3 top-1/2 -translate-y-1/2 text-[#B0A898]" width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round">
                       <rect x="2" y="4" width="14" height="11" rx="2"/>
@@ -126,7 +130,7 @@ export default function ForgotPassword() {
                       type="email"
                       value={email}
                       onChange={e => setEmail(e.target.value)}
-                      placeholder="toi@exemple.com"
+                      placeholder={t('forgotPassword.emailPlaceholder')}
                       required
                       className="w-full h-11 rounded-xl border border-[#E8DDC7] bg-[#FDFAF4] pl-10 pr-4 text-sm outline-none focus:border-[#C8864B] transition-colors"
                     />
@@ -137,7 +141,7 @@ export default function ForgotPassword() {
                   disabled={loading}
                   className="w-full py-3 rounded-full bg-[#C8864B] text-white text-sm font-bold border-none cursor-pointer hover:bg-[#B07030] transition-colors disabled:opacity-50"
                 >
-                  {loading ? 'Envoi…' : 'Envoyer le lien'}
+                  {loading ? t('actions.sending') : t('forgotPassword.submit')}
                 </button>
               </form>
 
@@ -148,7 +152,7 @@ export default function ForgotPassword() {
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round">
                   <path d="M9 2L4 7l5 5"/>
                 </svg>
-                Retour à la connexion
+                {t('forgotPassword.backToLogin')}
               </button>
             </>
           )}

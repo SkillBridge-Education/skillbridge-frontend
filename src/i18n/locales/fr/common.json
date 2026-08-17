@@ -86,7 +86,141 @@
       "firstNamePlaceholder": "Alice",
       "lastName": "Nom",
       "lastNamePlaceholder": "Martin"
+    },
+    "spamHint": "Pense à vérifier ton dossier spam si tu ne vois rien.",
+    "resendIn": "Renvoyer dans 0:{{seconds}}"
+  },
+  "days": {
+    "mon": "Lundi",
+    "tue": "Mardi",
+    "wed": "Mercredi",
+    "thu": "Jeudi",
+    "fri": "Vendredi"
+  },
+  "daysShort": {
+    "mon": "Lun",
+    "tue": "Mar",
+    "wed": "Mer",
+    "thu": "Jeu",
+    "fri": "Ven"
+  },
+  "slots": {
+    "morning": "Matin",
+    "noon": "Midi",
+    "evening": "Soir"
+  },
+  "slotHints": {
+    "morning": "8h–12h",
+    "noon": "12h–14h",
+    "evening": "18h–22h"
+  },
+  "register": {
+    "aside": {
+      "title": "Rejoins la communauté de l'échange.",
+      "subtitle": "Partage ce que tu sais, apprends ce que tu aimes."
+    },
+    "steps": {
+      "account": { "label": "Compte", "desc": "Informations personnelles" },
+      "skills": { "label": "Compétences", "desc": "Enseignement & apprentissage" },
+      "availability": { "label": "Disponibilités", "desc": "Vos créneaux libres" }
+    },
+    "account": {
+      "title": "Créer votre compte",
+      "subtitle": "Ces infos seront visibles dans votre profil.",
+      "photo": "Photo",
+      "addPhoto": "Ajouter une photo de profil",
+      "emailPlaceholder": "alice@example.com",
+      "passwordPlaceholder": "8 caractères minimum",
+      "bio": "Bio (optionnel)",
+      "bioPlaceholder": "Dites-nous ce qui vous passionne…"
+    },
+    "skills": {
+      "title": "Vos compétences",
+      "subtitle": "Ce que vous pouvez enseigner et ce que vous voulez apprendre.",
+      "teaches": "J'enseigne",
+      "wants": "J'apprends",
+      "searchPlaceholder": "Rechercher une compétence…",
+      "customPlaceholder": "Ajouter une compétence personnalisée…",
+      "addCustom": "Ajouter cette compétence",
+      "hint": "Ajoute au moins une compétence à enseigner ET une à apprendre pour continuer.",
+      "creating": "Création…"
+    },
+    "availability": {
+      "title": "Vos disponibilités",
+      "subtitle": "Sélectionnez vos créneaux libres pour les échanges.",
+      "finish": "Terminer l'inscription →",
+      "toggleSlot": "{{day}} — {{slot}}"
+    },
+    "continue": "Continuer →",
+    "back": "Retour",
+    "errors": {
+      "firstName": "Le prénom est requis",
+      "lastName": "Le nom est requis",
+      "email": "L'email est requis",
+      "password": "Mot de passe : 8 caractères minimum",
+      "bothSkills": "Ajoute au moins une compétence à enseigner ET une à apprendre pour continuer",
+      "teaches": "Ajoute au moins une compétence à enseigner",
+      "wants": "Ajoute au moins une compétence à apprendre",
+      "failed": "Échec de l'inscription"
+    },
+    "verify": {
+      "title": "Vérifie ta boîte mail !",
+      "text": "Un email de confirmation a été envoyé à <strong>{{email}}</strong>. Clique sur le bouton qu'il contient pour activer ton compte.",
+      "resent": "Email renvoyé !",
+      "resend": "Renvoyer l'email de confirmation",
+      "resendError": "Erreur lors du renvoi."
+    },
+    "done": {
+      "title": "Bienvenue sur SkillBridge !",
+      "subtitle": "Ton compte est prêt. Tu peux maintenant trouver des pairs et apprendre.",
+      "welcomeCredits": "Crédits de bienvenue",
+      "creditsHint": "crédits offerts · 2 heures d'apprentissage",
+      "explore": "Explorer les membres",
+      "completeProfile": "Compléter mon profil →"
     }
+  },
+  "forgotPassword": {
+    "title": "Réinitialise ton mot de passe",
+    "subtitle": "Entre ton adresse email et nous t'enverrons un lien de réinitialisation.",
+    "emailPlaceholder": "toi@exemple.com",
+    "submit": "Envoyer le lien",
+    "error": "Erreur lors de l'envoi",
+    "sentTitle": "Email envoyé",
+    "sentText": "Si un compte existe pour <strong>{{email}}</strong>, tu recevras un lien de réinitialisation dans quelques minutes.",
+    "resend": "Renvoyer le lien",
+    "backToLogin": "Retour à la connexion"
+  },
+  "resetPassword": {
+    "title": "Nouveau mot de passe",
+    "subtitle": "Choisissez un nouveau mot de passe sécurisé.",
+    "newPassword": "Nouveau mot de passe",
+    "newPasswordPlaceholder": "8 caractères minimum",
+    "confirmPassword": "Confirmer le mot de passe",
+    "confirmPasswordPlaceholder": "Répéter le mot de passe",
+    "submit": "Réinitialiser le mot de passe",
+    "submitting": "Réinitialisation…",
+    "doneTitle": "Mot de passe réinitialisé !",
+    "doneText": "Votre mot de passe a été mis à jour. Vous pouvez maintenant vous connecter.",
+    "invalidTitle": "Lien invalide",
+    "invalidText": "Ce lien est invalide ou a expiré.",
+    "requestNewLink": "Demander un nouveau lien",
+    "errors": {
+      "invalidLink": "Lien invalide ou expiré.",
+      "tooShort": "Le mot de passe doit contenir au moins 8 caractères.",
+      "mismatch": "Les mots de passe ne correspondent pas.",
+      "failed": "Erreur lors de la réinitialisation"
+    }
+  },
+  "verifyEmail": {
+    "checking": "Vérification en cours…",
+    "successTitle": "Email vérifié !",
+    "successText": "Ton adresse email a bien été confirmée. Tu peux maintenant te connecter.",
+    "errorTitle": "Lien invalide ou expiré",
+    "errorText": "Ce lien de vérification n'est plus valide. Entre ton email pour en recevoir un nouveau.",
+    "resent": "Email de vérification envoyé !",
+    "emailLabel": "Ton adresse email",
+    "resend": "Renvoyer le lien",
+    "resendError": "Erreur lors de l'envoi."
   },
   "cookies": {
     "text": "Nous utilisons des cookies pour améliorer ton expérience. En utilisant SkillBridge, tu acceptes notre <privacy>politique de confidentialité</privacy> et nos <terms>conditions générales d'utilisation</terms>.",
