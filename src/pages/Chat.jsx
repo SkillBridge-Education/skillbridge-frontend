@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
   Search, Pin, Trash2, Paperclip,
   Image as ImageIcon, Video as VideoIcon, File as FileIcon,
@@ -21,11 +22,11 @@ function convColor(name) {
   return CONV_COLORS[c % CONV_COLORS.length]
 }
 
-function formatBytes(bytes) {
+function formatBytes(bytes, t) {
   if (!bytes) return ''
-  if (bytes < 1024)    return `${bytes} o`
-  if (bytes < 1048576) return `${(bytes / 1024).toFixed(1)} Ko`
-  return `${(bytes / 1048576).toFixed(1)} Mo`
+  if (bytes < 1024)    return `${bytes} ${t('chat.units.b')}`
+  if (bytes < 1048576) return `${(bytes / 1024).toFixed(1)} ${t('chat.units.kb')}`
+  return `${(bytes / 1048576).toFixed(1)} ${t('chat.units.mb')}`
 }
 
 function fileIcon(type) {
@@ -48,28 +49,28 @@ function ConvAvatar({ conv }) {
   )
 }
 
-function getDateLabel(isoStr) {
+function getDateLabel(isoStr, t, locale) {
   if (!isoStr) return ''
   const d = new Date(isoStr)
   const today = new Date()
   const yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1)
-  if (d.toDateString() === today.toDateString())     return "Aujourd'hui"
-  if (d.toDateString() === yesterday.toDateString()) return 'Hier'
-  return d.toLocaleDateString('fr', { day: '2-digit', month: 'long', year: 'numeric' })
+  if (d.toDateString() === today.toDateString())     return t('chat.today')
+  if (d.toDateString() === yesterday.toDateString()) return t('chat.yesterday')
+  return d.toLocaleDateString(locale, { day: '2-digit', month: 'long', year: 'numeric' })
 }
 
-function groupByDate(msgs) {
+function groupByDate(msgs, t, locale) {
   const groups = []
   let key = null
   msgs.forEach(m => {
     const dk = m.rawCreatedAt ? new Date(m.rawCreatedAt).toDateString() : 'x'
-    if (dk !== key) { key = dk; groups.push({ label: getDateLabel(m.rawCreatedAt), msgs: [] }) }
+    if (dk !== key) { key = dk; groups.push({ label: getDateLabel(m.rawCreatedAt, t, locale), msgs: [] }) }
     groups[groups.length - 1].msgs.push(m)
   })
   return groups
 }
 
-function mapMessage(m, userId) {
+function mapMessage(m, userId, locale) {
   const isImg   = m.fileUrl && (m.mimeType ?? m.fileType ?? '').startsWith('image/')
   const isVideo = m.fileUrl && (m.mimeType ?? m.fileType ?? '').startsWith('video/')
   const isFile  = m.fileUrl && !isImg && !isVideo
@@ -83,7 +84,7 @@ function mapMessage(m, userId) {
     fileSize:     m.fileSize ?? null,
     fileType:     m.mimeType ?? m.fileType ?? null,
     msgType:      isImg ? 'image' : isVideo ? 'video' : isFile ? 'file' : 'text',
-    time:         new Date(m.createdAt).toLocaleTimeString('fr', { hour: '2-digit', minute: '2-digit' }),
+    time:         new Date(m.createdAt).toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' }),
     rawCreatedAt: m.createdAt,
   }
 }
@@ -91,6 +92,8 @@ function mapMessage(m, userId) {
 export default function Chat() {
   const { user }  = useAuthStore()
   const addToast  = useToast()
+  const { t, i18n } = useTranslation()
+  const locale = i18n.language
 
   const [conversations,  setConversations]  = useState([])
   const [activeId,       setActiveId]       = useState(null)
@@ -152,7 +155,7 @@ export default function Chat() {
           avatarUrl: c.other?.avatarUrl ?? null,
           preview:   c.lastMessage?.body ?? '',
           time:      c.lastMessage
-            ? new Date(c.lastMessage.createdAt).toLocaleTimeString('fr', { hour: '2-digit', minute: '2-digit' })
+            ? new Date(c.lastMessage.createdAt).toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' })
             : '',
           unread: c.unreadCount ?? 0,
         }))
@@ -161,16 +164,16 @@ export default function Chat() {
       })
       .catch(console.error)
       .finally(() => setLoading(false))
-  }, [user?.id])
+  }, [user?.id, locale])
 
   const fetchMessages = useCallback((convId) => {
     convApi.messages(convId)
       .then(data => {
-        const mapped = (data.messages ?? data).map(m => mapMessage(m, user?.id))
+        const mapped = (data.messages ?? data).map(m => mapMessage(m, user?.id, locale))
         setMessages(prev => ({ ...prev, [convId]: mapped }))
       })
       .catch(() => {})
-  }, [user?.id])
+  }, [user?.id, locale])
 
   useEffect(() => {
     if (!activeId) return
@@ -186,7 +189,7 @@ export default function Chat() {
     if (!socket) return
 
     const onNewMessage = ({ conversationId, message }) => {
-      const mapped = mapMessage(message, user.id)
+      const mapped = mapMessage(message, user.id, locale)
       setMessages(prev => {
         const existing = prev[conversationId] ?? []
         if (existing.some(m => m.id === mapped.id)) return prev
@@ -205,7 +208,7 @@ export default function Chat() {
 
     socket.on('message:new', onNewMessage)
     return () => socket.off('message:new', onNewMessage)
-  }, [user, activeId])
+  }, [user, activeId, locale])
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -219,13 +222,13 @@ export default function Chat() {
     const tmpId = `tmp-${Date.now()}`
     const tmp = {
       id: tmpId, from: 'me', msgType: 'text', text,
-      time: new Date().toLocaleTimeString('fr', { hour: '2-digit', minute: '2-digit' }),
+      time: new Date().toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' }),
       rawCreatedAt: new Date().toISOString(),
     }
     setMessages(prev => ({ ...prev, [activeId]: [...(prev[activeId] ?? []), tmp] }))
     try {
       const realMessage = await convApi.send(activeId, text)
-      const mapped = mapMessage(realMessage, user.id)
+      const mapped = mapMessage(realMessage, user.id, locale)
       // Swap the optimistic bubble for the real one so the later `message:new`
       // echo (same id) gets deduped instead of appearing twice.
       setMessages(prev => ({
@@ -251,13 +254,13 @@ export default function Chat() {
     const tmp = {
       id: tmpId, from: 'me', msgType,
       fileUrl, fileName: file.name, fileSize: file.size, fileType: file.type,
-      time: new Date().toLocaleTimeString('fr', { hour: '2-digit', minute: '2-digit' }),
+      time: new Date().toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' }),
       rawCreatedAt: new Date().toISOString(),
     }
     setMessages(prev => ({ ...prev, [activeId]: [...(prev[activeId] ?? []), tmp] }))
 
     const { data: realMessage } = await api.post(`/conversations/${activeId}/messages/file`, { fileUrl })
-    const mapped = mapMessage(realMessage, user.id)
+    const mapped = mapMessage(realMessage, user.id, locale)
     setMessages(prev => ({
       ...prev,
       [activeId]: (prev[activeId] ?? []).map(m => (m.id === tmpId ? mapped : m)),
@@ -273,8 +276,8 @@ export default function Chat() {
     try {
       const { url } = await uploadCloudinary(file)
       await sendFileToBackend(url, file, 'file')
-      addToast?.('Fichier envoyé', 'success')
-    } catch { addToast?.("Erreur lors de l'envoi du fichier", 'error') }
+      addToast?.(t('chat.toasts.fileSent'), 'success')
+    } catch { addToast?.(t('chat.toasts.fileError'), 'error') }
     finally { setUploading(false) }
   }
 
@@ -287,8 +290,8 @@ export default function Chat() {
     try {
       const { url } = await uploadCloudinary(file)
       await sendFileToBackend(url, file, 'image')
-      addToast?.('Image envoyée', 'success')
-    } catch { addToast?.("Erreur lors de l'envoi de l'image", 'error') }
+      addToast?.(t('chat.toasts.imageSent'), 'success')
+    } catch { addToast?.(t('chat.toasts.imageError'), 'error') }
     finally { setUploading(false) }
   }
 
@@ -301,8 +304,8 @@ export default function Chat() {
     try {
       const { url } = await uploadCloudinary(file)
       await sendFileToBackend(url, file, 'video')
-      addToast?.('Vidéo envoyée', 'success')
-    } catch { addToast?.("Erreur lors de l'envoi de la vidéo", 'error') }
+      addToast?.(t('chat.toasts.videoSent'), 'success')
+    } catch { addToast?.(t('chat.toasts.videoError'), 'error') }
     finally { setUploading(false) }
   }
 
@@ -314,7 +317,7 @@ export default function Chat() {
 
   const handlePinConv = (convId) => {
     setConvMenu(null)
-    addToast?.('Bientôt disponible', 'info')
+    addToast?.(t('actions.comingSoon'), 'info')
   }
 
   const handleDeleteMsg = (msgId) => {
@@ -327,7 +330,7 @@ export default function Chat() {
     </div>
   )
 
-  const grouped = groupByDate(msgs)
+  const grouped = groupByDate(msgs, t, i18n.language)
 
   return (
     <>
@@ -335,7 +338,7 @@ export default function Chat() {
       {lightbox && (
         <div className="fixed inset-0 z-[600] bg-black/90 flex items-center justify-center p-6"
           onClick={() => setLightbox(null)}>
-          <img src={lightbox} alt="Aperçu" className="max-w-full max-h-full object-contain rounded-xl" />
+          <img src={lightbox} alt={t('chat.preview')} className="max-w-full max-h-full object-contain rounded-xl" />
           <button onClick={() => setLightbox(null)}
             className="absolute top-4 right-4 h-10 w-10 rounded-full bg-white/20 text-white flex items-center justify-center border-none cursor-pointer hover:bg-white/30">
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M1 1l12 12M13 1L1 13"/></svg>
@@ -352,13 +355,13 @@ export default function Chat() {
 
           {/* Sidebar header */}
           <div className="px-5 py-4 border-b border-[#E8DDC7]">
-            <h2 className="text-lg font-black text-[#252840] mb-3">Messages</h2>
+            <h2 className="text-lg font-black text-[#252840] mb-3">{t('chat.title')}</h2>
             <div className="relative">
               <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#B0A898]" />
               <input
                 value={search}
                 onChange={e => setSearch(e.target.value)}
-                placeholder="Rechercher…"
+                placeholder={t('chat.searchPlaceholder')}
                 className="w-full h-9 pl-8 pr-3 rounded-full border border-[#E8DDC7] bg-[#FDFAF4] text-sm outline-none focus:border-[#C8864B] transition-colors"
               />
             </div>
@@ -371,11 +374,11 @@ export default function Chat() {
                 <svg className="mx-auto mb-3 text-[#E8DDC7]" width="40" height="40" viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
                   <path d="M35 25a5 5 0 01-5 5H12L5 36V10a5 5 0 015-5h20a5 5 0 015 5v15z"/>
                 </svg>
-                <p className="text-sm font-semibold text-[#252840]">Aucune conversation</p>
-                <p className="text-xs text-[#756B5B] mt-1">Connecte-toi à d'autres élèves pour démarrer.</p>
+                <p className="text-sm font-semibold text-[#252840]">{t('chat.noConversations')}</p>
+                <p className="text-xs text-[#756B5B] mt-1">{t('chat.noConversationsHint')}</p>
               </div>
             ) : filteredConvs.length === 0 ? (
-              <div className="p-6 text-center text-sm text-[#756B5B]">Aucun résultat</div>
+              <div className="p-6 text-center text-sm text-[#756B5B]">{t('chat.noResults')}</div>
             ) : filteredConvs.map(conv => (
               <div key={conv.id} className="relative group">
                 <button onClick={() => openConversation(conv.id)}
@@ -403,7 +406,7 @@ export default function Chat() {
                 <button
                   onClick={e => { e.stopPropagation(); setConvMenu(convMenu === conv.id ? null : conv.id) }}
                   className="absolute right-3 top-1/2 -translate-y-1/2 h-7 w-7 rounded-full bg-white border border-[#E8DDC7] items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer hidden group-hover:flex z-10 shadow-sm"
-                  title="Actions"
+                  title={t('chat.conversationActions')}
                 >
                   <svg width="12" height="12" viewBox="0 0 12 12" fill="#756B5B" aria-hidden><circle cx="6" cy="2" r="1.2"/><circle cx="6" cy="6" r="1.2"/><circle cx="6" cy="10" r="1.2"/></svg>
                 </button>
@@ -415,8 +418,8 @@ export default function Chat() {
                       className="w-full flex items-center gap-2.5 px-4 py-3 text-sm text-left hover:bg-[#F8F4EA] cursor-pointer bg-transparent border-none transition-colors text-[#252840]"
                     >
                       <Pin size={13} />
-                      Épingler
-                      {!CHAT_PIN_ENABLED && <span className="ml-auto text-[10px] text-[#B0A898]">bientôt</span>}
+                      {t('chat.pin')}
+                      {!CHAT_PIN_ENABLED && <span className="ml-auto text-[10px] text-[#B0A898]">{t('chat.soon')}</span>}
                     </button>
                   </div>
                 )}
@@ -431,7 +434,7 @@ export default function Chat() {
           {!active ? (
             <div className="flex-1 flex flex-col items-center justify-center gap-3 text-[#756B5B]">
               <MessageCircle size={48} className="text-[#E8DDC7]" />
-              <p className="text-sm font-semibold">Sélectionnez une conversation</p>
+              <p className="text-sm font-semibold">{t('chat.selectConversation')}</p>
             </div>
           ) : (
             <>
@@ -454,7 +457,7 @@ export default function Chat() {
                 {msgs.length === 0 ? (
                   <div className="relative flex-1 flex flex-col items-center justify-center gap-2 py-16 z-10">
                     <MessageCircle size={40} className="text-[#E8DDC7]" />
-                    <p className="text-sm text-[#756B5B] font-semibold">Commencez la conversation</p>
+                    <p className="text-sm text-[#756B5B] font-semibold">{t('chat.startConversation')}</p>
                   </div>
                 ) : (
                   grouped.map((group, gi) => (
@@ -478,7 +481,7 @@ export default function Chat() {
                               {isMe && hoveredMsg === msg.id && (
                                 <button
                                   onClick={() => handleDeleteMsg(msg.id)}
-                                  title={CHAT_DELETE_ENABLED ? 'Supprimer le message' : 'Bientôt disponible'}
+                                  title={CHAT_DELETE_ENABLED ? t('chat.deleteMessage') : t('actions.comingSoon')}
                                   className="self-center mr-2 flex-shrink-0 h-7 w-7 rounded-full bg-white border border-[#E8DDC7] items-center justify-center cursor-pointer hover:bg-red-50 hover:border-red-200 transition-colors shadow-sm flex text-[#756B5B]"
                                 >
                                   <Trash2 size={12} />
@@ -513,7 +516,7 @@ export default function Chat() {
                                       </span>
                                       <div className="min-w-0">
                                         <p className="text-sm font-semibold truncate underline">{msg.fileName}</p>
-                                        {msg.fileSize && <p className={`text-[10px] ${isMe ? 'text-white/50' : 'text-[#756B5B]'}`}>{formatBytes(msg.fileSize)}</p>}
+                                        {msg.fileSize && <p className={`text-[10px] ${isMe ? 'text-white/50' : 'text-[#756B5B]'}`}>{formatBytes(msg.fileSize, t)}</p>}
                                       </div>
                                     </a>
                                     <div className={`text-[10px] mt-1 px-1 ${isMe ? 'text-white/50' : 'text-[#756B5B]'}`}>{msg.time}</div>
@@ -547,19 +550,19 @@ export default function Chat() {
                     <div ref={attachBarRef}
                       className="absolute bottom-full left-0 mb-2 w-40 rounded-2xl bg-white border border-[#E8DDC7] shadow-soft overflow-hidden z-20 animate-modal-in">
                       {[
-                        { label: 'Image',   Icon: ImageIcon, action: () => imageRef.current?.click() },
-                        { label: 'Vidéo',   Icon: VideoIcon, action: () => videoRef.current?.click() },
-                        { label: 'Fichier', Icon: FileIcon,  action: () => fileRef.current?.click()  },
+                        { label: t('chat.attachments.image'), Icon: ImageIcon, action: () => imageRef.current?.click() },
+                        { label: t('chat.attachments.video'), Icon: VideoIcon, action: () => videoRef.current?.click() },
+                        { label: t('chat.attachments.file'),  Icon: FileIcon,  action: () => fileRef.current?.click()  },
                       ].map(btn => (
                         <button key={btn.label} type="button"
                           disabled={!FILE_UPLOAD_ENABLED}
                           onClick={() => { if (FILE_UPLOAD_ENABLED) { btn.action(); setShowAttach(false) } }}
-                          title={!FILE_UPLOAD_ENABLED ? 'Bientôt disponible' : undefined}
+                          title={!FILE_UPLOAD_ENABLED ? t('actions.comingSoon') : undefined}
                           className="w-full flex items-center gap-3 px-4 py-3 text-sm font-semibold border-none cursor-pointer transition-colors text-[#252840] hover:bg-[#F8F4EA] bg-transparent disabled:opacity-50 disabled:cursor-not-allowed border-b border-[#F0EAE0] last:border-0"
                         >
                           <btn.Icon size={15} className="flex-shrink-0 text-[#756B5B]" />
                           {btn.label}
-                          {!FILE_UPLOAD_ENABLED && <span className="ml-auto text-[10px] text-[#B0A898]">bientôt</span>}
+                          {!FILE_UPLOAD_ENABLED && <span className="ml-auto text-[10px] text-[#B0A898]">{t('chat.soon')}</span>}
                         </button>
                       ))}
                     </div>
@@ -568,7 +571,7 @@ export default function Chat() {
                   <button type="button"
                     onClick={() => setShowAttach(s => !s)}
                     disabled={uploading || !activeId}
-                    title="Joindre un fichier"
+                    title={t('chat.attach')}
                     className={`h-10 w-10 rounded-full flex items-center justify-center border-none cursor-pointer transition-all flex-shrink-0 disabled:opacity-40 disabled:cursor-not-allowed ${
                       showAttach ? 'bg-[#252840] text-white' : 'bg-[#F8F4EA] text-[#756B5B] hover:bg-[#252840] hover:text-white'
                     }`}>
@@ -581,7 +584,7 @@ export default function Chat() {
                     value={input}
                     onChange={e => setInput(e.target.value)}
                     onKeyDown={e => e.key === 'Enter' && !e.shiftKey && send()}
-                    placeholder="Écrire un message…"
+                    placeholder={t('chat.messagePlaceholder')}
                     className="flex-1 h-10 px-4 rounded-full border border-[#E8DDC7] bg-[#FDFAF4] text-sm outline-none focus:border-[#C8864B] transition-colors"
                   />
 

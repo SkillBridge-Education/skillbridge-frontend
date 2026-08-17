@@ -120,9 +120,18 @@
       "subtitle": "Partage ce que tu sais, apprends ce que tu aimes."
     },
     "steps": {
-      "account": { "label": "Compte", "desc": "Informations personnelles" },
-      "skills": { "label": "Compétences", "desc": "Enseignement & apprentissage" },
-      "availability": { "label": "Disponibilités", "desc": "Vos créneaux libres" }
+      "account": {
+        "label": "Compte",
+        "desc": "Informations personnelles"
+      },
+      "skills": {
+        "label": "Compétences",
+        "desc": "Enseignement & apprentissage"
+      },
+      "availability": {
+        "label": "Disponibilités",
+        "desc": "Vos créneaux libres"
+      }
     },
     "account": {
       "title": "Créer votre compte",
@@ -262,6 +271,43 @@
     "like": "J'aime",
     "comments_one": "{{count}} commentaire",
     "comments_other": "{{count}} commentaires"
+  },
+  "chat": {
+    "title": "Messages",
+    "searchPlaceholder": "Rechercher…",
+    "noConversations": "Aucune conversation",
+    "noConversationsHint": "Connecte-toi à d'autres élèves pour démarrer.",
+    "noResults": "Aucun résultat",
+    "selectConversation": "Sélectionnez une conversation",
+    "startConversation": "Commencez la conversation",
+    "messagePlaceholder": "Écrire un message…",
+    "send": "Envoyer le message",
+    "attach": "Joindre un fichier",
+    "conversationActions": "Actions",
+    "pin": "Épingler",
+    "soon": "bientôt",
+    "deleteMessage": "Supprimer le message",
+    "today": "Aujourd'hui",
+    "yesterday": "Hier",
+    "attachments": {
+      "image": "Image",
+      "video": "Vidéo",
+      "file": "Fichier"
+    },
+    "units": {
+      "b": "o",
+      "kb": "Ko",
+      "mb": "Mo"
+    },
+    "toasts": {
+      "fileSent": "Fichier envoyé",
+      "fileError": "Erreur lors de l'envoi du fichier",
+      "imageSent": "Image envoyée",
+      "imageError": "Erreur lors de l'envoi de l'image",
+      "videoSent": "Vidéo envoyée",
+      "videoError": "Erreur lors de l'envoi de la vidéo"
+    },
+    "preview": "Aperçu"
   },
   "forgotPassword": {
     "title": "Réinitialise ton mot de passe",

@@ -120,9 +120,18 @@
       "subtitle": "Share what you know, learn what you love."
     },
     "steps": {
-      "account": { "label": "Account", "desc": "Personal information" },
-      "skills": { "label": "Skills", "desc": "Teaching & learning" },
-      "availability": { "label": "Availability", "desc": "Your free slots" }
+      "account": {
+        "label": "Account",
+        "desc": "Personal information"
+      },
+      "skills": {
+        "label": "Skills",
+        "desc": "Teaching & learning"
+      },
+      "availability": {
+        "label": "Availability",
+        "desc": "Your free slots"
+      }
     },
     "account": {
       "title": "Create your account",
@@ -262,6 +271,43 @@
     "like": "Like",
     "comments_one": "{{count}} comment",
     "comments_other": "{{count}} comments"
+  },
+  "chat": {
+    "title": "Messages",
+    "searchPlaceholder": "Search…",
+    "noConversations": "No conversation",
+    "noConversationsHint": "Connect with other students to get started.",
+    "noResults": "No result",
+    "selectConversation": "Select a conversation",
+    "startConversation": "Start the conversation",
+    "messagePlaceholder": "Write a message…",
+    "send": "Send the message",
+    "attach": "Attach a file",
+    "conversationActions": "Actions",
+    "pin": "Pin",
+    "soon": "soon",
+    "deleteMessage": "Delete the message",
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "attachments": {
+      "image": "Image",
+      "video": "Video",
+      "file": "File"
+    },
+    "units": {
+      "b": "B",
+      "kb": "KB",
+      "mb": "MB"
+    },
+    "toasts": {
+      "fileSent": "File sent",
+      "fileError": "Could not send the file",
+      "imageSent": "Image sent",
+      "imageError": "Could not send the image",
+      "videoSent": "Video sent",
+      "videoError": "Could not send the video"
+    },
+    "preview": "Preview"
   },
   "forgotPassword": {
     "title": "Reset your password",
