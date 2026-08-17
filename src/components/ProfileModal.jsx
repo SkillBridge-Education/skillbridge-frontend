@@ -1,7 +1,8 @@
 // ProfileModal — Profil détaillé avec grille de disponibilité cliquable
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import useFocusTrap from '../hooks/useFocusTrap'
 import useAuthStore from '../store/authStore'
 
 // `key` indexe member.availability : jamais traduite.
@@ -42,11 +43,8 @@ export default function ProfileModal({ member, onClose }) {
   const { user, openModal } = useAuthStore()
   const [selectedSlot, setSelectedSlot] = useState(null) // { day, slotIdx }
 
-  useEffect(() => {
-    const onKey = e => { if (e.key === 'Escape') onClose() }
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
-  }, [onClose])
+  // Échap, piégeage du focus et restitution au déclencheur.
+  const dialogRef = useFocusTrap(!!member, onClose)
 
   if (!member) return null
 
@@ -84,7 +82,13 @@ export default function ProfileModal({ member, onClose }) {
       className="fixed inset-0 z-[200] bg-[rgba(26,20,16,0.55)] backdrop-blur-sm flex items-center justify-center p-4"
       onClick={e => { if (e.target === e.currentTarget) onClose() }}
     >
-      <div className="bg-[#FDFAF4] rounded-2xl w-full max-w-[620px] max-h-[90vh] overflow-y-auto shadow-2xl">
+      <div
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="profile-modal-title"
+        className="bg-[#FDFAF4] rounded-2xl w-full max-w-[620px] max-h-[90vh] overflow-y-auto shadow-2xl"
+      >
 
         {/* Header */}
         <div className="flex items-start gap-5 p-7 pb-5 border-b border-black/[0.07]">
@@ -95,7 +99,7 @@ export default function ProfileModal({ member, onClose }) {
             {initials}
           </div>
           <div className="flex-1 min-w-0">
-            <h2 className="text-[22px] font-black tracking-tight text-[#1A1410]">
+            <h2 id="profile-modal-title" className="text-[22px] font-black tracking-tight text-[#1A1410]">
               {member.firstName} {member.lastName}
             </h2>
             <p className="text-[13px] text-[#7A6E5C] mt-[2px]">

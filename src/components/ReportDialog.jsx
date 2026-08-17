@@ -1,19 +1,15 @@
 // src/components/ReportDialog.jsx
 // Enveloppe modale autour de <ReportForm /> pour signaler depuis un contexte
 // précis (profil, message, session) sans quitter la page.
-import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
+import useFocusTrap from '../hooks/useFocusTrap'
 import ReportForm from './ReportForm'
 
 export default function ReportDialog({ open, onClose, targetType = 'user', target = '', reporterEmail = '' }) {
   const { t } = useTranslation()
 
-  useEffect(() => {
-    if (!open) return
-    const onKey = (e) => { if (e.key === 'Escape') onClose?.() }
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
-  }, [open, onClose])
+  // Échap, piégeage du focus et restitution au déclencheur.
+  const dialogRef = useFocusTrap(open, onClose)
 
   if (!open) return null
 
@@ -23,9 +19,10 @@ export default function ReportDialog({ open, onClose, targetType = 'user', targe
       onClick={(e) => { if (e.target === e.currentTarget) onClose?.() }}
     >
       <div
+        ref={dialogRef}
         role="dialog"
         aria-modal="true"
-        aria-label={t('report.title')}
+        aria-labelledby="report-dialog-title"
         className="animate-modal-in relative w-full max-w-lg"
       >
         <button
@@ -39,7 +36,7 @@ export default function ReportDialog({ open, onClose, targetType = 'user', targe
           </svg>
         </button>
 
-        <h2 className="mb-3 text-xl font-black tracking-tight text-white">{t('report.title')}</h2>
+        <h2 id="report-dialog-title" className="mb-3 text-xl font-black tracking-tight text-white">{t('report.title')}</h2>
 
         <ReportForm
           targetType={targetType}

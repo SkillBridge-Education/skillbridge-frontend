@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import {
@@ -9,6 +9,8 @@ import {
 import useAuthStore from '../store/authStore'
 import CreditIcon from './CreditIcon'
 import useNotifications from '../hooks/useNotifications'
+import useMediaQuery from '../hooks/useMediaQuery'
+import useFocusTrap from '../hooks/useFocusTrap'
 
 const NAV_LINKS = [
   { to: '/',           labelKey: 'nav.home',        public: true,  Icon: Home           },
@@ -151,6 +153,7 @@ export default function Navbar() {
   const { user, openModal, logout } = useAuthStore()
   const { notifications, dismiss, dismissAll, unreadCount } = useNotifications()
   const { t }     = useTranslation()
+  const isDesktop = useMediaQuery('(min-width: 1024px)')
   const location  = useLocation()
   const navigate  = useNavigate()
   const pathname  = location.pathname
@@ -202,11 +205,21 @@ export default function Navbar() {
   }
 
   const closeAll = () => { setShowCredits(false); setShowNotifs(false) }
+  const closeMenu = useCallback(() => setMenuOpen(false), [])
+  const drawerRef = useFocusTrap(menuOpen, closeMenu)
+
+  // La barre horizontale et le dock vertical se relaient au défilement en
+  // jouant sur l'opacité. Un élément à `opacity: 0` reste focusable et lu
+  // par les lecteurs d'écran : on neutralise donc celui qui est masqué.
+  const headerHidden = scrolled && isDesktop
+  const dockHidden   = !scrolled || !isDesktop
 
   return (
     <>
       {/* ── Horizontal navbar (fixed, full width) ── */}
       <header
+        inert={headerHidden ? '' : undefined}
+        aria-hidden={headerHidden || undefined}
         className={`fixed top-0 left-0 right-0 z-40 border-b border-[#E8DDC7] bg-[rgba(253,250,244,0.88)] backdrop-blur-md transition-all duration-300 ease-out ${
           scrolled ? 'lg:opacity-0 lg:pointer-events-none lg:-translate-y-1' : ''
         }`}
@@ -248,7 +261,8 @@ export default function Navbar() {
               <>
                 <div className="relative">
                   <button ref={notifBtnRef} onClick={() => { setShowNotifs(s => !s); setShowCredits(false) }}
-                    aria-label={t('notifications.title')}
+                    aria-label={t('a11y.notifications', { count: unreadCount })}
+                    aria-expanded={showNotifs}
                     className="relative h-9 w-9 grid place-items-center rounded-full bg-transparent border border-[#E8DDC7] text-[#756B5B] hover:border-[#252840] hover:text-[#252840] cursor-pointer transition-colors">
                     <Bell size={15} />
                     {unreadCount > 0 && (
@@ -295,7 +309,10 @@ export default function Navbar() {
           {/* Hamburger mobile */}
           <div className="flex items-center gap-2 lg:hidden">
             {user && <Link to="/profile" className="no-underline" onClick={closeAll}><Avatar user={user} /></Link>}
-            <button onClick={() => setMenuOpen(o => !o)} aria-label={t('nav.menu')}
+            <button onClick={() => setMenuOpen(o => !o)}
+              aria-label={menuOpen ? t('a11y.closeMenu') : t('a11y.openMenu')}
+              aria-expanded={menuOpen}
+              aria-controls="mobile-drawer"
               className="grid h-10 w-10 place-items-center rounded-full bg-transparent border-none cursor-pointer text-[#252840] hover:bg-[#F8F4EA] transition-colors">
               {menuOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
@@ -305,6 +322,8 @@ export default function Navbar() {
 
       {/* ── Vertical dock (fixed right, desktop only, scrolled) ── */}
       <aside
+        inert={dockHidden ? '' : undefined}
+        aria-hidden={dockHidden || undefined}
         className={`fixed right-4 top-1/2 z-40 hidden lg:flex flex-col items-center gap-1 p-2.5 rounded-2xl border border-[#E8DDC7] bg-[rgba(253,250,244,0.94)] backdrop-blur-md shadow-lg transition-all duration-300 ease-out origin-right ${
           scrolled ? 'opacity-100 scale-100' : 'opacity-0 pointer-events-none scale-90'
         }`}
@@ -403,7 +422,13 @@ export default function Navbar() {
       {/* ── Mobile drawer ── */}
       {menuOpen && (
         <div className="fixed inset-0 z-30 lg:hidden" onClick={() => setMenuOpen(false)}>
-          <div className="absolute top-[65px] right-4 w-72 bg-[#FDFAF4] border border-[#E8DDC7] shadow-soft rounded-2xl p-5 animate-modal-in"
+          <div
+            id="mobile-drawer"
+            ref={drawerRef}
+            role="dialog"
+            aria-modal="true"
+            aria-label={t('nav.menu')}
+            className="absolute top-[65px] right-4 w-72 bg-[#FDFAF4] border border-[#E8DDC7] shadow-soft rounded-2xl p-5 animate-modal-in"
             onClick={e => e.stopPropagation()}>
             <nav className="flex flex-col gap-1 mb-6">
               {visibleLinks.map(({ to, labelKey }) => (
