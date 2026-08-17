@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import useAuthStore from '../store/authStore'
 import { authApi, getApiError } from '../services/api'
 
 export default function AuthModal() {
   const { modalOpen, modalMode, closeModal, switchMode, login } = useAuthStore()
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const [error, setError]     = useState('')
   const [loading, setLoading] = useState(false)
@@ -39,7 +41,7 @@ export default function AuthModal() {
       const msg = getApiError(err)
       const status = err?.response?.status
       if (status === 403 && msg.toLowerCase().includes('verif')) {
-        setError(`Ton email n'est pas encore vérifié. Vérifie ta boîte mail ou renvoie le lien depuis /verify-email.`)
+        setError(t('auth.login.unverified'))
       } else {
         setError(msg)
       }
@@ -81,6 +83,7 @@ export default function AuthModal() {
       <div className="w-full max-w-md rounded-3xl border border-[#E8DDC7] bg-white p-8 shadow-soft relative">
         <button
           onClick={closeModal}
+          aria-label={t('actions.close')}
           className="absolute top-4 right-4 w-8 h-8 rounded-full bg-[#F8F4EA] border-none cursor-pointer text-[#756B5B] flex items-center justify-center hover:bg-[#E8DDC7] transition-colors"
         >
           <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M1 1l10 10M11 1L1 11"/></svg>
@@ -92,40 +95,40 @@ export default function AuthModal() {
 
         {modalMode === 'login' && (
           <form onSubmit={handleLogin}>
-            <h2 className="text-2xl font-black tracking-tight text-[#252840] mb-1">Bienvenue !</h2>
-            <p className="text-sm text-[#756B5B] mb-6">Connectez-vous pour continuer vos échanges</p>
+            <h2 className="text-2xl font-black tracking-tight text-[#252840] mb-1">{t('auth.login.title')}</h2>
+            <p className="text-sm text-[#756B5B] mb-6">{t('auth.login.subtitle')}</p>
 
             {error && <p className="text-red-500 text-sm mb-4 bg-red-50 px-3 py-2 rounded-lg">{error}</p>}
 
             <div className="mb-3">
-              <label className={lbl}>Email</label>
-              <input ref={loginEmailRef} type="email" placeholder="vous@exemple.com" required className={inp} />
+              <label className={lbl}>{t('auth.fields.email')}</label>
+              <input ref={loginEmailRef} type="email" placeholder={t('auth.fields.emailPlaceholder')} required className={inp} />
             </div>
 
             <div className="mb-2">
               <div className="flex justify-between items-center mb-1">
-                <label className={lbl}>Mot de passe</label>
+                <label className={lbl}>{t('auth.fields.password')}</label>
               </div>
-              <input ref={loginPasswordRef} type="password" placeholder="••••••••" required className={inp} />
+              <input ref={loginPasswordRef} type="password" placeholder={t('auth.fields.passwordPlaceholder')} required className={inp} />
               <button
                 type="button"
                 onClick={() => { closeModal(); navigate('/forgot-password') }}
                 className="text-xs text-[#756B5B] hover:text-[#252840] bg-transparent border-none cursor-pointer transition-colors mt-1"
               >
-                Mot de passe oublié ?
+                {t('auth.login.forgot')}
               </button>
             </div>
 
             <button type="submit" disabled={loading}
               className="w-full py-3 rounded-xl border-none bg-[#C8864B] text-white text-sm font-bold cursor-pointer hover:bg-[#B07030] transition-colors disabled:opacity-50 mt-4">
-              {loading ? 'Connexion…' : 'Se connecter'}
+              {loading ? t('auth.login.submitting') : t('auth.login.submit')}
             </button>
 
             <p className="text-center text-sm text-[#756B5B] mt-4">
-              Pas encore de compte ?{' '}
+              {t('auth.login.noAccount')}{' '}
               <button type="button" onClick={() => switchMode('register')}
                 className="text-[#252840] font-bold bg-transparent border-none cursor-pointer hover:text-[#C8864B] transition-colors">
-                S'inscrire
+                {t('nav.register')}
               </button>
             </p>
           </form>
@@ -133,42 +136,42 @@ export default function AuthModal() {
 
         {modalMode === 'register' && (
           <form onSubmit={handleRegister}>
-            <h2 className="text-2xl font-black tracking-tight text-[#252840] mb-1">Rejoindre SkillBridge</h2>
-            <p className="text-sm text-[#756B5B] mb-6">Créez votre compte et commencez à échanger</p>
+            <h2 className="text-2xl font-black tracking-tight text-[#252840] mb-1">{t('auth.register.title')}</h2>
+            <p className="text-sm text-[#756B5B] mb-6">{t('auth.register.subtitle')}</p>
 
             {error && <p className="text-red-500 text-sm mb-4 bg-red-50 px-3 py-2 rounded-lg">{error}</p>}
 
             <div className="flex gap-3 mb-3">
               <div className="flex-1">
-                <label className={lbl}>Prénom</label>
-                <input ref={regFirstRef} type="text" placeholder="Alice" required className={inp} />
+                <label className={lbl}>{t('auth.fields.firstName')}</label>
+                <input ref={regFirstRef} type="text" placeholder={t('auth.fields.firstNamePlaceholder')} required className={inp} />
               </div>
               <div className="flex-1">
-                <label className={lbl}>Nom</label>
-                <input ref={regLastRef} type="text" placeholder="Martin" required className={inp} />
+                <label className={lbl}>{t('auth.fields.lastName')}</label>
+                <input ref={regLastRef} type="text" placeholder={t('auth.fields.lastNamePlaceholder')} required className={inp} />
               </div>
             </div>
 
             <div className="mb-3">
-              <label className={lbl}>Email</label>
-              <input ref={regEmailRef} type="email" placeholder="vous@exemple.com" required className={inp} />
+              <label className={lbl}>{t('auth.fields.email')}</label>
+              <input ref={regEmailRef} type="email" placeholder={t('auth.fields.emailPlaceholder')} required className={inp} />
             </div>
 
             <div className="mb-4">
-              <label className={lbl}>Mot de passe (min. 8 caractères)</label>
-              <input ref={regPasswordRef} type="password" placeholder="••••••••" required minLength={8} className={inp} />
+              <label className={lbl}>{t('auth.fields.passwordWithMin')}</label>
+              <input ref={regPasswordRef} type="password" placeholder={t('auth.fields.passwordPlaceholder')} required minLength={8} className={inp} />
             </div>
 
             <button type="submit" disabled={loading}
               className="w-full py-3 rounded-xl border-none bg-[#C8864B] text-white text-sm font-bold cursor-pointer hover:bg-[#B07030] transition-colors disabled:opacity-50">
-              {loading ? 'Création du compte…' : 'Créer mon compte'}
+              {loading ? t('auth.register.submitting') : t('auth.register.submit')}
             </button>
 
             <p className="text-center text-sm text-[#756B5B] mt-4">
-              Déjà un compte ?{' '}
+              {t('auth.register.hasAccount')}{' '}
               <button type="button" onClick={() => switchMode('login')}
                 className="text-[#252840] font-bold bg-transparent border-none cursor-pointer hover:text-[#C8864B] transition-colors">
-                Se connecter
+                {t('auth.register.switch')}
               </button>
             </p>
           </form>
