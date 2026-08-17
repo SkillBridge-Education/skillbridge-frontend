@@ -334,7 +334,7 @@ export default function Register() {
                   className="relative h-24 w-24 rounded-full border-2 border-dashed border-[#E8DDC7] overflow-hidden cursor-pointer bg-[#F8F4EA] hover:border-[#C8864B] transition-colors flex items-center justify-center"
                 >
                   {avatar ? (
-                    <img src={avatar} alt="avatar" className="w-full h-full object-cover" />
+                    <img src={avatar} alt={t('a11y.avatarPreview')} className="w-full h-full object-cover" />
                   ) : (
                     <div className="flex flex-col items-center gap-1 text-[#B0A898]">
                       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">

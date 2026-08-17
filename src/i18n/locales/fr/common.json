@@ -914,6 +914,8 @@
     "errorPrefix": "Erreur :",
     "requiredField": "obligatoire",
     "loading": "Chargement en cours",
-    "rateStars": "Noter {{count}} sur 5"
+    "rateStars": "Noter {{count}} sur 5",
+    "avatarPreview": "Aperçu de votre photo de profil",
+    "logoHome": "SkillBridge — accueil"
   }
 }

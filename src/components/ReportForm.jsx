@@ -37,7 +37,7 @@ export default function ReportForm({
 
   const inp = 'w-full rounded-xl border border-[color:var(--border)] bg-light-cream px-4 text-sm text-navy outline-none focus:border-warm transition-colors'
   const lbl = 'block text-sm font-bold text-navy mb-1'
-  const err = 'mt-1 text-xs font-semibold text-red-500'
+  const err = 'mt-1 text-xs font-semibold text-red-600'
 
   const validate = () => {
     const next = {}
@@ -146,10 +146,11 @@ export default function ReportForm({
           value={target}
           onChange={e => setTarget(e.target.value)}
           placeholder={t('report.fields.targetPlaceholder')}
-          aria-invalid={!!errors.target}
+          aria-invalid={!!errors.target || undefined}
+          aria-describedby={errors.target ? 'report-target-error' : undefined}
           className={`${inp} h-11`}
         />
-        {errors.target && <p className={err} role="alert">{errors.target}</p>}
+        {errors.target && <p id="report-target-error" className={err} role="alert">{errors.target}</p>}
       </div>
 
       <div className="mb-4">
@@ -158,7 +159,8 @@ export default function ReportForm({
           id="report-reason"
           value={reason}
           onChange={e => setReason(e.target.value)}
-          aria-invalid={!!errors.reason}
+          aria-invalid={!!errors.reason || undefined}
+          aria-describedby={errors.reason ? 'report-reason-error' : undefined}
           className={`${inp} h-11`}
         >
           <option value="">{t('report.fields.reasonPlaceholder')}</option>
@@ -166,7 +168,7 @@ export default function ReportForm({
             <option key={key} value={key}>{t(`report.reasons.${key}`)}</option>
           ))}
         </select>
-        {errors.reason && <p className={err} role="alert">{errors.reason}</p>}
+        {errors.reason && <p id="report-reason-error" className={err} role="alert">{errors.reason}</p>}
       </div>
 
       <div className="mb-4">
@@ -177,10 +179,11 @@ export default function ReportForm({
           value={details}
           onChange={e => setDetails(e.target.value)}
           placeholder={t('report.fields.detailsPlaceholder')}
-          aria-invalid={!!errors.details}
+          aria-invalid={!!errors.details || undefined}
+          aria-describedby={errors.details ? 'report-details-error' : undefined}
           className={`${inp} py-3 resize-y`}
         />
-        {errors.details && <p className={err} role="alert">{errors.details}</p>}
+        {errors.details && <p id="report-details-error" className={err} role="alert">{errors.details}</p>}
       </div>
 
       <div className="mb-5">
@@ -191,9 +194,10 @@ export default function ReportForm({
           value={contact}
           onChange={e => setContact(e.target.value)}
           placeholder={t('report.fields.contactPlaceholder')}
+          aria-describedby="report-contact-hint"
           className={`${inp} h-11`}
         />
-        <p className="mt-1 text-xs text-[color:var(--muted-fg)]">{t('report.fields.contactHint')}</p>
+        <p id="report-contact-hint" className="mt-1 text-xs text-[color:var(--muted-fg)]">{t('report.fields.contactHint')}</p>
       </div>
 
       <button

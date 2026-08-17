@@ -914,6 +914,8 @@
     "errorPrefix": "Error:",
     "requiredField": "required",
     "loading": "Loading",
-    "rateStars": "Rate {{count}} out of 5"
+    "rateStars": "Rate {{count}} out of 5",
+    "avatarPreview": "Preview of your profile picture",
+    "logoHome": "SkillBridge — home"
   }
 }

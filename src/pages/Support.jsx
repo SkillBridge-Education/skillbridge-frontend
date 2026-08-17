@@ -29,7 +29,7 @@ export default function Support() {
 
   const inp = 'w-full rounded-xl border border-[color:var(--border)] bg-light-cream px-4 text-sm text-navy outline-none focus:border-warm transition-colors'
   const lbl = 'block text-sm font-bold text-navy mb-1'
-  const errCls = 'mt-1 text-xs font-semibold text-red-500'
+  const errCls = 'mt-1 text-xs font-semibold text-red-600'
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -110,7 +110,8 @@ export default function Support() {
                   id="support-topic"
                   value={topic}
                   onChange={e => setTopic(e.target.value)}
-                  aria-invalid={!!errors.topic}
+                  aria-invalid={!!errors.topic || undefined}
+                  aria-describedby={errors.topic ? 'support-topic-error' : undefined}
                   className={`${inp} h-11`}
                 >
                   <option value="">{t('support.fields.topicPlaceholder')}</option>
@@ -118,7 +119,7 @@ export default function Support() {
                     <option key={key} value={key}>{t(`support.topics.${key}`)}</option>
                   ))}
                 </select>
-                {errors.topic && <p className={errCls} role="alert">{errors.topic}</p>}
+                {errors.topic && <p id="support-topic-error" className={errCls} role="alert">{errors.topic}</p>}
               </div>
 
               <div className="mb-4">
@@ -129,12 +130,13 @@ export default function Support() {
                   value={email}
                   onChange={e => setEmail(e.target.value)}
                   placeholder={t('support.fields.emailPlaceholder')}
-                  aria-invalid={!!errors.email}
+                  aria-invalid={!!errors.email || undefined}
+                  aria-describedby={errors.email ? 'support-email-error' : 'support-email-hint'}
                   className={`${inp} h-11`}
                 />
                 {errors.email
-                  ? <p className={errCls} role="alert">{errors.email}</p>
-                  : <p className="mt-1 text-xs text-[color:var(--muted-fg)]">{t('support.fields.emailHint')}</p>}
+                  ? <p id="support-email-error" className={errCls} role="alert">{errors.email}</p>
+                  : <p id="support-email-hint" className="mt-1 text-xs text-[color:var(--muted-fg)]">{t('support.fields.emailHint')}</p>}
               </div>
 
               <div className="mb-4">
@@ -145,10 +147,11 @@ export default function Support() {
                   value={subject}
                   onChange={e => setSubject(e.target.value)}
                   placeholder={t('support.fields.subjectPlaceholder')}
-                  aria-invalid={!!errors.subject}
+                  aria-invalid={!!errors.subject || undefined}
+                  aria-describedby={errors.subject ? 'support-subject-error' : undefined}
                   className={`${inp} h-11`}
                 />
-                {errors.subject && <p className={errCls} role="alert">{errors.subject}</p>}
+                {errors.subject && <p id="support-subject-error" className={errCls} role="alert">{errors.subject}</p>}
               </div>
 
               <div className="mb-5">
@@ -159,10 +162,11 @@ export default function Support() {
                   value={message}
                   onChange={e => setMessage(e.target.value)}
                   placeholder={t('support.fields.messagePlaceholder')}
-                  aria-invalid={!!errors.message}
+                  aria-invalid={!!errors.message || undefined}
+                  aria-describedby={errors.message ? 'support-message-error' : undefined}
                   className={`${inp} resize-y py-3`}
                 />
-                {errors.message && <p className={errCls} role="alert">{errors.message}</p>}
+                {errors.message && <p id="support-message-error" className={errCls} role="alert">{errors.message}</p>}
               </div>
 
               <button

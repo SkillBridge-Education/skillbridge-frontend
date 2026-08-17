@@ -345,7 +345,7 @@ export default function Profile() {
                   onClick={() => fileRef.current?.click()}
                 >
                   {avatar
-                    ? <img src={avatar} alt="avatar" className="w-full h-full object-cover" />
+                    ? <img src={avatar} alt={t('a11y.avatarPreview')} className="w-full h-full object-cover" />
                     : <div className="w-full h-full flex items-center justify-center text-white font-black text-3xl">{initials}</div>
                   }
                 </div>

@@ -227,7 +227,7 @@ export default function Navbar() {
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6">
           {/* Logo */}
           <Link to="/" className="flex-shrink-0 flex items-center gap-2.5 no-underline" onClick={closeAll}>
-            <img src="/skillbridge-logo.webp" alt="SkillBridge" className="h-8 w-auto" />
+            <img src="/skillbridge-logo.webp" alt="" className="h-8 w-auto" />
             <span className="hidden sm:block text-xl font-black tracking-tight" style={{ color: 'var(--ink)' }}>
               SkillBridge
             </span>
@@ -331,7 +331,7 @@ export default function Navbar() {
       >
         {/* Logo mark */}
         <Link to="/" className="no-underline mb-1" title={t('nav.home')} onClick={closeAll}>
-          <img src="/skillbridge-logo.webp" alt="SkillBridge" className="h-7 w-auto" />
+          <img src="/skillbridge-logo.webp" alt={t('a11y.logoHome')} className="h-7 w-auto" />
         </Link>
 
         <div className="w-5 h-px bg-[#E8DDC7] my-0.5" />
