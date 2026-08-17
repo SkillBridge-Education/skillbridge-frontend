@@ -1,27 +1,55 @@
 import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
 const NAV_LINKS = [
-  { to: '/',           label: 'Accueil'    },
-  { to: '/connection', label: 'Connexions' },
-  { to: '/sessions',   label: 'Sessions'   },
-  { to: '/chat',       label: 'Messages'   },
-  { to: '/credits',    label: 'Crédits'    },
-  { to: '/profile',    label: 'Profil'     },
+  { to: '/',           key: 'nav.home'        },
+  { to: '/connection', key: 'nav.connections' },
+  { to: '/sessions',   key: 'nav.sessions'    },
+  { to: '/chat',       key: 'nav.messages'    },
+  { to: '/credits',    key: 'nav.credits'     },
+  { to: '/profile',    key: 'nav.profile'     },
 ]
 
 const LEGAL_LINKS = [
-  { href: '#', label: 'Mentions légales'           },
-  { href: '#', label: 'Politique de confidentialité' },
-  { href: '#', label: 'CGU'                        },
+  { to: '/legal-notice', key: 'footer.legalNotice' },
+  { to: '/privacy',      key: 'footer.privacy'     },
+  { to: '/terms',        key: 'footer.terms'       },
+  { to: '/settings',     key: 'footer.settings'    },
 ]
 
+const HELP_LINKS = [
+  { to: '/help',    key: 'footer.helpCenter' },
+  { to: '/support', key: 'footer.support'    },
+  { to: '/report',  key: 'footer.report'     },
+]
+
+const linkCls = 'text-sm text-[rgba(248,244,234,0.7)] hover:text-[#C8864B] transition-colors no-underline'
+const titleCls = 'text-xs font-bold uppercase tracking-widest text-[#C8864B] mb-4'
+
+function LinkColumn({ title, links, t }) {
+  return (
+    <div>
+      <p className={titleCls}>{title}</p>
+      <ul className="flex flex-col gap-3 list-none p-0 m-0">
+        {links.map(({ to, key }) => (
+          <li key={to}>
+            <Link to={to} className={linkCls}>{t(key)}</Link>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
+}
+
 export default function Footer() {
+  const { t } = useTranslation()
+
   return (
     <footer className="border-t-2 border-[rgba(255,255,255,0.14)] bg-[#0E0F1C] text-[#F8F4EA]">
       <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6">
 
-        {/* 3 colonnes */}
-        <div className="grid grid-cols-1 gap-10 md:grid-cols-3">
+        {/* 4 colonnes */}
+        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 md:grid-cols-4">
 
           {/* Colonne 1 — Logo + tagline */}
           <div className="flex flex-col gap-4">
@@ -29,49 +57,24 @@ export default function Footer() {
               <img src="/skillbridge-logo-dark.webp" alt="SkillBridge" className="h-8 w-auto" />
             </div>
             <p className="text-sm text-[rgba(248,244,234,0.7)] leading-relaxed max-w-[220px]">
-              Partager ce qu'on sait.<br />Apprendre ce qu'on aime.
+              {t('app.taglineLine1')}<br />{t('app.taglineLine2')}
             </p>
           </div>
 
           {/* Colonne 2 — Navigation */}
-          <div>
-            <p className="text-xs font-bold uppercase tracking-widest text-[#C8864B] mb-4">Navigation</p>
-            <ul className="flex flex-col gap-3 list-none p-0 m-0">
-              {NAV_LINKS.map(({ to, label }) => (
-                <li key={to}>
-                  <Link
-                    to={to}
-                    className="text-sm text-[rgba(248,244,234,0.7)] hover:text-[#C8864B] transition-colors no-underline"
-                  >
-                    {label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+          <LinkColumn title={t('footer.navigation')} links={NAV_LINKS} t={t} />
 
           {/* Colonne 3 — Légal */}
-          <div>
-            <p className="text-xs font-bold uppercase tracking-widest text-[#C8864B] mb-4">Légal</p>
-            <ul className="flex flex-col gap-3 list-none p-0 m-0">
-              {LEGAL_LINKS.map(({ href, label }) => (
-                <li key={label}>
-                  <a
-                    href={href}
-                    className="text-sm text-[rgba(248,244,234,0.7)] hover:text-[#C8864B] transition-colors no-underline"
-                  >
-                    {label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
+          <LinkColumn title={t('footer.legal')} links={LEGAL_LINKS} t={t} />
+
+          {/* Colonne 4 — Aide */}
+          <LinkColumn title={t('footer.help')} links={HELP_LINKS} t={t} />
         </div>
 
         {/* Bas */}
         <div className="mt-12 border-t border-[rgba(255,255,255,0.08)] pt-6 text-center">
           <p className="text-xs text-[rgba(248,244,234,0.4)]">
-            SkillBridge · HETIC Fast Tracks 2026 · Jimel · Yanis · Mahamane · Yahia
+            {t('footer.credits')}
           </p>
         </div>
       </div>

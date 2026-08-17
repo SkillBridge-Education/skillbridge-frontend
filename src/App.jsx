@@ -20,6 +20,13 @@ import Credits         from './pages/Credits'
 import ForgotPassword  from './pages/ForgotPassword'
 import ResetPassword   from './pages/ResetPassword'
 import VerifyEmail     from './pages/VerifyEmail'
+import SettingsPage    from './pages/Settings'
+import LegalNotice     from './pages/LegalNotice'
+import PrivacyPolicy   from './pages/PrivacyPolicy'
+import Terms           from './pages/Terms'
+import Help            from './pages/Help'
+import Support         from './pages/Support'
+import Report          from './pages/Report'
 import useAuthStore    from './store/authStore'
 import { authApi }     from './services/api'
 
@@ -68,6 +75,20 @@ export default function App() {
           <Route path="/match"             element={<Navigate to="/connection" replace />} />
           <Route path="/forgot-password"   element={<ForgotPassword />} />
           <Route path="/reset-password"    element={<ResetPassword />} />
+
+          {/* Paramètres, aide et documents légaux — accessibles sans compte */}
+          <Route path="/settings"          element={<SettingsPage />} />
+          <Route path="/legal-notice"      element={<LegalNotice />} />
+          <Route path="/privacy"           element={<PrivacyPolicy />} />
+          <Route path="/terms"             element={<Terms />} />
+          <Route path="/help"              element={<Help />} />
+          <Route path="/support"           element={<Support />} />
+          <Route path="/report"            element={<Report />} />
+          {/* Alias historiques / liens externes */}
+          <Route path="/mentions-legales"  element={<Navigate to="/legal-notice" replace />} />
+          <Route path="/cgu"               element={<Navigate to="/terms" replace />} />
+          <Route path="/confidentialite"   element={<Navigate to="/privacy" replace />} />
+
           <Route path="/chat"              element={<ProtectedRoute><ChatPage /></ProtectedRoute>} />
           <Route path="/profile"           element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
           <Route path="/credits"           element={<ProtectedRoute><Credits /></ProtectedRoute>} />
