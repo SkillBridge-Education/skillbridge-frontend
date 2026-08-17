@@ -46,7 +46,7 @@ export default function ResetPassword() {
     }
   }
 
-  const inp = "w-full h-11 rounded-xl border border-[#E8DDC7] bg-[#FDFAF4] px-4 text-sm outline-none focus:border-[#C8864B] transition-colors"
+  const inp = "w-full h-11 rounded-xl border border-[color:var(--field-border)] bg-[#FDFAF4] px-4 text-sm outline-none focus:border-[#C8864B] transition-colors"
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-[#FDFAF4] px-4">

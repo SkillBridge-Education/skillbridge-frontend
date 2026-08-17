@@ -35,7 +35,7 @@ export default function ReportForm({
   const [errors,     setErrors]     = useState({})
   const [submitted,  setSubmitted]  = useState(null)
 
-  const inp = 'w-full rounded-xl border border-[color:var(--border)] bg-light-cream px-4 text-sm text-navy outline-none focus:border-warm transition-colors'
+  const inp = 'w-full rounded-xl border border-[color:var(--field-border)] bg-light-cream px-4 text-sm text-navy outline-none focus:border-warm transition-colors'
   const lbl = 'block text-sm font-bold text-navy mb-1'
   const err = 'mt-1 text-xs font-semibold text-red-600'
 

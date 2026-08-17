@@ -120,7 +120,7 @@ export default function NewSession() {
     }
   }
 
-  const inputClass = "w-full px-4 py-[10px] rounded-xl border-[1.5px] border-black/[0.09] bg-white text-[14px] text-[#1A1410] outline-none focus:border-[#252840] transition-all"
+  const inputClass = "w-full px-4 py-[10px] rounded-xl border-[1.5px] border-[color:var(--field-border)] bg-white text-[14px] text-[#1A1410] outline-none focus:border-[#252840] transition-all"
   const labelClass = "text-[11px] font-bold uppercase tracking-[0.6px] text-[#7A6E5C] block mb-1"
 
   /* ── Écran lien de partage ── */

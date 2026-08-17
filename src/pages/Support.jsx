@@ -27,7 +27,7 @@ export default function Support() {
   const [errors,  setErrors]  = useState({})
   const [sent,    setSent]    = useState(null)
 
-  const inp = 'w-full rounded-xl border border-[color:var(--border)] bg-light-cream px-4 text-sm text-navy outline-none focus:border-warm transition-colors'
+  const inp = 'w-full rounded-xl border border-[color:var(--field-border)] bg-light-cream px-4 text-sm text-navy outline-none focus:border-warm transition-colors'
   const lbl = 'block text-sm font-bold text-navy mb-1'
   const errCls = 'mt-1 text-xs font-semibold text-red-600'
 
@@ -189,13 +189,13 @@ export default function Support() {
             <div className="mt-4 flex flex-wrap gap-2">
               <Link
                 to="/help"
-                className="rounded-full border border-[color:var(--border)] bg-light-cream px-4 py-2 text-sm font-semibold text-navy no-underline hover:border-navy transition-colors"
+                className="rounded-full border border-[color:var(--field-border)] bg-light-cream px-4 py-2 text-sm font-semibold text-navy no-underline hover:border-navy transition-colors"
               >
                 {t('footer.helpCenter')}
               </Link>
               <Link
                 to="/report"
-                className="rounded-full border border-[color:var(--border)] bg-light-cream px-4 py-2 text-sm font-semibold text-navy no-underline hover:border-navy transition-colors"
+                className="rounded-full border border-[color:var(--field-border)] bg-light-cream px-4 py-2 text-sm font-semibold text-navy no-underline hover:border-navy transition-colors"
               >
                 {t('footer.report')}
               </Link>

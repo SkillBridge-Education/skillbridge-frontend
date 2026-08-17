@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
+import useFocusTrap from '../hooks/useFocusTrap'
 import { useNavigate } from 'react-router-dom'
 import useAuthStore from '../store/authStore'
 import { sessionApi } from '../services/api'
@@ -25,6 +26,7 @@ function CalIcon() {
 
 function EditSessionModal({ session, onClose, onSaved }) {
   const { t } = useTranslation()
+  const dialogRef = useFocusTrap(true, onClose)
   const addToast  = useToast()
   const [saving,   setSaving]   = useState(false)
   const [duration, setDuration] = useState(String(session.creditsReserved))
@@ -57,10 +59,11 @@ function EditSessionModal({ session, onClose, onSaved }) {
 
   return (
     <div className="fixed inset-0 z-[500] bg-black/50 backdrop-blur-sm flex items-center justify-center p-4" onClick={onClose}>
-      <div className="bg-white rounded-3xl p-8 w-[440px] max-w-full shadow-soft border border-[#E8DDC7] animate-fade-up"
+      <div ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby="edit-session-title"
+        className="bg-white rounded-3xl p-8 w-[440px] max-w-full shadow-soft border border-[#E8DDC7] animate-fade-up"
         onClick={e => e.stopPropagation()}>
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-black text-[#252840]">{t('sessions.editModal.title')}</h2>
+          <h2 id="edit-session-title" className="text-xl font-black text-[#252840]">{t('sessions.editModal.title')}</h2>
           <button onClick={onClose}
             className="w-8 h-8 rounded-full bg-[#F8F4EA] border-none cursor-pointer text-[#756B5B] flex items-center justify-center hover:bg-[#E8DDC7] transition-colors flex-shrink-0">
             <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M1 1l10 10M11 1L1 11"/></svg>
@@ -114,6 +117,7 @@ function EditSessionModal({ session, onClose, onSaved }) {
 
 function SessionDetailModal({ session, user, onClose, onAction }) {
   const { t, i18n } = useTranslation()
+  const dialogRef = useFocusTrap(true, onClose)
   const [joining,       setJoining]       = useState(false)
   const [acting,        setActing]        = useState(null)
   const [learnerCredits, setLearnerCredits] = useState(null)
@@ -181,10 +185,11 @@ function SessionDetailModal({ session, user, onClose, onAction }) {
 
   return (
     <div className="fixed inset-0 z-[500] bg-black/50 backdrop-blur-sm flex items-center justify-center p-4" onClick={onClose}>
-      <div className="bg-white rounded-3xl p-8 w-[440px] max-w-full shadow-soft border border-[#E8DDC7] animate-fade-up"
+      <div ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby="session-detail-title"
+        className="bg-white rounded-3xl p-8 w-[440px] max-w-full shadow-soft border border-[#E8DDC7] animate-fade-up"
         onClick={e => e.stopPropagation()}>
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-black text-[#252840] truncate pr-4">{session.title || t('sessions.fallbackTitle')}</h2>
+          <h2 id="session-detail-title" className="text-xl font-black text-[#252840] truncate pr-4">{session.title || t('sessions.fallbackTitle')}</h2>
           <button onClick={onClose}
             className="w-8 h-8 rounded-full bg-[#F8F4EA] border-none cursor-pointer text-[#756B5B] flex items-center justify-center hover:bg-[#E8DDC7] transition-colors flex-shrink-0">
             <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M1 1l10 10M11 1L1 11"/></svg>
@@ -283,6 +288,7 @@ export default function Sessions() {
   const [confirmId,  setConfirmId]  = useState(null)
   const [cancelling, setCancelling] = useState(null)
   const [selected,   setSelected]   = useState(null)
+  const confirmRef = useFocusTrap(!!confirmId, () => setConfirmId(null))
   const [editTarget, setEditTarget] = useState(null)
 
   const loadSessions = useCallback(async () => {
@@ -348,8 +354,9 @@ export default function Sessions() {
 
       {confirmId && (
         <div className="fixed inset-0 z-[500] bg-black/50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl p-8 w-[400px] max-w-full shadow-soft border border-[#E8DDC7]">
-            <h2 className="text-lg font-black text-[#252840] mb-2">{t('sessions.cancelModal.title')}</h2>
+          <div ref={confirmRef} role="alertdialog" aria-modal="true" aria-labelledby="cancel-session-title"
+            className="bg-white rounded-3xl p-8 w-[400px] max-w-full shadow-soft border border-[#E8DDC7]">
+            <h2 id="cancel-session-title" className="text-lg font-black text-[#252840] mb-2">{t('sessions.cancelModal.title')}</h2>
             <p className="text-sm text-[#756B5B] mb-6">
               {t('sessions.cancelModal.text')}
             </p>
@@ -458,8 +465,19 @@ export default function Sessions() {
                   </span>
                 </div>
 
-                {/* Title */}
-                <h3 className="font-bold text-[#252840] text-base leading-tight mb-3">{s.title || t('sessions.fallbackTitle')}</h3>
+                {/* Title — porte l'action d'ouverture : la carte <article> est
+                    cliquable au pointeur mais n'est pas atteignable au clavier,
+                    et elle contient déjà d'autres boutons (rejoindre, annuler…)
+                    qu'on ne peut pas imbriquer dans un bouton englobant. */}
+                <h3 className="font-bold text-[#252840] text-base leading-tight mb-3">
+                  <button
+                    type="button"
+                    onClick={e => { e.stopPropagation(); setSelected(s) }}
+                    className="bg-transparent border-none p-0 text-left font-bold text-[#252840] text-base leading-tight cursor-pointer hover:underline"
+                  >
+                    {s.title || t('sessions.fallbackTitle')}
+                  </button>
+                </h3>
 
                 {/* Partner */}
                 <div className="flex items-center gap-3 mb-4">

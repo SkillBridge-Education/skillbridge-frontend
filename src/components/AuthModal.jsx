@@ -76,7 +76,7 @@ export default function AuthModal() {
 
   if (!modalOpen) return null
 
-  const inp = "w-full h-11 rounded-xl border border-[#E8DDC7] bg-[#FDFAF4] px-4 text-sm text-[#1A1410] outline-none focus:border-[#C8864B] transition-colors"
+  const inp = "w-full h-11 rounded-xl border border-[color:var(--field-border)] bg-[#FDFAF4] px-4 text-sm text-[#1A1410] outline-none focus:border-[#C8864B] transition-colors"
   const lbl = "block text-sm font-bold text-[#252840] mb-1"
 
   return (

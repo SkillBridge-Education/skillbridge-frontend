@@ -621,14 +621,22 @@ export default function Profile() {
                     }
                     const st = statusMap[s.status] ?? statusMap.SCHEDULED
                     return (
-                      <li key={s.id} onClick={() => navigate(`/sessions/${s.id}`)}
-                        className="flex items-center gap-4 py-4 cursor-pointer hover:bg-[#F8F4EA] rounded-xl px-2 transition-colors -mx-2">
-                        <div className="h-11 w-11 rounded-2xl bg-[#252840] text-white flex items-center justify-center font-bold text-sm flex-shrink-0">
+                      <li key={s.id}
+                        className="flex items-center gap-4 py-4 hover:bg-[#F8F4EA] rounded-xl px-2 transition-colors -mx-2">
+                        <div className="h-11 w-11 rounded-2xl bg-[#252840] text-white flex items-center justify-center font-bold text-sm flex-shrink-0" aria-hidden="true">
                           {partner?.firstName?.[0]}{partner?.lastName?.[0]}
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 mb-0.5">
-                            <span className="font-bold text-[#252840] truncate">{s.title}</span>
+                            {/* Le titre porte l'action : un <li> cliquable n'est
+                                ni focusable ni activable au clavier. */}
+                            <button
+                              type="button"
+                              onClick={() => navigate(`/sessions/${s.id}`)}
+                              className="font-bold text-[#252840] truncate bg-transparent border-none p-0 text-left cursor-pointer hover:underline"
+                            >
+                              {s.title}
+                            </button>
                             <span className={`rounded-full px-2.5 py-0.5 text-[10px] font-bold flex-shrink-0 ${st.cls}`}>{st.label}</span>
                           </div>
                           <p className="text-xs text-[#756B5B]">{isTeacher ? t('profile.sessions.teaching') : t('profile.sessions.learning')} · {partner?.firstName} {partner?.lastName} · {formatDate(s.startsAt)}</p>
