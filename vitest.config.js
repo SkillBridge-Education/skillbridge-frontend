@@ -12,6 +12,10 @@ export default mergeConfig(
       // Les machines de dev (Windows) sont lentes quand plusieurs fichiers de
       // test tournent en parallèle : 5 s par défaut rendait la suite instable.
       testTimeout: 15000,
+      // Chaque fichier monte un environnement jsdom complet : au-delà de
+      // quelques workers la mémoire sature et userEvent (qui attend entre
+      // chaque frappe) part en timeout. On plafonne pour rester déterministe.
+      maxWorkers: 4,
     },
   })
 )

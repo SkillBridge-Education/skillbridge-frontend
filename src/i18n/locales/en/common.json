@@ -236,6 +236,33 @@
       "stat4": "no money is exchanged"
     }
   },
+  "feed": {
+    "eyebrow": "Community",
+    "title": "What members <highlight>share</highlight>",
+    "subtitle": "Progress, discoveries and exchanges from the SkillBridge community.",
+    "filters": {
+      "all": "All",
+      "languages": "Languages",
+      "music": "Music",
+      "tech": "Tech",
+      "science": "Science",
+      "wellbeing": "Well-being"
+    },
+    "composerPlaceholder": "Share a discovery, some progress…",
+    "newPost": "New post",
+    "textPlaceholder": "Share your progress, a tip or a thought…",
+    "tagPlaceholder": "Related skill (e.g. Python, Guitar…)",
+    "publish": "Publish",
+    "justNow": "Just now",
+    "me": "Me",
+    "emptyTitle": "No posts yet",
+    "emptyText": "Be the first to share your progress or a discovery.",
+    "writePost": "Write a post",
+    "join": "Join SkillBridge",
+    "like": "Like",
+    "comments_one": "{{count}} comment",
+    "comments_other": "{{count}} comments"
+  },
   "forgotPassword": {
     "title": "Reset your password",
     "subtitle": "Enter your email address and we will send you a reset link.",
