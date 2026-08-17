@@ -566,5 +566,79 @@
     "summary": "Summary of your report",
     "emergency": "If someone is in immediate danger, do not wait: 17 (police), 119 (child protection), 3018 (online violence) in France.",
     "confidential": "Your report is confidential. Abusive reports may lead to sanctions."
+  },
+  "profile": {
+    "eyebrow": "My profile",
+    "edit": "Edit",
+    "newSession": "Session",
+    "banner": "Banner",
+    "removeBanner": "Remove photo",
+    "logout": "Log out",
+    "tabs": {
+      "skills": "Skills",
+      "card": "My card",
+      "availability": "Availability",
+      "sessions": "Sessions",
+      "transactions": "History"
+    },
+    "editModal": {
+      "title": "Edit profile",
+      "bio": "Bio",
+      "bioPlaceholder": "Tell us about yourself…",
+      "avatar": "Profile picture",
+      "avatarHint": "JPG, PNG · max 5 MB",
+      "change": "Change",
+      "uploading": "Uploading…"
+    },
+    "skillModal": {
+      "teachTitle": "Skill to teach",
+      "learnTitle": "Learning goal",
+      "subtitle": "Search or pick from the list",
+      "searchPlaceholder": "Search a skill…",
+      "addCustom": "+ Add \"{{skill}}\" (custom)"
+    },
+    "stats": {
+      "available": "Credits available",
+      "earned": "Credits earned",
+      "spent": "Credits spent"
+    },
+    "skills": {
+      "teaching": "I teach ({{count}})",
+      "learning": "I want to learn ({{count}})",
+      "add": "Add",
+      "noTeach": "No skill added yet.",
+      "noWant": "No goal added yet."
+    },
+    "card": {
+      "title": "My business card",
+      "changePhoto": "Change profile picture",
+      "manageSkills": "Manage my skills",
+      "setAvailability": "Set my availability",
+      "teaches": "Teaches"
+    },
+    "availability": {
+      "title": "My available slots",
+      "subtitle": "The exact time is agreed in the chat with your peer.",
+      "saved": "Saved"
+    },
+    "sessions": {
+      "empty": "No session yet",
+      "create": "Create a session",
+      "teaching": "You teach",
+      "learning": "You learn"
+    },
+    "transactions": {
+      "empty": "No transaction",
+      "emptyHint": "Credits show up here after your sessions.",
+      "givenTo": "Given to",
+      "receivedFrom": "Received from"
+    },
+    "status": {
+      "scheduled": "Upcoming",
+      "active": "Live",
+      "completed": "Completed",
+      "cancelled": "Cancelled"
+    },
+    "genericError": "Error"
   }
 }

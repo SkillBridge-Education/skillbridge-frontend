@@ -566,5 +566,79 @@
     "summary": "Résumé de ton signalement",
     "emergency": "Si une personne est en danger immédiat, n'attends pas : 17 (police), 119 (enfance en danger), 3018 (violences numériques).",
     "confidential": "Ton signalement est confidentiel. Les abus de signalement peuvent entraîner des sanctions."
+  },
+  "profile": {
+    "eyebrow": "Mon profil",
+    "edit": "Modifier",
+    "newSession": "Séance",
+    "banner": "Bannière",
+    "removeBanner": "Retirer photo",
+    "logout": "Déconnexion",
+    "tabs": {
+      "skills": "Compétences",
+      "card": "Ma carte",
+      "availability": "Disponibilités",
+      "sessions": "Sessions",
+      "transactions": "Historique"
+    },
+    "editModal": {
+      "title": "Modifier le profil",
+      "bio": "Bio",
+      "bioPlaceholder": "Parlez de vous…",
+      "avatar": "Photo de profil",
+      "avatarHint": "JPG, PNG · max 5 MB",
+      "change": "Changer",
+      "uploading": "Upload…"
+    },
+    "skillModal": {
+      "teachTitle": "Compétence à enseigner",
+      "learnTitle": "Objectif d'apprentissage",
+      "subtitle": "Recherchez ou sélectionnez dans la liste",
+      "searchPlaceholder": "Rechercher une compétence…",
+      "addCustom": "+ Ajouter \"{{skill}}\" (personnalisé)"
+    },
+    "stats": {
+      "available": "Crédits disponibles",
+      "earned": "Crédits gagnés",
+      "spent": "Crédits dépensés"
+    },
+    "skills": {
+      "teaching": "J'enseigne ({{count}})",
+      "learning": "Je veux apprendre ({{count}})",
+      "add": "Ajouter",
+      "noTeach": "Aucune compétence ajoutée.",
+      "noWant": "Aucun objectif ajouté."
+    },
+    "card": {
+      "title": "Ma carte de visite",
+      "changePhoto": "Changer photo de profil",
+      "manageSkills": "Gérer mes compétences",
+      "setAvailability": "Configurer disponibilités",
+      "teaches": "Enseigne"
+    },
+    "availability": {
+      "title": "Mes créneaux disponibles",
+      "subtitle": "L'heure exacte se convient dans le chat avec votre pair.",
+      "saved": "Enregistré"
+    },
+    "sessions": {
+      "empty": "Aucune séance pour l'instant",
+      "create": "Créer une séance",
+      "teaching": "Tu enseignes",
+      "learning": "Tu apprends"
+    },
+    "transactions": {
+      "empty": "Aucune transaction",
+      "emptyHint": "Les crédits apparaissent ici après vos séances.",
+      "givenTo": "Donnée à",
+      "receivedFrom": "Reçue de"
+    },
+    "status": {
+      "scheduled": "À venir",
+      "active": "En direct",
+      "completed": "Terminée",
+      "cancelled": "Annulée"
+    },
+    "genericError": "Erreur"
   }
 }
