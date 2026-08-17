@@ -102,12 +102,15 @@
     "tue": "Mar",
     "wed": "Mer",
     "thu": "Jeu",
-    "fri": "Ven"
+    "fri": "Ven",
+    "sat": "Sam",
+    "sun": "Dim"
   },
   "slots": {
     "morning": "Matin",
     "noon": "Midi",
-    "evening": "Soir"
+    "evening": "Soir",
+    "afternoon": "Après-midi"
   },
   "slotHints": {
     "morning": "8h–12h",
@@ -640,5 +643,82 @@
       "cancelled": "Annulée"
     },
     "genericError": "Erreur"
+  },
+  "member": {
+    "rateAfter": "Notez après un cours",
+    "shares": "Partage",
+    "learns": "Apprend",
+    "available": "Dispo",
+    "chosen": "Choisi",
+    "unavailable": "—",
+    "noAvailability": "Disponibilités à confirmer via le chat.",
+    "reviews": "{{count}} avis",
+    "creditsActive": "actifs sur la plateforme",
+    "credits": "{{count}} crédits",
+    "selectedSlot": "Créneau sélectionné : {{slot}}",
+    "book": "Réserver une session",
+    "bookSlot": "Réserver — {{slot}}",
+    "slotLabel": "{{day}} — {{slot}}"
+  },
+  "credits": {
+    "eyebrow": "Tes crédits",
+    "title": "{{count}} crédits",
+    "titleUnit": "crédits",
+    "subtitle": "soit <strong>{{count}} minutes</strong> de cours disponibles.",
+    "capReached": "Plafond atteint — dépense tes crédits en apprenant quelque chose de nouveau",
+    "findSomeone": "Trouver quelqu'un",
+    "progress": "Progression vers le plafond",
+    "capHint": "Plafond à {{limit}} crédits pour t'inciter à apprendre plutôt qu'à thésauriser.",
+    "capRemaining": " · {{count}} cr avant le plafond",
+    "stats": {
+      "balance": "Solde",
+      "earned": "Gagnés au total",
+      "spent": "Dépensés au total",
+      "unit": "crédits"
+    },
+    "history": "Historique",
+    "creditPerMinute": "1 cr = 1 min",
+    "empty": "Aucune transaction pour l'instant.",
+    "emptyHint": "Les crédits apparaissent ici après tes séances terminées.",
+    "with": "avec {{name}} · {{date}}",
+    "notForSale": "Les crédits ne s'achètent pas. Ils se gagnent, en enseignant.",
+    "howTitle": "Comment fonctionnent les crédits",
+    "how1Title": "1 crédit = 1 minute",
+    "how1Text": "Chaque crédit correspond à une minute de session d'apprentissage.",
+    "how2Title": "Réservation à la création",
+    "how2Text": "Quand tu crées une session, les crédits sont mis de côté immédiatement.",
+    "how3Title": "Versement + remboursement prorata",
+    "how3Text": "À la fin, l'enseignant reçoit les crédits consommés. Si la session est plus courte, la différence t'est remboursée.",
+    "how4Title": "Plafond {{limit}} crédits",
+    "how4Text": "Atteint le plafond ? Utilise tes crédits pour apprendre. L'objectif, c'est d'apprendre, pas de thésauriser.",
+    "ctaFind": "Trouver quelqu'un à apprendre",
+    "ctaCreate": "Créer une session",
+    "session": "Session",
+    "unit": "cr."
+  },
+  "becomeSharer": {
+    "doneTitle": "Profil donneur créé !",
+    "doneText": "Vos compétences sont visibles dans la page Connexion. Les membres peuvent maintenant vous trouver et réserver une session.",
+    "seeConnections": "Voir la page Connexion",
+    "myProfile": "Mon profil",
+    "back": "Retour",
+    "previousStep": "Étape précédente",
+    "step1Label": "Compétences",
+    "step2Label": "Bio & Disponibilités",
+    "step1Title": "Que souhaitez-vous partager ?",
+    "step2Title": "Votre profil donneur",
+    "step1Text": "Choisissez les compétences que vous pouvez enseigner aux autres membres.",
+    "step2Text": "Décrivez-vous et indiquez vos créneaux disponibles.",
+    "continue": "Continuer",
+    "bio": "Bio courte",
+    "bioPlaceholder": "Décrivez votre parcours et ce que vous pouvez apporter aux membres…",
+    "rate": "Tarif en crédits par minute",
+    "rateOption": "{{count}} crédit/min",
+    "slots": "Mes créneaux disponibles",
+    "submit": "Créer mon profil donneur",
+    "errors": {
+      "skills": "Sélectionnez au moins une compétence.",
+      "generic": "Une erreur est survenue."
+    }
   }
 }

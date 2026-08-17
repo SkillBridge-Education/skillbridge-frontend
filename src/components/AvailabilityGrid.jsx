@@ -1,14 +1,26 @@
 // AvailabilityGrid — Grille de disponibilité hebdomadaire (lecture seule)
-const DAYS = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim']
-const SLOTS = ['Matin', 'Après-midi', 'Soir']
+import { useTranslation } from 'react-i18next'
+
+// `key` indexe l'objet `availability` reçu du backend : jamais traduite.
+const DAYS = [
+  { key: 'Lun', labelKey: 'daysShort.mon' },
+  { key: 'Mar', labelKey: 'daysShort.tue' },
+  { key: 'Mer', labelKey: 'daysShort.wed' },
+  { key: 'Jeu', labelKey: 'daysShort.thu' },
+  { key: 'Ven', labelKey: 'daysShort.fri' },
+  { key: 'Sam', labelKey: 'daysShort.sat' },
+  { key: 'Dim', labelKey: 'daysShort.sun' },
+]
+const SLOTS = ['slots.morning', 'slots.afternoon', 'slots.evening']
 
 export default function AvailabilityGrid({ availability = {} }) {
+  const { t } = useTranslation()
   const hasAny = Object.values(availability).some(slots => slots.some(Boolean))
 
   if (!hasAny) {
     return (
       <p className="text-[13px] text-[#7A6E5C] italic">
-        Disponibilités à confirmer via le chat.
+        {t('member.noAvailability')}
       </p>
     )
   }
@@ -19,21 +31,21 @@ export default function AvailabilityGrid({ availability = {} }) {
         <thead>
           <tr>
             <th className="text-left text-[#7A6E5C] font-semibold pb-2 pr-3 w-[70px]"></th>
-            {SLOTS.map(slot => (
-              <th key={slot} className="text-center text-[#7A6E5C] font-semibold pb-2 px-1 min-w-[56px]">
-                {slot}
+            {SLOTS.map(slotKey => (
+              <th key={slotKey} className="text-center text-[#7A6E5C] font-semibold pb-2 px-1 min-w-[56px]">
+                {t(slotKey)}
               </th>
             ))}
           </tr>
         </thead>
         <tbody>
           {DAYS.map(day => {
-            const slots = availability[day] ?? [false, false, false]
+            const slots = availability[day.key] ?? [false, false, false]
             const anyAvail = slots.some(Boolean)
             return (
-              <tr key={day}>
+              <tr key={day.key}>
                 <td className={`text-[12px] font-bold py-[5px] pr-3 ${anyAvail ? 'text-[#1A1410]' : 'text-[#C0B8AC]'}`}>
-                  {day}
+                  {t(day.labelKey)}
                 </td>
                 {slots.map((avail, i) => (
                   <td key={i} className="px-1 py-[5px] text-center">
@@ -44,7 +56,7 @@ export default function AvailabilityGrid({ availability = {} }) {
                           : 'bg-[#F5F3EE] text-[#C0B8AC]'
                         }`}
                     >
-                      {avail ? 'Dispo' : '—'}
+                      {avail ? t('member.available') : t('member.unavailable')}
                     </div>
                   </td>
                 ))}

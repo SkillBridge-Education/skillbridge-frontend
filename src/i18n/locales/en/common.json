@@ -102,12 +102,15 @@
     "tue": "Tue",
     "wed": "Wed",
     "thu": "Thu",
-    "fri": "Fri"
+    "fri": "Fri",
+    "sat": "Sat",
+    "sun": "Sun"
   },
   "slots": {
     "morning": "Morning",
     "noon": "Midday",
-    "evening": "Evening"
+    "evening": "Evening",
+    "afternoon": "Afternoon"
   },
   "slotHints": {
     "morning": "8am–12pm",
@@ -640,5 +643,82 @@
       "cancelled": "Cancelled"
     },
     "genericError": "Error"
+  },
+  "member": {
+    "rateAfter": "Rate after a session",
+    "shares": "Shares",
+    "learns": "Learns",
+    "available": "Free",
+    "chosen": "Chosen",
+    "unavailable": "—",
+    "noAvailability": "Availability to be confirmed in the chat.",
+    "reviews": "{{count}} reviews",
+    "creditsActive": "active on the platform",
+    "credits": "{{count}} credits",
+    "selectedSlot": "Selected slot: {{slot}}",
+    "book": "Book a session",
+    "bookSlot": "Book — {{slot}}",
+    "slotLabel": "{{day}} — {{slot}}"
+  },
+  "credits": {
+    "eyebrow": "Your credits",
+    "title": "{{count}} credits",
+    "titleUnit": "credits",
+    "subtitle": "that is <strong>{{count}} minutes</strong> of lessons available.",
+    "capReached": "Cap reached — spend your credits by learning something new",
+    "findSomeone": "Find someone",
+    "progress": "Progress towards the cap",
+    "capHint": "The cap is set at {{limit}} credits to nudge you into learning rather than hoarding.",
+    "capRemaining": " · {{count}} cr before the cap",
+    "stats": {
+      "balance": "Balance",
+      "earned": "Earned in total",
+      "spent": "Spent in total",
+      "unit": "credits"
+    },
+    "history": "History",
+    "creditPerMinute": "1 cr = 1 min",
+    "empty": "No transaction yet.",
+    "emptyHint": "Credits show up here once your sessions are completed.",
+    "with": "with {{name}} · {{date}}",
+    "notForSale": "Credits cannot be bought. They are earned, by teaching.",
+    "howTitle": "How credits work",
+    "how1Title": "1 credit = 1 minute",
+    "how1Text": "Each credit is worth one minute of a learning session.",
+    "how2Title": "Reserved on creation",
+    "how2Text": "When you create a session, the credits are set aside straight away.",
+    "how3Title": "Payment + pro-rata refund",
+    "how3Text": "At the end, the teacher receives the credits actually spent. If the session runs short, the difference is refunded to you.",
+    "how4Title": "{{limit}}-credit cap",
+    "how4Text": "Hit the cap? Use your credits to learn. The point is to learn, not to hoard.",
+    "ctaFind": "Find someone to learn from",
+    "ctaCreate": "Create a session",
+    "session": "Session",
+    "unit": "cr."
+  },
+  "becomeSharer": {
+    "doneTitle": "Teacher profile created!",
+    "doneText": "Your skills are visible on the Connections page. Members can now find you and book a session.",
+    "seeConnections": "See the Connections page",
+    "myProfile": "My profile",
+    "back": "Back",
+    "previousStep": "Previous step",
+    "step1Label": "Skills",
+    "step2Label": "Bio & availability",
+    "step1Title": "What would you like to share?",
+    "step2Title": "Your teacher profile",
+    "step1Text": "Pick the skills you can teach to other members.",
+    "step2Text": "Describe yourself and set the slots when you are available.",
+    "continue": "Continue",
+    "bio": "Short bio",
+    "bioPlaceholder": "Describe your background and what you can bring to other members…",
+    "rate": "Rate in credits per minute",
+    "rateOption": "{{count}} credit/min",
+    "slots": "My available slots",
+    "submit": "Create my teacher profile",
+    "errors": {
+      "skills": "Pick at least one skill.",
+      "generic": "Something went wrong."
+    }
   }
 }

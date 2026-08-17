@@ -1,6 +1,7 @@
 // src/pages/BecomeSharer.jsx — Créer son profil de donneur
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import api from '../services/api'
 import useAuthStore from '../store/authStore'
 
@@ -21,13 +22,23 @@ const ALL_SKILLS = [
   'Business', 'Finance', 'Marketing', 'Entrepreneurship', 'Accounting',
 ]
 
-const DAYS  = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim']
-const SLOTS = ['Matin', 'Après-midi', 'Soir']
+// `key` est la valeur envoyée au backend : jamais traduite.
+const DAYS = [
+  { key: 'Lun', labelKey: 'daysShort.mon' },
+  { key: 'Mar', labelKey: 'daysShort.tue' },
+  { key: 'Mer', labelKey: 'daysShort.wed' },
+  { key: 'Jeu', labelKey: 'daysShort.thu' },
+  { key: 'Ven', labelKey: 'daysShort.fri' },
+  { key: 'Sam', labelKey: 'daysShort.sat' },
+  { key: 'Dim', labelKey: 'daysShort.sun' },
+]
+const SLOTS = ['slots.morning', 'slots.afternoon', 'slots.evening']
 
-const EMPTY_SCHEDULE = Object.fromEntries(DAYS.map(d => [d, [false, false, false]]))
+const EMPTY_SCHEDULE = Object.fromEntries(DAYS.map(d => [d.key, [false, false, false]]))
 
 export default function BecomeSharer() {
   const navigate = useNavigate()
+  const { t } = useTranslation()
   const { user, setUser } = useAuthStore()
 
   const [step,     setStep]    = useState(1) // 1=skills 2=bio+schedule 3=success
@@ -57,7 +68,7 @@ export default function BecomeSharer() {
   )
 
   const handleSubmit = async () => {
-    if (skills.length === 0) { setError('Sélectionnez au moins une compétence.'); return }
+    if (skills.length === 0) { setError(t('becomeSharer.errors.skills')); return }
     setError('')
     setLoading(true)
     try {
@@ -76,7 +87,7 @@ export default function BecomeSharer() {
       }
       setStep(3)
     } catch (e) {
-      setError(e.response?.data?.message || 'Une erreur est survenue.')
+      setError(e.response?.data?.message || t('becomeSharer.errors.generic'))
     } finally {
       setLoading(false)
     }
@@ -91,23 +102,23 @@ export default function BecomeSharer() {
           </svg>
         </div>
         <h1 className="text-[28px] font-black tracking-tight text-[#1A1410] mb-2 text-center">
-          Profil donneur créé !
+          {t('becomeSharer.doneTitle')}
         </h1>
         <p className="text-[14px] text-[#7A6E5C] text-center max-w-[400px] mb-8">
-          Vos compétences sont visibles dans la page Connexion. Les membres peuvent maintenant vous trouver et réserver une session.
+          {t('becomeSharer.doneText')}
         </p>
         <div className="flex gap-3">
           <button
             onClick={() => navigate('/connection')}
             className="px-6 py-3 rounded-xl border-[1.5px] border-[#252840] text-[#252840] text-[13px] font-semibold bg-transparent cursor-pointer hover:bg-[#252840] hover:text-white transition-all"
           >
-            Voir la page Connexion
+            {t('becomeSharer.seeConnections')}
           </button>
           <button
             onClick={() => navigate('/profile')}
             className="px-6 py-3 rounded-xl bg-[#252840] text-white text-[13px] font-bold border-none cursor-pointer hover:bg-[#363B6B] transition-all"
           >
-            Mon profil
+            {t('becomeSharer.myProfile')}
           </button>
         </div>
       </main>
@@ -123,7 +134,7 @@ export default function BecomeSharer() {
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round">
             <path d="M9 2L4 7l5 5"/>
           </svg>
-          {step === 1 ? 'Retour' : 'Étape précédente'}
+          {step === 1 ? t('becomeSharer.back') : t('becomeSharer.previousStep')}
         </button>
 
         {/* Progress */}
@@ -138,17 +149,17 @@ export default function BecomeSharer() {
             </div>
           ))}
           <span className="ml-2 text-[12px] text-[#7A6E5C]">
-            {step === 1 ? 'Compétences' : 'Bio & Disponibilités'}
+            {step === 1 ? t('becomeSharer.step1Label') : t('becomeSharer.step2Label')}
           </span>
         </div>
 
         <h1 className="text-[28px] font-black tracking-tight text-[#1A1410] mb-2">
-          {step === 1 ? 'Que souhaitez-vous partager ?' : 'Votre profil donneur'}
+          {step === 1 ? t('becomeSharer.step1Title') : t('becomeSharer.step2Title')}
         </h1>
         <p className="text-[14px] text-[#7A6E5C] mb-8">
           {step === 1
-            ? 'Choisissez les compétences que vous pouvez enseigner aux autres membres.'
-            : 'Décrivez-vous et indiquez vos créneaux disponibles.'}
+            ? t('becomeSharer.step1Text')
+            : t('becomeSharer.step2Text')}
         </p>
 
         {error && (
@@ -191,7 +202,7 @@ export default function BecomeSharer() {
               disabled={skills.length === 0}
               className="w-full py-3 rounded-xl bg-[#252840] text-white text-[14px] font-bold border-none cursor-pointer hover:bg-[#363B6B] transition-all disabled:opacity-40"
             >
-              Continuer
+              {t('becomeSharer.continue')}
             </button>
           </div>
         )}
@@ -203,12 +214,12 @@ export default function BecomeSharer() {
             {/* Bio */}
             <div>
               <label className="text-[11px] font-bold uppercase tracking-[0.6px] text-[#7A6E5C] block mb-1">
-                Bio courte
+                {t('becomeSharer.bio')}
               </label>
               <textarea
                 value={bio}
                 onChange={e => setBio(e.target.value)}
-                placeholder="Décrivez votre parcours et ce que vous pouvez apporter aux membres…"
+                placeholder={t('becomeSharer.bioPlaceholder')}
                 className="w-full px-4 py-3 rounded-xl border-[1.5px] border-black/[0.09] bg-white text-[14px] text-[#1A1410] outline-none focus:border-[#252840] transition-all resize-none h-28"
               />
             </div>
@@ -216,7 +227,7 @@ export default function BecomeSharer() {
             {/* Tarif */}
             <div>
               <label className="text-[11px] font-bold uppercase tracking-[0.6px] text-[#7A6E5C] block mb-1">
-                Tarif en crédits par minute
+                {t('becomeSharer.rate')}
               </label>
               <select
                 value={credits}
@@ -224,7 +235,7 @@ export default function BecomeSharer() {
                 className="w-full px-4 py-[10px] rounded-xl border-[1.5px] border-black/[0.09] bg-white text-[14px] text-[#1A1410] outline-none focus:border-[#252840] transition-all"
               >
                 {[1, 2, 3].map(n => (
-                  <option key={n} value={n}>{n} crédit/min{n > 1 ? '' : ''}</option>
+                  <option key={n} value={n}>{t('becomeSharer.rateOption', { count: n })}</option>
                 ))}
               </select>
             </div>
@@ -232,34 +243,36 @@ export default function BecomeSharer() {
             {/* Grille planning */}
             <div>
               <label className="text-[11px] font-bold uppercase tracking-[0.6px] text-[#7A6E5C] block mb-3">
-                Mes créneaux disponibles
+                {t('becomeSharer.slots')}
               </label>
               <div className="overflow-x-auto">
                 <table className="w-full border-collapse text-[11px]">
                   <thead>
                     <tr>
                       <th className="text-left text-[#7A6E5C] font-semibold pb-2 pr-3 w-[50px]" />
-                      {SLOTS.map(slot => (
-                        <th key={slot} className="text-center text-[#7A6E5C] font-semibold pb-2 px-1 min-w-[80px]">
-                          {slot}
+                      {SLOTS.map(slotKey => (
+                        <th key={slotKey} className="text-center text-[#7A6E5C] font-semibold pb-2 px-1 min-w-[80px]">
+                          {t(slotKey)}
                         </th>
                       ))}
                     </tr>
                   </thead>
                   <tbody>
                     {DAYS.map(day => (
-                      <tr key={day}>
-                        <td className="text-[12px] font-bold py-[4px] pr-3 text-[#1A1410]">{day}</td>
-                        {schedule[day].map((active, i) => (
+                      <tr key={day.key}>
+                        <td className="text-[12px] font-bold py-[4px] pr-3 text-[#1A1410]">{t(day.labelKey)}</td>
+                        {schedule[day.key].map((active, i) => (
                           <td key={i} className="px-1 py-[4px] text-center">
                             <button
-                              onClick={() => toggleSlot(day, i)}
+                              onClick={() => toggleSlot(day.key, i)}
+                              aria-pressed={active}
+                              aria-label={t('register.availability.toggleSlot', { day: t(day.labelKey), slot: t(SLOTS[i]) })}
                               className={`w-full h-[28px] rounded-lg text-[10px] font-bold transition-all border-none cursor-pointer
                                 ${active
                                   ? 'bg-[#3D5C28] text-white hover:bg-[#4E6035]'
                                   : 'bg-[#F5F3EE] text-[#B0A898] hover:bg-[#E4EED8] hover:text-[#3D5C28]'}`}
                             >
-                              {active ? 'Dispo' : '—'}
+                              {active ? t('member.available') : t('member.unavailable')}
                             </button>
                           </td>
                         ))}
@@ -278,7 +291,7 @@ export default function BecomeSharer() {
               disabled={loading}
               className="w-full py-3 rounded-xl bg-[#3D5C28] text-white text-[14px] font-bold border-none cursor-pointer hover:bg-[#4E6035] transition-all disabled:opacity-50"
             >
-              {loading ? 'Enregistrement…' : 'Créer mon profil donneur'}
+              {loading ? t('actions.saving') : t('becomeSharer.submit')}
             </button>
           </div>
         )}
