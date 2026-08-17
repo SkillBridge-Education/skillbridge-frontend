@@ -179,6 +179,63 @@
       "completeProfile": "Complete my profile →"
     }
   },
+  "subjects": {
+    "maths": "Maths",
+    "physics": "Physics",
+    "network": "Networking",
+    "cybersecurity": "Cybersecurity",
+    "english": "English",
+    "database": "Databases",
+    "designUi": "UI Design",
+    "dataScience": "Data Science",
+    "guitar": "Guitar",
+    "cooking": "Cooking"
+  },
+  "home": {
+    "badge": "Students helping students",
+    "heroTitleLine1": "Teach what you know.",
+    "heroTitleLine2": "Learn what you're missing.",
+    "heroText": "SkillBridge brings together the students of your school to help each other. No money, just credits you earn by sharing and spend by learning.",
+    "ctaExplore": "Explore members",
+    "ctaJoin": "Join in",
+    "slideLabel": "Image {{index}}",
+    "how": {
+      "eyebrow": "How it works",
+      "title": "Three ways to progress together"
+    },
+    "usages": {
+      "catchUp": {
+        "title": "Catch up on a class",
+        "text": "Missed a session? A classmate walks you through it calmly, at your own pace."
+      },
+      "learnTech": {
+        "title": "Learn a new technology",
+        "text": "React, Docker, Python… Passionate students get you started step by step."
+      },
+      "sharePassion": {
+        "title": "Share your passion",
+        "text": "Guitar, cooking, photography: teach what you love and earn credits."
+      }
+    },
+    "catalog": {
+      "eyebrow": "The catalogue",
+      "title": "Subjects & technologies taught",
+      "text": "From algebra to React, from networking to design — someone here has what you need.",
+      "cta": "Find someone who teaches"
+    },
+    "creditsSection": {
+      "eyebrow": "The credit system",
+      "title": "1 credit = <highlight>1 minute</highlight> of teaching.",
+      "text": "No wallet, no subscription. You receive credits by teaching and spend them by learning. We all start in the same place and grow together.",
+      "bullet1": "120 free credits when you sign up, so you can start without stress.",
+      "bullet2": "A 500-credit cap — to nudge you into learning rather than hoarding.",
+      "bullet3": "No real money is ever exchanged.",
+      "stat1": "free credits when you sign up",
+      "stat2": "cap — get moving!",
+      "stat3": "= 1 credit spent / earned",
+      "stat4": "no money is exchanged"
+    }
+  },
   "forgotPassword": {
     "title": "Reset your password",
     "subtitle": "Enter your email address and we will send you a reset link.",

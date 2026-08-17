@@ -179,6 +179,63 @@
       "completeProfile": "Compléter mon profil →"
     }
   },
+  "subjects": {
+    "maths": "Maths",
+    "physics": "Physique",
+    "network": "Réseau",
+    "cybersecurity": "Cybersécurité",
+    "english": "Anglais",
+    "database": "Base de données",
+    "designUi": "Design UI",
+    "dataScience": "Data Science",
+    "guitar": "Guitare",
+    "cooking": "Cuisine"
+  },
+  "home": {
+    "badge": "L'entraide entre élèves",
+    "heroTitleLine1": "Enseigne ce que tu sais.",
+    "heroTitleLine2": "Apprends ce qui te manque.",
+    "heroText": "SkillBridge réunit les élèves de ton école pour s'entraider. Pas d'argent, juste des crédits que tu gagnes en partageant et que tu dépenses en apprenant.",
+    "ctaExplore": "Explorer les membres",
+    "ctaJoin": "Rejoindre l'entraide",
+    "slideLabel": "Image {{index}}",
+    "how": {
+      "eyebrow": "Comment ça marche",
+      "title": "Trois façons de progresser ensemble"
+    },
+    "usages": {
+      "catchUp": {
+        "title": "Rattrape un cours",
+        "text": "Tu as séché un TD ? Un·e camarade te le reprend tranquille, à ton rythme."
+      },
+      "learnTech": {
+        "title": "Apprends une nouvelle techno",
+        "text": "React, Docker, Python… Des étudiants passionnés t'initient pas à pas."
+      },
+      "sharePassion": {
+        "title": "Partage ta passion",
+        "text": "Guitare, cuisine, photo : enseigne ce qui te fait kiffer et gagne des crédits."
+      }
+    },
+    "catalog": {
+      "eyebrow": "Le catalogue",
+      "title": "Matières & technos enseignées",
+      "text": "De l'algèbre à React, du réseau au design — quelqu'un a forcément ce qu'il te faut.",
+      "cta": "Trouver quelqu'un qui enseigne"
+    },
+    "creditsSection": {
+      "eyebrow": "Le système de crédits",
+      "title": "1 crédit = <highlight>1 minute</highlight> de cours.",
+      "text": "Pas de portefeuille, pas d'abonnement. Tu reçois des crédits en enseignant, tu les dépenses en apprenant. On démarre tous au même endroit, on grandit ensemble.",
+      "bullet1": "120 crédits offerts à l'inscription, pour démarrer sans stress.",
+      "bullet2": "Plafond de 500 crédits — pour t'inciter à apprendre, pas à thésauriser.",
+      "bullet3": "Zéro argent réel n'est jamais échangé.",
+      "stat1": "crédits offerts à l'inscription",
+      "stat2": "plafond — bouge-toi !",
+      "stat3": "= 1 crédit dépensé / gagné",
+      "stat4": "aucun argent n'est échangé"
+    }
+  },
   "forgotPassword": {
     "title": "Réinitialise ton mot de passe",
     "subtitle": "Entre ton adresse email et nous t'enverrons un lien de réinitialisation.",
