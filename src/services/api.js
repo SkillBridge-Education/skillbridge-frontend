@@ -78,8 +78,11 @@ export const blockApi = {
 
 // ── Recours (DSA) ───────────────────────────────────────
 export const appealApi = {
-  create: (message) => api.post('/appeals', { message }).then(r => r.data.appeal ?? r.data),
-  mine:   ()        => api.get('/appeals/mine').then(r => r.data.appeals ?? r.data),
+  // Le 403 de suspension transporte son propre `appealPath` : on le suit quand
+  // il est fourni, pour que le backend puisse déplacer la route sans casser
+  // l'écran de recours.
+  create: (message, path = '/appeals') => api.post(path, { message }).then(r => r.data.appeal ?? r.data),
+  mine:   ()                           => api.get('/appeals/mine').then(r => r.data.appeals ?? r.data),
 }
 
 // ── Demande d'inscription d'un établissement ────────────

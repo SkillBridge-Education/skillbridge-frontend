@@ -28,6 +28,7 @@ import Terms           from './pages/Terms'
 import Help            from './pages/Help'
 import Support         from './pages/Support'
 import Report          from './pages/Report'
+import SuspendedAccount from './pages/SuspendedAccount'
 import useAuthStore    from './store/authStore'
 import { authApi }     from './services/api'
 
@@ -38,7 +39,7 @@ function ProtectedRoute({ children }) {
 }
 
 export default function App() {
-  const { token, setUser, logout, markAuthReady } = useAuthStore()
+  const { token, setUser, logout, markAuthReady, suspension } = useAuthStore()
 
   useEffect(() => {
     if (!token) { markAuthReady(); return }
@@ -69,6 +70,10 @@ export default function App() {
         {/* tabIndex={-1} : cible programmable du lien d'évitement, sans
             ajouter la zone à l'ordre de tabulation. */}
         <div id="main-content" tabIndex={-1} className="pb-16 md:pb-0">
+        {/* Compte suspendu : l'écran de motivation et de recours remplace
+            l'application. Le laisser naviguer n'aurait aucun sens, chaque
+            appel repartant en 403. */}
+        {suspension ? <SuspendedAccount /> : (
         <Routes>
           <Route path="/"                  element={<HomePage />} />
           <Route path="/register"          element={<RegisterPage />} />
@@ -101,6 +106,7 @@ export default function App() {
           <Route path="/sessions/:id"      element={<ProtectedRoute><SessionRoom /></ProtectedRoute>} />
           <Route path="/become-sharer"     element={<ProtectedRoute><BecomeSharer /></ProtectedRoute>} />
         </Routes>
+        )}
         </div>
         <BottomNav />
       </ToastProvider>
