@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
+import useFocusTrap from '../hooks/useFocusTrap'
 import { Search, Star, Send, X } from 'lucide-react'
 import useAuthStore from '../store/authStore'
 import api from '../services/api'
@@ -70,6 +71,7 @@ export default function Connection() {
   const [filter,    setFilter]    = useState('all')
   const [search,    setSearch]    = useState('')
   const [selected,  setSelected]  = useState(null)
+  const bookingRef = useFocusTrap(!!selected, () => setSelected(null))
   const [pickedSlots, setPickedSlots] = useState({})
 
   const [incoming,  setIncoming]  = useState([])
@@ -193,6 +195,10 @@ export default function Connection() {
           onClick={() => setSelected(null)}
         >
           <div
+            ref={bookingRef}
+            role="dialog"
+            aria-modal="true"
+            aria-label={t('connection.sendRequest')}
             className="bg-white rounded-3xl w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-soft border border-[#E8DDC7] animate-modal-in"
             onClick={e => e.stopPropagation()}
           >

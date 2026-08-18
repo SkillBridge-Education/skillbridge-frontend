@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
+import useFocusTrap from '../hooks/useFocusTrap'
 import {
   Search, Pin, Trash2, Paperclip,
   Image as ImageIcon, Video as VideoIcon, File as FileIcon,
@@ -104,6 +105,7 @@ export default function Chat() {
   const [uploading,      setUploading]      = useState(false)
   const [showAttach,     setShowAttach]     = useState(false)
   const [lightbox,       setLightbox]       = useState(null)
+  const lightboxRef = useFocusTrap(!!lightbox, () => setLightbox(null))
   const [showThread,     setShowThread]     = useState(false)
   const [search,         setSearch]         = useState('')
   const [convMenu,       setConvMenu]       = useState(null)
@@ -336,7 +338,8 @@ export default function Chat() {
     <>
       {/* Lightbox */}
       {lightbox && (
-        <div className="fixed inset-0 z-[600] bg-black/90 flex items-center justify-center p-6"
+        <div ref={lightboxRef} role="dialog" aria-modal="true" aria-label={t('chat.preview')}
+          className="fixed inset-0 z-[600] bg-black/90 flex items-center justify-center p-6"
           onClick={() => setLightbox(null)}>
           <img src={lightbox} alt={t('chat.preview')} className="max-w-full max-h-full object-contain rounded-xl" />
           <button onClick={() => setLightbox(null)}

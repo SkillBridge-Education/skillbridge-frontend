@@ -33,6 +33,27 @@ function focusableWithin(container) {
 export default function useFocusTrap(active, onEscape) {
   const containerRef = useRef(null)
   const escapeRef    = useRef(onEscape)
+  const lastOutsideRef = useRef(null)
+  const activeRef      = useRef(active)
+
+  // Écrit pendant le rendu, donc AVANT le commit : c'est ce qui permet au
+  // garde ci-dessous de voir la boîte comme « déjà ouverte » au moment où le
+  // navigateur applique un éventuel `autoFocus`.
+  activeRef.current = active
+
+  // On mémorise en continu le dernier élément focalisé pendant que le piège
+  // est inactif. Lire `document.activeElement` à l'ouverture ne suffit pas :
+  // un champ `autoFocus` prend le focus pendant le commit, avant que l'effet
+  // ne s'exécute, et on mémoriserait alors un élément de la boîte elle-même —
+  // le focus ne reviendrait jamais au déclencheur.
+  useEffect(() => {
+    const onFocusIn = (e) => {
+      if (activeRef.current) return
+      lastOutsideRef.current = e.target
+    }
+    document.addEventListener('focusin', onFocusIn, true)
+    return () => document.removeEventListener('focusin', onFocusIn, true)
+  }, [])
 
   // On garde le callback dans une ref : le piège ne doit pas se ré-installer
   // à chaque rendu du parent simplement parce que la fonction change d'identité.
@@ -56,7 +77,10 @@ export default function useFocusTrap(active, onEscape) {
     const container = containerRef.current
     if (!container) return
 
-    const previouslyFocused = document.activeElement
+    const active_el = document.activeElement
+    const previouslyFocused = active_el && !container.contains(active_el)
+      ? active_el
+      : lastOutsideRef.current
     focusFirst()
 
     const onKeyDown = (e) => {
@@ -93,10 +117,18 @@ export default function useFocusTrap(active, onEscape) {
     document.addEventListener('keydown', onKeyDown, true)
     return () => {
       document.removeEventListener('keydown', onKeyDown, true)
+
       // Le focus revient au déclencheur, sauf s'il a disparu du DOM entre-temps.
-      if (previouslyFocused && document.contains(previouslyFocused)) {
-        previouslyFocused.focus?.()
+      const restore = () => {
+        if (previouslyFocused && document.contains(previouslyFocused)) {
+          previouslyFocused.focus?.()
+        }
       }
+      restore()
+      // React démonte la boîte après avoir exécuté ce nettoyage : la
+      // suppression du noeud qui avait le focus le renvoie alors sur <body>,
+      // ce qui annulerait la restitution. On la rejoue une fois le DOM stable.
+      queueMicrotask(restore)
     }
   }, [active, focusFirst])
 

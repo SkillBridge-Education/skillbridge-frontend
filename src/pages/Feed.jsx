@@ -1,6 +1,7 @@
 // src/pages/Feed.jsx — Fil communautaire nettoyé, posts réels uniquement
 import { useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
+import useFocusTrap from '../hooks/useFocusTrap'
 import useAuthStore from '../store/authStore'
 import { useNavigate } from 'react-router-dom'
 
@@ -14,6 +15,7 @@ export default function Feed() {
   const [filter,      setFilter]   = useState('all')
   const [posts,       setPosts]    = useState([])
   const [addOpen,     setAddOpen]  = useState(false)
+  const composerRef = useFocusTrap(addOpen, () => setAddOpen(false))
   const [newText,     setNewText]  = useState('')
   const [newTag,      setNewTag]   = useState('')
   const [liked,       setLiked]    = useState(new Set())
@@ -95,9 +97,10 @@ export default function Feed() {
         {addOpen && (
           <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center p-4"
             onClick={e => e.target === e.currentTarget && setAddOpen(false)}>
-            <div className="bg-white rounded-2xl p-7 w-full max-w-[500px]">
+            <div ref={composerRef} role="dialog" aria-modal="true" aria-labelledby="new-post-title"
+              className="bg-white rounded-2xl p-7 w-full max-w-[500px]">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-[18px] font-black text-[#1A1410]">{t('feed.newPost')}</h2>
+                <h2 id="new-post-title" className="text-[18px] font-black text-[#1A1410]">{t('feed.newPost')}</h2>
                 <button onClick={() => setAddOpen(false)} aria-label={t('actions.close')}
                   className="w-8 h-8 rounded-full bg-black/[0.06] border-none cursor-pointer text-[#7A6E5C] flex items-center justify-center hover:bg-black/10 transition-all">
                   <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M1 1l10 10M11 1L1 11"/></svg>

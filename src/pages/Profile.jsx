@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import useFocusTrap from '../hooks/useFocusTrap'
 import { Camera, LogOut, Pencil } from 'lucide-react'
 import useAuthStore from '../store/authStore'
 import api from '../services/api'
@@ -77,6 +78,11 @@ export default function Profile() {
   const [addingSkill, setAddingSkill] = useState(false)
   const [skillSearch, setSkillSearch] = useState('')
   const [skillSaving, setSkillSaving] = useState(false)
+
+  // Déclarés après les états qu'ils observent (sinon zone morte temporelle),
+  // et avant tout `return` conditionnel : l'ordre des hooks doit rester stable.
+  const editRef  = useFocusTrap(editing, () => setEditing(false))
+  const skillRef = useFocusTrap(!!addingSkill, () => { setAddingSkill(false); setSkillSearch('') })
 
   // Animated banner gradient
   useEffect(() => {
@@ -236,9 +242,10 @@ export default function Profile() {
       {/* Edit modal */}
       {editing && (
         <div className="fixed inset-0 z-[500] bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="animate-modal-in bg-white rounded-3xl p-8 w-[440px] max-w-full max-h-[90vh] overflow-y-auto shadow-soft border border-[#E8DDC7]">
-            <h2 className="text-xl font-black text-[#252840] mb-5">{t('profile.editModal.title')}</h2>
-            {editError && <p className="text-red-500 text-sm mb-3 bg-red-50 px-3 py-2 rounded-lg">{editError}</p>}
+          <div ref={editRef} role="dialog" aria-modal="true" aria-labelledby="profile-edit-title"
+            className="animate-modal-in bg-white rounded-3xl p-8 w-[440px] max-w-full max-h-[90vh] overflow-y-auto shadow-soft border border-[#E8DDC7]">
+            <h2 id="profile-edit-title" className="text-xl font-black text-[#252840] mb-5">{t('profile.editModal.title')}</h2>
+            {editError && <p role="alert" className="text-red-600 text-sm mb-3 bg-red-50 px-3 py-2 rounded-lg">{editError}</p>}
             <div className="flex gap-3 mb-3">
               <div className="flex-1">
                 <label className="block text-xs font-bold text-[#252840] uppercase tracking-wide mb-1">{t('auth.fields.firstName')}</label>
@@ -287,8 +294,9 @@ export default function Profile() {
       {/* Skill add modal */}
       {addingSkill && (
         <div className="fixed inset-0 z-[500] bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="animate-modal-in bg-white rounded-3xl p-6 w-[440px] max-w-full shadow-soft border border-[#E8DDC7]">
-            <h2 className="text-lg font-black text-[#252840] mb-1">
+          <div ref={skillRef} role="dialog" aria-modal="true" aria-labelledby="profile-skill-title"
+            className="animate-modal-in bg-white rounded-3xl p-6 w-[440px] max-w-full shadow-soft border border-[#E8DDC7]">
+            <h2 id="profile-skill-title" className="text-lg font-black text-[#252840] mb-1">
               {addingSkill === 'teach' ? t('profile.skillModal.teachTitle') : t('profile.skillModal.learnTitle')}
             </h2>
             <p className="text-xs text-[#756B5B] mb-4">{t('profile.skillModal.subtitle')}</p>
