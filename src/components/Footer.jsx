@@ -21,6 +21,7 @@ const HELP_LINKS = [
   { to: '/help',    key: 'footer.helpCenter' },
   { to: '/support', key: 'footer.support'    },
   { to: '/report',  key: 'footer.report'     },
+  { to: '/schools', key: 'footer.schools'    },
 ]
 
 const linkCls = 'text-sm text-[rgba(248,244,234,0.7)] hover:text-[#C8864B] transition-colors no-underline'

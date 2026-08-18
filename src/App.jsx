@@ -29,6 +29,7 @@ import Help            from './pages/Help'
 import Support         from './pages/Support'
 import Report          from './pages/Report'
 import SuspendedAccount from './pages/SuspendedAccount'
+import OrganizationRequest from './pages/OrganizationRequest'
 import useAuthStore    from './store/authStore'
 import { authApi }     from './services/api'
 
@@ -93,6 +94,8 @@ export default function App() {
           <Route path="/help"              element={<Help />} />
           <Route path="/support"           element={<Support />} />
           <Route path="/report"            element={<Report />} />
+          <Route path="/schools"           element={<OrganizationRequest />} />
+          <Route path="/etablissements"    element={<Navigate to="/schools" replace />} />
           {/* Alias historiques / liens externes */}
           <Route path="/mentions-legales"  element={<Navigate to="/legal-notice" replace />} />
           <Route path="/cgu"               element={<Navigate to="/terms" replace />} />
