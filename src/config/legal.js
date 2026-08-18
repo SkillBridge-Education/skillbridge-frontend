@@ -20,8 +20,9 @@ export const PENDING_ENDPOINTS = {
   deleteAccount:  'DELETE /users/me',           // RGPD art. 17
   preferences:    'PATCH /users/me/preferences',// notifications + confidentialité
   supportTicket:  'POST /support/tickets',
-  report:         'POST /reports',
 }
+// Implémentés depuis, et branchés : POST /reports, /blocks, /appeals et
+// /organizations/requests (voir services/api.js).
 
 // Numéros d'urgence français — affichés sur les pages de signalement/assistance.
 export const EMERGENCY_NUMBERS = ['17', '119', '3018']
