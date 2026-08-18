@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next'
 import useAuthStore from '../store/authStore'
 import { matchApi, getApiError } from '../services/api'
 import ReportDialog from '../components/ReportDialog'
+import BlockButton from '../components/BlockButton'
 
 const TAG_STYLES = {
   sand:  'bg-[#FAF5E8] text-[#3D3020] border border-[rgba(223,192,128,0.5)]',
@@ -186,6 +187,9 @@ export default function UserProfile() {
             </svg>
             {t('report.openButton')}
           </button>
+          {user && user.id !== profile.id && (
+            <BlockButton userId={profile.id} userName={profile.name} />
+          )}
           {reqError && (
             <span className="text-[12px] font-semibold text-red-600">{reqError}</span>
           )}

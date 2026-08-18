@@ -1,10 +1,16 @@
-import { afterEach, beforeEach, describe, expect, it } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
 import Settings from './Settings'
 import useAuthStore from '../store/authStore'
 import i18n from '../i18n'
+
+// La carte « Personnes bloquées » interroge l'API au montage.
+vi.mock('../services/api', async () => {
+  const actual = await vi.importActual('../services/api')
+  return { ...actual, blockApi: { list: vi.fn().mockResolvedValue([]), block: vi.fn(), unblock: vi.fn() } }
+})
 
 const renderSettings = () => render(
   <MemoryRouter>

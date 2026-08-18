@@ -9,10 +9,11 @@ import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import {
-  Bell, Download, FileText, Globe, LogOut, ShieldCheck, Trash2, Check,
+  Ban, Bell, Download, FileText, Globe, LogOut, ShieldCheck, Trash2, Check,
 } from 'lucide-react'
 import useAuthStore from '../store/authStore'
 import LanguageSwitcher from '../components/LanguageSwitcher'
+import BlockedList from '../components/BlockedList'
 import Footer from '../components/Footer'
 import { PENDING_ENDPOINTS } from '../config/legal'
 
@@ -353,6 +354,17 @@ export default function Settings() {
                 </p>
               )}
             </Card>
+
+            {/* ── Personnes bloquées ── */}
+            {user && (
+              <Card
+                icon={<Ban size={18} aria-hidden="true" />}
+                title={t('block.title')}
+                description={t('block.description')}
+              >
+                <BlockedList />
+              </Card>
+            )}
 
             {/* ── Légal ── */}
             <Card
