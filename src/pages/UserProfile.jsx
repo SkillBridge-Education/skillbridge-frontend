@@ -194,9 +194,8 @@ export default function UserProfile() {
         <ReportDialog
           open={reportOpen}
           onClose={() => setReportOpen(false)}
-          targetType="profile"
-          target={profile.name}
-          reporterEmail={user?.email ?? ''}
+          reportedUserId={profile.id}
+          reportedName={profile.name}
         />
 
         <div className="grid grid-cols-[1fr_320px] gap-10 pb-16">

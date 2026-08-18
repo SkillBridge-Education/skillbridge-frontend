@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import useFocusTrap from '../hooks/useFocusTrap'
 import ReportForm from './ReportForm'
 
-export default function ReportDialog({ open, onClose, targetType = 'user', target = '', reporterEmail = '' }) {
+export default function ReportDialog({ open, onClose, reportedUserId, reportedName = '', messageId }) {
   const { t } = useTranslation()
 
   // Échap, piégeage du focus et restitution au déclencheur.
@@ -39,10 +39,9 @@ export default function ReportDialog({ open, onClose, targetType = 'user', targe
         <h2 id="report-dialog-title" className="mb-3 text-xl font-black tracking-tight text-white">{t('report.title')}</h2>
 
         <ReportForm
-          targetType={targetType}
-          target={target}
-          reporterEmail={reporterEmail}
-          onSubmitted={() => {}}
+          reportedUserId={reportedUserId}
+          reportedName={reportedName}
+          messageId={messageId}
         />
       </div>
     </div>

@@ -3,6 +3,11 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import ReportDialog from './ReportDialog'
 
+vi.mock('../services/api', async () => {
+  const actual = await vi.importActual('../services/api')
+  return { ...actual, reportApi: { create: vi.fn(), mine: vi.fn() } }
+})
+
 describe('ReportDialog', () => {
   it('renders nothing when closed', () => {
     render(<ReportDialog open={false} onClose={() => {}} />)
@@ -10,11 +15,12 @@ describe('ReportDialog', () => {
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
   })
 
-  it('shows the report form prefilled with the reported target', () => {
-    render(<ReportDialog open onClose={() => {}} targetType="profile" target="Léa Arnaud" />)
+  it('shows the report form for the reported member', () => {
+    render(<ReportDialog open onClose={() => {}} reportedUserId="user-42" reportedName="Léa Arnaud" />)
 
     expect(screen.getByRole('dialog')).toBeInTheDocument()
-    expect(screen.getByLabelText(/qui ou quoi/i)).toHaveValue('Léa Arnaud')
+    expect(screen.getByText('Léa Arnaud')).toBeInTheDocument()
+    expect(screen.getByLabelText(/motif du signalement/i)).toBeInTheDocument()
   })
 
   it('closes on the close button and on Escape', async () => {

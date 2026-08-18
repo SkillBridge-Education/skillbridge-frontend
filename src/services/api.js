@@ -17,8 +17,20 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
+    const { status, data } = error.response ?? {}
+    if (status === 401) {
       useAuthStore.getState().logout()
+    }
+    // Compte suspendu : le backend renvoie 403 avec le motif et le chemin de
+    // recours. On le remonte au store pour que l'app bascule sur l'écran de
+    // suspension, quel que soit l'appel qui a déclenché la réponse — une
+    // sanction doit être motivée et contestable (DSA, art. 17 et 20).
+    if (status === 403 && data?.appealPath) {
+      useAuthStore.getState().setSuspension({
+        message:    data.message,
+        reason:     data.reason,
+        appealPath: data.appealPath,
+      })
     }
     return Promise.reject(error)
   }
@@ -35,6 +47,45 @@ export const authApi = {
   me:                ()      => api.get('/auth/me').then(r => r.data.user),
   verifyEmail:       (token) => api.get(`/auth/verify-email?token=${token}`).then(r => r.data),
   resendVerification:(email) => api.post('/auth/resend-verification', { email }).then(r => r.data),
+}
+
+// ── Signalements ────────────────────────────────────────
+// `reason` doit appartenir à REPORT_REASONS (voir plus bas) : le backend
+// rejette toute autre valeur.
+export const reportApi = {
+  create: (body) => api.post('/reports', body).then(r => r.data.report ?? r.data),
+  mine:   ()     => api.get('/reports/mine').then(r => r.data.reports ?? r.data),
+}
+
+// Valeurs acceptées par POST /reports — l'ordre fixe celui du formulaire.
+export const REPORT_REASONS = [
+  'HARASSMENT',
+  'INAPPROPRIATE_CONTENT',
+  'CHILD_SAFETY',
+  'IMPERSONATION',
+  'SPAM',
+  'OTHER',
+]
+
+// ── Blocages ────────────────────────────────────────────
+// Préférence personnelle : masque la personne pour soi, sans passer par la
+// modération. Distinct d'un signalement, qui lui est traité par l'équipe.
+export const blockApi = {
+  list:    ()   => api.get('/blocks').then(r => r.data.blocks ?? r.data),
+  block:   (id) => api.post(`/blocks/${id}`).then(r => r.data.block ?? r.data),
+  unblock: (id) => api.delete(`/blocks/${id}`).then(r => r.data),
+}
+
+// ── Recours (DSA) ───────────────────────────────────────
+export const appealApi = {
+  create: (message) => api.post('/appeals', { message }).then(r => r.data.appeal ?? r.data),
+  mine:   ()        => api.get('/appeals/mine').then(r => r.data.appeals ?? r.data),
+}
+
+// ── Demande d'inscription d'un établissement ────────────
+// Endpoint public : appelé sans jeton.
+export const organizationApi = {
+  requestAccess: (body) => api.post('/organizations/requests', body).then(r => r.data.organization ?? r.data),
 }
 
 // ── Matches ─────────────────────────────────────────────

@@ -1,8 +1,13 @@
-import { beforeEach, describe, expect, it } from 'vitest'
-import { render, screen } from '@testing-library/react'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter, Route, Routes } from 'react-router-dom'
 import UserProfile from './UserProfile'
+
+vi.mock('../services/api', async () => {
+  const actual = await vi.importActual('../services/api')
+  return { ...actual, reportApi: { create: vi.fn(), mine: vi.fn() } }
+})
 import useAuthStore from '../store/authStore'
 
 const renderProfile = () => render(
@@ -25,8 +30,10 @@ describe('UserProfile — reporting', () => {
 
     await userEvent.click(screen.getByRole('button', { name: /signaler/i }))
 
-    expect(screen.getByRole('dialog')).toBeInTheDocument()
-    expect(screen.getByLabelText(/qui ou quoi/i)).toHaveValue('Léa Arnaud')
-    expect(screen.getByLabelText(/que veux-tu signaler/i)).toHaveValue('profile')
+    // Le nom apparait aussi dans la page derriere la boite : on cherche
+    // dans la boite de dialogue elle-meme.
+    const dialog = screen.getByRole('dialog')
+    expect(within(dialog).getByText('Léa Arnaud')).toBeInTheDocument()
+    expect(within(dialog).getByLabelText(/motif du signalement/i)).toBeInTheDocument()
   })
 })

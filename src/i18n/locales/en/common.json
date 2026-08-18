@@ -521,52 +521,37 @@
   },
   "report": {
     "eyebrow": "Moderation",
-    "title": "Report a user or content",
+    "title": "Report a user",
     "subtitle": "Reports are confidential: the reported person is never told who reported them.",
     "openButton": "Report",
-    "targetUser": "Reported user",
+    "targetUser": "Reported person",
+    "optional": "optional",
     "fields": {
-      "targetType": "What do you want to report?",
-      "target": "Who or what?",
-      "targetPlaceholder": "Username, member name, or link to the content",
       "reason": "Reason for the report",
       "reasonPlaceholder": "Pick a reason",
       "details": "What happened",
-      "detailsPlaceholder": "Describe the facts: when, where (message, profile, session), and what was said or done.",
-      "contact": "Your email (optional)",
-      "contactPlaceholder": "you@example.com",
-      "contactHint": "Only if you want to be kept informed of the outcome."
-    },
-    "targetTypes": {
-      "user": "A user",
-      "message": "A message",
-      "profile": "A profile or a photo",
-      "session": "A session",
-      "other": "Something else"
+      "detailsPlaceholder": "Describe the facts: when, where (message, profile, session), and what was said or done."
     },
     "reasons": {
-      "harassment": "Harassment, insults or intimidation",
-      "sexual": "Sexual content",
-      "hate": "Hate speech or discrimination",
-      "violence": "Violence or threats",
-      "danger": "Someone in danger or self-harm",
-      "spam": "Spam or advertising",
-      "scam": "Scam or request for money",
-      "fake": "Fake account or impersonation",
-      "minor": "Inappropriate behaviour towards a minor",
-      "other": "Another reason"
+      "HARASSMENT": "Harassment, insults or intimidation",
+      "INAPPROPRIATE_CONTENT": "Inappropriate content (sexual, violent, hateful)",
+      "CHILD_SAFETY": "A minor put at risk",
+      "IMPERSONATION": "Impersonation or fake account",
+      "SPAM": "Spam, advertising or scam",
+      "OTHER": "Another reason"
     },
     "errors": {
-      "target": "Tell us who or what you are reporting.",
       "reason": "Select a reason from the list.",
-      "details": "Describe the facts in at least 20 characters."
+      "details": "Describe the facts in at least 20 characters.",
+      "alreadyPending": "You already have a report under review against this person. The team is handling it.",
+      "tooMany": "Too many reports sent in a short time. Try again in an hour.",
+      "failed": "Sending failed. Try again in a moment."
     },
     "submit": "Send the report",
-    "pendingTitle": "Report not sent",
-    "pendingText": "Automatic sending of reports is not wired up yet (backend endpoint still to be built). Your report has NOT reached the team. Send it by email with the button below — it is already written for you.",
-    "openMail": "Send by email",
-    "editReport": "Edit my report",
-    "summary": "Summary of your report",
+    "sentTitle": "Report sent",
+    "sentText": "The moderation team is reviewing it. You will not be matched with this person while the review is ongoing. We do not disclose the details of the outcome, to protect everyone's privacy.",
+    "noTargetTitle": "No person to report",
+    "noTargetText": "A report must target a specific member. Open their profile and use the \"Report\" button there.",
     "emergency": "If someone is in immediate danger, do not wait: 17 (police), 119 (child protection), 3018 (online violence) in France.",
     "confidential": "Your report is confidential. Abusive reports may lead to sanctions."
   },
@@ -917,5 +902,68 @@
     "rateStars": "Rate {{count}} out of 5",
     "avatarPreview": "Preview of your profile picture",
     "logoHome": "SkillBridge — home"
+  },
+  "block": {
+    "action": "Block",
+    "unblock": "Unblock",
+    "blocked": "Blocked",
+    "confirmTitle": "Block {{name}}?",
+    "confirmText": "This person will no longer be able to contact you or see your profile. You can unblock them at any time from your settings. Blocking does not alert moderation: use a report for that.",
+    "confirm": "Block this person",
+    "title": "Blocked people",
+    "description": "These members can no longer contact you. Blocking is a personal preference and is not sent to moderation.",
+    "empty": "You have not blocked anyone.",
+    "loadError": "Could not load the list of blocked people.",
+    "actionError": "The action failed. Try again in a moment.",
+    "blockedOn": "Blocked on {{date}}"
+  },
+  "suspension": {
+    "eyebrow": "Account suspended",
+    "title": "Your account is suspended",
+    "reasonLabel": "Stated reason",
+    "noReason": "No detailed reason was provided.",
+    "rights": "You can challenge this decision. A team member other than the one who issued the sanction will review your case.",
+    "appealTitle": "Challenge the decision",
+    "appealLabel": "Explain why you believe this decision is unjustified",
+    "appealPlaceholder": "Give the team anything that helps: context, clarification, evidence…",
+    "appealHint": "Between 20 and 2000 characters.",
+    "submit": "Send my appeal",
+    "sentTitle": "Appeal sent",
+    "sentText": "Your appeal has been recorded. The team will answer by email at your account address.",
+    "errors": {
+      "tooShort": "Your message must be at least 20 characters long.",
+      "tooLong": "Your message must not exceed 2000 characters.",
+      "alreadyPending": "An appeal is already under review. There is no need to send a second one.",
+      "notSuspended": "Your account is not suspended: no appeal is needed.",
+      "failed": "Sending failed. Try again in a moment."
+    },
+    "logout": "Log out"
+  },
+  "orgRequest": {
+    "eyebrow": "Schools",
+    "title": "Register my school",
+    "subtitle": "Are you a teacher or a member of staff? Ask for SkillBridge to be opened for your students.",
+    "intro": "The request is reviewed by the team before activation. No student account is created at this stage.",
+    "fields": {
+      "name": "School name",
+      "namePlaceholder": "Victor Hugo High School",
+      "contactName": "Your name",
+      "contactNamePlaceholder": "First and last name",
+      "contactEmail": "Your work email",
+      "contactEmailPlaceholder": "you@school.org",
+      "emailDomain": "School email domain",
+      "emailDomainPlaceholder": "school.org",
+      "emailDomainHint": "Optional. Lets us recognise students from your school automatically."
+    },
+    "errors": {
+      "name": "Enter the school name.",
+      "contactName": "Enter your name.",
+      "contactEmail": "Enter a valid email address.",
+      "failed": "Sending failed. Try again in a moment."
+    },
+    "submit": "Send the request",
+    "sentTitle": "Request sent",
+    "sentText": "Your request has been recorded and will be reviewed by the team. You will get our answer at the address you provided.",
+    "pendingNotice": "Status: awaiting review."
   }
 }

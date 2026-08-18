@@ -521,52 +521,37 @@
   },
   "report": {
     "eyebrow": "Modération",
-    "title": "Signaler un utilisateur ou un contenu",
+    "title": "Signaler un utilisateur",
     "subtitle": "Les signalements sont confidentiels : la personne signalée n'est pas informée de ton identité.",
     "openButton": "Signaler",
-    "targetUser": "Utilisateur signalé",
+    "targetUser": "Personne signalée",
+    "optional": "facultatif",
     "fields": {
-      "targetType": "Que veux-tu signaler ?",
-      "target": "Qui ou quoi ?",
-      "targetPlaceholder": "Pseudo, nom du membre, ou lien vers le contenu",
       "reason": "Motif du signalement",
       "reasonPlaceholder": "Choisis un motif",
       "details": "Ce qui s'est passé",
-      "detailsPlaceholder": "Décris les faits : quand, où (message, profil, session), et ce qui a été dit ou fait.",
-      "contact": "Ton email (facultatif)",
-      "contactPlaceholder": "toi@exemple.com",
-      "contactHint": "Uniquement si tu veux être tenu au courant de la suite donnée."
-    },
-    "targetTypes": {
-      "user": "Un utilisateur",
-      "message": "Un message",
-      "profile": "Un profil ou une photo",
-      "session": "Une session",
-      "other": "Autre chose"
+      "detailsPlaceholder": "Décris les faits : quand, où (message, profil, session), et ce qui a été dit ou fait."
     },
     "reasons": {
-      "harassment": "Harcèlement, insultes ou intimidation",
-      "sexual": "Contenu à caractère sexuel",
-      "hate": "Propos haineux ou discriminatoires",
-      "violence": "Violence ou menaces",
-      "danger": "Personne en danger ou automutilation",
-      "spam": "Spam ou publicité",
-      "scam": "Arnaque ou demande d'argent",
-      "fake": "Faux compte ou usurpation d'identité",
-      "minor": "Comportement inapproprié envers un mineur",
-      "other": "Autre motif"
+      "HARASSMENT": "Harcèlement, insultes ou intimidation",
+      "INAPPROPRIATE_CONTENT": "Contenu inapproprié (sexuel, violent, haineux)",
+      "CHILD_SAFETY": "Mise en danger d'un mineur",
+      "IMPERSONATION": "Usurpation d'identité ou faux compte",
+      "SPAM": "Spam, publicité ou arnaque",
+      "OTHER": "Autre motif"
     },
     "errors": {
-      "target": "Indique qui ou quoi tu signales.",
       "reason": "Sélectionne un motif dans la liste.",
-      "details": "Décris les faits en 20 caractères minimum."
+      "details": "Décris les faits en 20 caractères minimum.",
+      "alreadyPending": "Tu as déjà un signalement en cours d'examen contre cette personne. L'équipe le traite.",
+      "tooMany": "Trop de signalements envoyés en peu de temps. Réessaie dans une heure.",
+      "failed": "L'envoi a échoué. Réessaie dans un instant."
     },
     "submit": "Envoyer le signalement",
-    "pendingTitle": "Signalement non transmis",
-    "pendingText": "L'envoi automatique des signalements n'est pas encore branché (endpoint backend à créer). Ton signalement n'a PAS été reçu par l'équipe. Transmets-le par email avec le bouton ci-dessous — il est déjà rédigé pour toi.",
-    "openMail": "Envoyer par email",
-    "editReport": "Modifier mon signalement",
-    "summary": "Résumé de ton signalement",
+    "sentTitle": "Signalement transmis",
+    "sentText": "L'équipe de modération l'examine. Tu ne seras pas mis en relation avec cette personne pendant l'examen. Nous ne communiquons pas le détail des suites données, pour protéger la vie privée de chacun.",
+    "noTargetTitle": "Personne à signaler introuvable",
+    "noTargetText": "Un signalement doit viser un membre précis. Ouvre son profil et utilise le bouton « Signaler » qui s'y trouve.",
     "emergency": "Si une personne est en danger immédiat, n'attends pas : 17 (police), 119 (enfance en danger), 3018 (violences numériques).",
     "confidential": "Ton signalement est confidentiel. Les abus de signalement peuvent entraîner des sanctions."
   },
@@ -917,5 +902,68 @@
     "rateStars": "Noter {{count}} sur 5",
     "avatarPreview": "Aperçu de votre photo de profil",
     "logoHome": "SkillBridge — accueil"
+  },
+  "block": {
+    "action": "Bloquer",
+    "unblock": "Débloquer",
+    "blocked": "Bloqué",
+    "confirmTitle": "Bloquer {{name}} ?",
+    "confirmText": "Cette personne ne pourra plus te contacter ni voir ton profil. Tu peux la débloquer à tout moment depuis tes paramètres. Bloquer n'alerte pas la modération : pour cela, utilise le signalement.",
+    "confirm": "Bloquer cette personne",
+    "title": "Personnes bloquées",
+    "description": "Ces membres ne peuvent plus te contacter. Le blocage est une préférence personnelle, il n'est pas transmis à la modération.",
+    "empty": "Tu n'as bloqué personne.",
+    "loadError": "Impossible de charger la liste des personnes bloquées.",
+    "actionError": "L'action a échoué. Réessaie dans un instant.",
+    "blockedOn": "Bloqué le {{date}}"
+  },
+  "suspension": {
+    "eyebrow": "Compte suspendu",
+    "title": "Ton compte est suspendu",
+    "reasonLabel": "Motif retenu",
+    "noReason": "Aucun motif détaillé n'a été transmis.",
+    "rights": "Tu peux contester cette décision. Un membre de l'équipe, différent de celui qui a pris la sanction, réexaminera ton dossier.",
+    "appealTitle": "Contester la décision",
+    "appealLabel": "Explique pourquoi cette décision te semble injustifiée",
+    "appealPlaceholder": "Donne les éléments qui peuvent éclairer l'équipe : contexte, mise au point, éléments de preuve…",
+    "appealHint": "Entre 20 et 2000 caractères.",
+    "submit": "Envoyer mon recours",
+    "sentTitle": "Recours transmis",
+    "sentText": "Ton recours est enregistré. L'équipe te répondra par email à l'adresse de ton compte.",
+    "errors": {
+      "tooShort": "Ton message doit faire au moins 20 caractères.",
+      "tooLong": "Ton message ne doit pas dépasser 2000 caractères.",
+      "alreadyPending": "Un recours est déjà en cours d'examen. Inutile d'en envoyer un second.",
+      "notSuspended": "Ton compte n'est pas suspendu : aucun recours n'est nécessaire.",
+      "failed": "L'envoi a échoué. Réessaie dans un instant."
+    },
+    "logout": "Se déconnecter"
+  },
+  "orgRequest": {
+    "eyebrow": "Établissements",
+    "title": "Inscrire mon établissement",
+    "subtitle": "Vous êtes enseignant, CPE ou membre de la direction ? Demandez l'ouverture de SkillBridge pour vos élèves.",
+    "intro": "La demande est examinée par l'équipe avant activation. Aucun compte élève n'est créé à cette étape.",
+    "fields": {
+      "name": "Nom de l'établissement",
+      "namePlaceholder": "Lycée Victor Hugo",
+      "contactName": "Votre nom",
+      "contactNamePlaceholder": "Prénom et nom",
+      "contactEmail": "Votre email professionnel",
+      "contactEmailPlaceholder": "vous@etablissement.fr",
+      "emailDomain": "Domaine email de l'établissement",
+      "emailDomainPlaceholder": "etablissement.fr",
+      "emailDomainHint": "Facultatif. Permet de reconnaître automatiquement les élèves de votre établissement."
+    },
+    "errors": {
+      "name": "Indiquez le nom de l'établissement.",
+      "contactName": "Indiquez votre nom.",
+      "contactEmail": "Entrez une adresse email valide.",
+      "failed": "L'envoi a échoué. Réessaie dans un instant."
+    },
+    "submit": "Envoyer la demande",
+    "sentTitle": "Demande envoyée",
+    "sentText": "Votre demande est enregistrée et sera examinée par l'équipe. Vous recevrez notre réponse à l'adresse indiquée.",
+    "pendingNotice": "Statut : en attente d'examen."
   }
 }

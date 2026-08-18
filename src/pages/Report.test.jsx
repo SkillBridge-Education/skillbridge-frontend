@@ -1,8 +1,13 @@
-import { beforeEach, describe, expect, it } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import Report from './Report'
 import useAuthStore from '../store/authStore'
+
+vi.mock('../services/api', async () => {
+  const actual = await vi.importActual('../services/api')
+  return { ...actual, reportApi: { create: vi.fn(), mine: vi.fn() } }
+})
 
 const renderReport = (path = '/report') => render(
   <MemoryRouter initialEntries={[path]}>
@@ -15,30 +20,30 @@ beforeEach(() => {
 })
 
 describe('Report page', () => {
-  it('renders the report form', () => {
-    renderReport()
+  it('renders the report form for a targeted user', () => {
+    renderReport('/report?userId=user-42&name=L%C3%A9a')
 
-    expect(screen.getByRole('heading', { level: 1, name: /signaler un utilisateur ou un contenu/i })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 1, name: /signaler un utilisateur/i })).toBeInTheDocument()
+    expect(screen.getByText('Léa')).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /envoyer le signalement/i })).toBeInTheDocument()
   })
 
-  it('prefills the form from the URL parameters', () => {
-    renderReport('/report?type=message&target=K%C3%A9nji')
+  it('offers the API reasons rather than free text', () => {
+    renderReport('/report?userId=user-42')
 
-    expect(screen.getByLabelText(/que veux-tu signaler/i)).toHaveValue('message')
-    expect(screen.getByLabelText(/qui ou quoi/i)).toHaveValue('Kénji')
+    const reason = screen.getByLabelText(/motif du signalement/i)
+    const values = Array.from(reason.options).map(o => o.value).filter(Boolean)
+    expect(values).toEqual([
+      'HARASSMENT', 'INAPPROPRIATE_CONTENT', 'CHILD_SAFETY', 'IMPERSONATION', 'SPAM', 'OTHER',
+    ])
   })
 
-  it('falls back to a user report when the type parameter is unknown', () => {
-    renderReport('/report?type=banana')
+  it('explains what to do when the URL carries no user', () => {
+    renderReport('/report')
 
-    expect(screen.getByLabelText(/que veux-tu signaler/i)).toHaveValue('user')
-  })
-
-  it('prefills the contact email of the logged-in reporter', () => {
-    useAuthStore.setState({ user: { id: '1', firstName: 'Ada', email: 'ada@example.com' }, token: 'jwt' })
-    renderReport()
-
-    expect(screen.getByLabelText(/ton email/i)).toHaveValue('ada@example.com')
+    // Un signalement sans cible ne peut pas partir : mieux vaut le dire que
+    // laisser remplir un formulaire voué à échouer.
+    expect(screen.getByText(/introuvable/i)).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: /envoyer le signalement/i })).not.toBeInTheDocument()
   })
 })
