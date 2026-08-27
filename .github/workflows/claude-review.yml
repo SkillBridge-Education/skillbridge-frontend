@@ -1,11 +1,17 @@
-name: Claude Code Review
+name: Revue automatique
 
 on:
   pull_request:
     types: [opened, synchronize, reopened]
 
+# Une seule revue en vol par PR : pousser trois commits d'affilee ne doit pas
+# lancer trois revues qui se marchent dessus et coutent trois fois.
+concurrency:
+  group: revue-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
 jobs:
-  review:
+  revue:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -17,16 +23,91 @@ jobs:
         with:
           fetch-depth: 0
 
-      # Requires the repo secret ANTHROPIC_API_KEY (Settings -> Secrets and
-      # variables -> Actions). Not created by this workflow file - see the
-      # frontend README for how to add it.
-      - uses: anthropics/claude-code-action@v1
+      # Sans cle, on ne fait pas echouer la PR : une revue absente est un
+      # probleme de configuration, pas un defaut du code propose. Le message
+      # dit quoi faire.
+      - name: Verifier la cle
+        id: cle
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          if [ -z "$ANTHROPIC_API_KEY" ]; then
+            echo "presente=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::Secret ANTHROPIC_API_KEY absent. Settings -> Secrets and variables -> Actions -> New repository secret. Revue ignoree."
+          else
+            echo "presente=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Revue
+        if: steps.cle.outputs.presente == 'true'
+        uses: anthropics/claude-code-action@v1
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          claude_args: --allowedTools "Read,Grep,Glob,Bash(git diff:*),Bash(git log:*),Write"
           prompt: |
-            Review this pull request against the skillbridge-frontend codebase
-            (React 18, Vite, Tailwind, Zustand, Axios, Socket.IO client).
-            Focus on: correctness, broken UI states, unhandled API error
-            cases, and consistency with existing patterns (services/api.js,
-            authStore, ProtectedRoute). Post inline comments for concrete
-            issues; skip generic style nitpicks.
+            Relis cette pull request sur skillbridge-frontend (React 18, Vite, JavaScript, Tailwind, Zustand, i18next).
+
+            Concentre-toi sur ce qui casse quelque chose, jamais sur le style :
+            correction, securite, coherence avec l'architecture existante,
+            et le fait que le code fasse reellement ce que son message annonce.
+
+            Points d'attention propres a ce depot :
+
+            - Aucun bouton mort. Un controle desactive avec la mention
+              « bientot disponible » alors que la route existe cote serveur est
+              un defaut, pas une precaution : c'est deja arrive sur les droits
+              RGPD, indisponibles pendant des mois alors qu'ils fonctionnaient.
+            - Les textes passent par i18next, en francais et en anglais.
+            - Une action irreversible demande une confirmation explicite.
+            - Verifie qu'un commentaire ou un fichier de configuration ne
+              contredit pas le code : une note perimee a deja coute des
+              fonctionnalites entieres.
+
+            Ce projet a un public de mineurs de 15 a 18 ans et des obligations
+            RGPD et DSA. Traite comme BLOQUANT tout ce qui expose des donnees
+            personnelles, contourne une verification d'age, ou rend une
+            fonctionnalite de securite decorative.
+
+            Classe chaque probleme trouve :
+
+              BLOQUANT  le code est faux, dangereux, ou une fonctionnalite
+                        annoncee ne marche pas
+              MAJEUR    defaut reel a corriger, mais qui n'empeche pas de
+                        fusionner
+              MINEUR    remarque, amelioration possible
+
+            Poste un commentaire en ligne par probleme concret, a l'endroit
+            exact du code. Pas de commentaire generique, pas de resume de ce
+            que fait la PR : l'auteur le sait deja.
+
+            Un point de methode : une fonctionnalite peut etre entierement
+            ecrite et testee cote service et n'etre montee sur aucune route.
+            C'est arrive sur ce projet -- quatre actions du chat repondaient
+            404 alors que leurs tests unitaires passaient. Quand une PR ajoute
+            un service, verifie qu'une route l'expose reellement.
+
+            Termine en ecrivant un fichier verdict.txt a la racine, contenant
+            exactement une de ces deux lignes, et rien d'autre :
+
+              MERGE_OK       aucun probleme bloquant
+              MERGE_BLOQUE   au moins un probleme bloquant
+
+      # C'est cette etape qui allume le bouton en rouge. GitHub ne lit pas les
+      # commentaires : il regarde si le job a reussi. Sans elle, la revue
+      # pourrait signaler n'importe quoi et le check resterait vert.
+      - name: Verdict
+        if: steps.cle.outputs.presente == 'true'
+        run: |
+          if [ ! -f verdict.txt ]; then
+            echo "::warning::Aucun verdict rendu. Revue traitee comme non concluante."
+            exit 0
+          fi
+
+          echo "Verdict : $(cat verdict.txt)"
+
+          if grep -q "MERGE_BLOQUE" verdict.txt; then
+            echo "::error::La revue a trouve au moins un probleme bloquant. Voir les commentaires en ligne sur la PR."
+            exit 1
+          fi
+
+          echo "Aucun probleme bloquant."
