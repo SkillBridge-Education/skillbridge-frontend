@@ -424,9 +424,12 @@
       "exportHint": "Receive a copy of your personal data in a machine-readable format.",
       "delete": "Delete my account",
       "deleteHint": "Permanently deletes your account, profile, sessions and messages. This cannot be undone.",
-      "backendMissing": "This action needs a backend endpoint that does not exist yet. In the meantime, write to support: requests are handled manually.",
       "contactSupport": "Go through support",
-      "logout": "Log out"
+      "logout": "Log out",
+      "deleteConfirm": "This cannot be undone. Your profile, skills and messages will be anonymised, and you will lose access to your account immediately.",
+      "deletePassword": "Confirm with your password",
+      "deleteFinal": "Delete permanently",
+      "rightsNote": "Both rights are guaranteed by the GDPR (articles 15, 17 and 20). A question about your data?"
     },
     "legal": {
       "title": "Legal information",
@@ -513,12 +516,11 @@
       "message": "Describe your request in at least 20 characters."
     },
     "submit": "Send my request",
-    "pendingTitle": "Automatic sending is not available yet",
-    "pendingText": "The form is ready, but the backend endpoint that receives requests does not exist yet. Your request has therefore NOT been sent. Use the button below: it opens your mail app with the message already written.",
-    "openMail": "Open my pre-filled email",
-    "editRequest": "Edit my request",
     "responseTime": "Stated response time: [RESPONSE TIME] business days.",
-    "emergency": "Emergency: if someone is in immediate danger, call 17 (police) or 3018 (online violence, free and anonymous) in France. SkillBridge is not an emergency service."
+    "emergency": "Emergency: if someone is in immediate danger, call 17 (police) or 3018 (online violence, free and anonymous) in France. SkillBridge is not an emergency service.",
+    "sentTitle": "Your request has been sent",
+    "sentText": "Our team has received it and will reply to {{email}}.",
+    "newRequest": "New request"
   },
   "report": {
     "eyebrow": "Moderation",

@@ -1,9 +1,16 @@
-import { beforeEach, describe, expect, it } from 'vitest'
-import { render, screen } from '@testing-library/react'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
 import Support from './Support'
 import useAuthStore from '../store/authStore'
+
+// Le formulaire cree un vrai ticket : il construisait un mailto: auparavant.
+const createTicket = vi.fn().mockResolvedValue({ ticket: { id: 't1' } })
+vi.mock('../services/api', async () => {
+  const actual = await vi.importActual('../services/api')
+  return { ...actual, supportApi: { createTicket: (...args) => createTicket(...args) } }
+})
 
 const renderSupport = () => render(
   <MemoryRouter>
@@ -12,6 +19,7 @@ const renderSupport = () => render(
 )
 
 beforeEach(() => {
+  createTicket.mockClear()
   useAuthStore.setState({ user: null, token: null, authReady: true })
 })
 
@@ -41,19 +49,28 @@ describe('Support', () => {
     expect(screen.getByText(/donne un objet/i)).toBeInTheDocument()
   })
 
-  it('states that the request was not sent and offers a prefilled email', async () => {
+  it('actually sends the request to the API', async () => {
     // delay: null — la frappe caractère par caractère est trop lente ici.
     const user = userEvent.setup({ delay: null })
     renderSupport()
 
     await user.selectOptions(screen.getByLabelText(/sujet de la demande/i), 'bug')
     await user.type(screen.getByLabelText(/ton email/i), 'ada@example.com')
-    await user.type(screen.getByLabelText(/^objet$/i), 'Minuteur bloqué')
+    await user.type(screen.getByLabelText(/^objet$/i), 'Minuteur bloque')
     await user.type(screen.getByLabelText(/^message$/i), 'Le minuteur reste bloqué à zéro.')
     await user.click(screen.getByRole('button', { name: /envoyer ma demande/i }))
 
-    expect(await screen.findByText(/envoi automatique pas encore disponible/i)).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: /ouvrir mon email pré-rempli/i }))
-      .toHaveAttribute('href', expect.stringContaining('mailto:support@'))
+    // Le formulaire construisait un mailto: vers support@skillbridge.example,
+    // un domaine reserve par la RFC 2606 qui ne peut pas recevoir de courrier :
+    // toute demande partait dans le vide, y compris celles des comptes suspendus
+    // que la page invite a passer par ici.
+    await waitFor(() => expect(createTicket).toHaveBeenCalled())
+    expect(createTicket.mock.calls[0][0]).toMatchObject({
+      subject: 'Minuteur bloque',
+      category: 'BUG',
+      email: 'ada@example.com',
+    })
+
+    expect(await screen.findByText(/ta demande est envoyée/i)).toBeInTheDocument()
   })
 })

@@ -424,9 +424,12 @@
       "exportHint": "Recevoir une copie de tes données personnelles dans un format lisible par machine.",
       "delete": "Supprimer mon compte",
       "deleteHint": "Suppression définitive de ton compte, de ton profil, de tes sessions et de tes messages. Cette action est irréversible.",
-      "backendMissing": "Cette action a besoin d'un endpoint backend qui n'existe pas encore. En attendant, écris à l'assistance : elle traite les demandes manuellement.",
       "contactSupport": "Passer par l'assistance",
-      "logout": "Se déconnecter"
+      "logout": "Se déconnecter",
+      "deleteConfirm": "Cette action est définitive. Ton profil, tes compétences et tes messages seront anonymisés, et tu perdras l'accès à ton compte immédiatement.",
+      "deletePassword": "Confirme avec ton mot de passe",
+      "deleteFinal": "Supprimer définitivement",
+      "rightsNote": "Ces deux droits sont garantis par le RGPD (articles 15, 17 et 20). Une question sur tes données ?"
     },
     "legal": {
       "title": "Informations légales",
@@ -513,12 +516,11 @@
       "message": "Décris ta demande en 20 caractères minimum."
     },
     "submit": "Envoyer ma demande",
-    "pendingTitle": "Envoi automatique pas encore disponible",
-    "pendingText": "Le formulaire est prêt, mais l'endpoint backend qui reçoit les demandes n'existe pas encore. Ta demande n'a donc PAS été transmise. Utilise le bouton ci-dessous : il ouvre ton logiciel de mail avec le message déjà rempli.",
-    "openMail": "Ouvrir mon email pré-rempli",
-    "editRequest": "Modifier ma demande",
     "responseTime": "Délai de réponse annoncé : [DÉLAI DE RÉPONSE] jours ouvrés.",
-    "emergency": "Urgence : en cas de danger immédiat, appelle le 17 (police) ou le 3018 (violences numériques, gratuit et anonyme). SkillBridge n'est pas un service d'urgence."
+    "emergency": "Urgence : en cas de danger immédiat, appelle le 17 (police) ou le 3018 (violences numériques, gratuit et anonyme). SkillBridge n'est pas un service d'urgence.",
+    "sentTitle": "Ta demande est envoyée",
+    "sentText": "Notre équipe l'a bien reçue et te répondra à {{email}}.",
+    "newRequest": "Nouvelle demande"
   },
   "report": {
     "eyebrow": "Modération",

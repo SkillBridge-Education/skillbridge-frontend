@@ -1,18 +1,36 @@
 // src/pages/Support.jsx — Contacter l'assistance
 //
-// ⚠️ L'endpoint qui reçoit les demandes (PENDING_ENDPOINTS.supportTicket)
-// n'existe pas encore côté backend. Le formulaire n'affiche donc jamais un faux
-// « message envoyé » : il explique que rien n'a été transmis et propose un
-// email pré-rempli en attendant.
+// Le formulaire crée un vrai ticket via POST /support/tickets, sans exiger de
+// compte : les personnes qui ont le plus besoin d'assistance sont justement
+// celles qui ne peuvent pas entrer.
+//
+// Il proposait auparavant un email pré-rempli vers support@skillbridge.example
+// — un domaine réservé par la RFC 2606, incapable de recevoir du courrier. Toute
+// demande partait dans le vide, y compris celles des comptes suspendus que la
+// page invite à passer par ici.
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { AlertTriangle, Mail, LifeBuoy } from 'lucide-react'
+import { LifeBuoy } from 'lucide-react'
 import useAuthStore from '../store/authStore'
 import Footer from '../components/Footer'
-import { SUPPORT_EMAIL } from '../config/legal'
+import { supportApi, getApiError } from '../services/api'
 
 const TOPICS = ['account', 'credits', 'sessions', 'bug', 'privacy', 'report', 'other']
+
+// Le formulaire propose sept sujets, l'API en connaît quatre. On envoie la
+// catégorie la plus proche pour le tri côté modération, et on garde le sujet
+// exact en tête du message : réduire sept choix à quatre ne doit pas faire
+// perdre l'information que la personne a pris le temps de préciser.
+const TOPIC_TO_CATEGORY = {
+  account:  'UNBLOCK_REQUEST',
+  credits:  'CREDITS',
+  sessions: 'OTHER',
+  bug:      'BUG',
+  privacy:  'OTHER',
+  report:   'OTHER',
+  other:    'OTHER',
+}
 const MIN_MESSAGE = 20
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
@@ -25,13 +43,15 @@ export default function Support() {
   const [subject, setSubject] = useState('')
   const [message, setMessage] = useState('')
   const [errors,  setErrors]  = useState({})
+  const [sending, setSending] = useState(false)
+  const [submitError, setSubmitError] = useState('')
   const [sent,    setSent]    = useState(null)
 
   const inp = 'w-full rounded-xl border border-[color:var(--field-border)] bg-light-cream px-4 text-sm text-navy outline-none focus:border-warm transition-colors'
   const lbl = 'block text-sm font-bold text-navy mb-1'
   const errCls = 'mt-1 text-xs font-semibold text-red-600'
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     const next = {}
     if (!topic)                              next.topic   = t('support.errors.topic')
@@ -41,15 +61,24 @@ export default function Support() {
     setErrors(next)
     if (Object.keys(next).length > 0) return
 
-    // TODO(backend): POST /support/tickets { topic, email, subject, message }
-    setSent({ topic, email: email.trim(), subject: subject.trim(), message: message.trim() })
+    setSending(true)
+    setSubmitError('')
+    try {
+      await supportApi.createTicket({
+        subject: subject.trim(),
+        // Le sujet choisi ouvre le corps du ticket, pour que le modérateur
+        // voie « Confidentialité » et pas seulement « Autre ».
+        body: `${t(`support.topics.${topic}`)} — ${message.trim()}`,
+        category: TOPIC_TO_CATEGORY[topic] ?? 'OTHER',
+        email: email.trim(),
+      })
+      setSent({ topic, email: email.trim(), subject: subject.trim(), message: message.trim() })
+    } catch (err) {
+      setSubmitError(getApiError(err))
+    } finally {
+      setSending(false)
+    }
   }
-
-  const mailto = sent
-    ? `mailto:${SUPPORT_EMAIL}?subject=${encodeURIComponent(`[${t(`support.topics.${sent.topic}`)}] ${sent.subject}`)}&body=${encodeURIComponent(
-        `${t('support.fields.email')} : ${sent.email}\n${t('support.fields.topic')} : ${t(`support.topics.${sent.topic}`)}\n\n${sent.message}`
-      )}`
-    : ''
 
   return (
     <>
@@ -61,18 +90,20 @@ export default function Support() {
           <p className="mt-2 text-sm leading-relaxed text-[color:var(--muted-fg)]">{t('support.subtitle')}</p>
 
           {sent ? (
-            <div className="mt-8 rounded-3xl border-2 border-warm bg-[rgba(200,134,75,0.1)] p-6 sm:p-8">
+            <div className="mt-8 rounded-3xl bg-[rgba(200,134,75,0.1)] p-6 shadow-sm sm:p-8">
               <div className="flex items-start gap-3">
                 <span className="mt-0.5 grid h-9 w-9 flex-shrink-0 place-items-center rounded-xl bg-warm-strong text-white">
-                  <AlertTriangle size={18} aria-hidden="true" />
+                  <LifeBuoy size={18} aria-hidden="true" />
                 </span>
                 <div className="min-w-0">
-                  <h2 className="text-lg font-bold text-navy">{t('support.pendingTitle')}</h2>
-                  <p className="mt-2 text-sm leading-relaxed text-[color:var(--muted-fg)]">{t('support.pendingText')}</p>
+                  <h2 className="text-lg font-bold text-navy">{t('support.sentTitle')}</h2>
+                  <p className="mt-2 text-sm leading-relaxed text-[color:var(--muted-fg)]">
+                    {t('support.sentText', { email: sent.email })}
+                  </p>
                 </div>
               </div>
 
-              <div className="mt-5 rounded-2xl border border-[color:var(--border)] bg-white p-4">
+              <div className="mt-5 rounded-2xl bg-white p-4 shadow-sm">
                 <p className="text-sm font-semibold text-navy break-words">
                   [{t(`support.topics.${sent.topic}`)}] {sent.subject}
                 </p>
@@ -82,19 +113,18 @@ export default function Support() {
               </div>
 
               <div className="mt-5 flex flex-col gap-3 sm:flex-row">
-                <a
-                  href={mailto}
+                <Link
+                  to="/"
                   className="flex flex-1 items-center justify-center gap-2 rounded-full bg-warm-strong px-5 py-3 text-sm font-bold text-white no-underline hover:bg-warm-dk transition-colors"
                 >
-                  <Mail size={15} aria-hidden="true" />
-                  {t('support.openMail')}
-                </a>
+                  {t('actions.backHome')}
+                </Link>
                 <button
                   type="button"
                   onClick={() => setSent(null)}
-                  className="flex-1 cursor-pointer rounded-full border-2 border-navy bg-transparent px-5 py-3 text-sm font-bold text-navy hover:bg-navy hover:text-white transition-colors"
+                  className="flex-1 cursor-pointer rounded-full bg-white px-5 py-3 text-sm font-bold text-navy shadow-sm hover:bg-navy hover:text-white transition-colors"
                 >
-                  {t('support.editRequest')}
+                  {t('support.newRequest')}
                 </button>
               </div>
             </div>
@@ -169,11 +199,18 @@ export default function Support() {
                 {errors.message && <p id="support-message-error" className={errCls} role="alert">{errors.message}</p>}
               </div>
 
+              {submitError ? (
+                <p role="alert" className="mb-3 rounded-2xl bg-red-50 p-3 text-sm font-semibold text-red-700">
+                  {submitError}
+                </p>
+              ) : null}
+
               <button
                 type="submit"
-                className="w-full cursor-pointer rounded-full border-none bg-warm-strong py-3 text-sm font-bold text-white hover:bg-warm-dk transition-colors"
+                disabled={sending}
+                className="w-full cursor-pointer rounded-full border-none bg-warm-strong py-3 text-sm font-bold text-white hover:bg-warm-dk transition-colors disabled:cursor-wait disabled:opacity-50"
               >
-                {t('support.submit')}
+                {sending ? t('actions.sending') : t('support.submit')}
               </button>
 
               <p className="mt-4 text-center text-xs text-[color:var(--muted-fg)]">{t('support.responseTime')}</p>

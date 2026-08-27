@@ -12,17 +12,21 @@ export const PRIVACY_EMAIL  = 'privacy@skillbridge.example'
 export const REPORT_EMAIL   = 'moderation@skillbridge.example'
 
 // Endpoints backend attendus mais NON IMPLÉMENTÉS côté serveur.
-// Tant qu'ils n'existent pas, l'UI affiche un état « bientôt disponible »
-// plutôt que d'appeler une route qui renverrait un 404.
-// TODO(backend): implémenter puis brancher ces routes.
+//
+// ⚠️ Cette liste est dangereuse quand elle est fausse. Elle a longtemps
+// annoncé /users/me/export et DELETE /users/me comme manquants alors que les
+// deux existaient et fonctionnaient : l'interface affichait donc « bientôt
+// disponible » sur les droits d'accès, de portabilité et d'effacement que le
+// RGPD garantit. Une note périmée a coûté des droits réels.
+//
+// Ne rien ajouter ici sans avoir vérifié la route sur le serveur en cours.
 export const PENDING_ENDPOINTS = {
-  exportData:     'GET  /users/me/export',      // RGPD art. 15 & 20
-  deleteAccount:  'DELETE /users/me',           // RGPD art. 17
-  preferences:    'PATCH /users/me/preferences',// notifications + confidentialité
-  supportTicket:  'POST /support/tickets',
+  preferences: 'PATCH /users/me/preferences', // notifications + confidentialité
 }
-// Implémentés depuis, et branchés : POST /reports, /blocks, /appeals et
-// /organizations/requests (voir services/api.js).
+
+// Implémentés et branchés : POST /reports, /blocks, /appeals,
+// /organizations/requests, /support/tickets, GET /users/me/export,
+// DELETE /users/me, POST /sessions/:id/cancel (voir services/api.js).
 
 // Numéros d'urgence français — affichés sur les pages de signalement/assistance.
 export const EMERGENCY_NUMBERS = ['17', '119', '3018']

@@ -125,6 +125,27 @@ export const sessionApi = {
   accept:  (id)          => api.post(`/sessions/${id}/accept`).then(r => r.data),
   refuse:  (id)          => api.post(`/sessions/${id}/refuse`).then(r => r.data),
   update:  (id, body)    => api.patch(`/sessions/${id}`, body).then(r => r.data),
+  // Annule une session pas encore commencée, des deux côtés, et rembourse
+  // l'apprenant si elle avait déjà été acceptée. `end` ne marche que sur une
+  // session ACTIVE : le bouton « Annuler » l'appelait et échouait toujours.
+  cancel:  (id)          => api.post(`/sessions/${id}/cancel`).then(r => r.data),
+}
+
+// ── Droits RGPD ──────────────────────────────────────────
+// Ces deux routes existent et fonctionnent côté serveur. L'interface les a
+// longtemps affichées en « bientôt disponible » sur la foi d'un commentaire
+// périmé, ce qui privait l'utilisateur de droits que la loi lui garantit.
+export const privacyApi = {
+  // Article 15 & 20 : accès et portabilité.
+  exportData:    ()         => api.get('/users/me/export').then(r => r.data),
+  // Article 17 : effacement. Le compte est anonymisé, pas supprimé en dur, pour
+  // que les sessions et messages des autres restent cohérents.
+  deleteAccount: (password) => api.delete('/users/me', { data: { password } }).then(r => r.data),
+}
+
+// ── Assistance ───────────────────────────────────────────
+export const supportApi = {
+  createTicket: (body) => api.post('/support/tickets', body).then(r => r.data),
 }
 
 export default api
