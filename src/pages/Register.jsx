@@ -1,11 +1,13 @@
 import { useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { Trans, useTranslation } from 'react-i18next'
 import useAuthStore from '../store/authStore'
 import api, { authApi } from '../services/api'
 
 const RESEND_DELAY = 60
 
 function ResendVerification({ email }) {
+  const { t } = useTranslation()
   const [sent,      setSent]      = useState(false)
   const [err,       setErr]       = useState('')
   const [busy,      setBusy]      = useState(false)
@@ -36,7 +38,7 @@ function ResendVerification({ email }) {
       setSent(true)
       startCountdown()
     } catch (e) {
-      setErr(e.response?.data?.message || 'Erreur lors du renvoi.')
+      setErr(e.response?.data?.message || t('register.verify.resendError'))
     } finally { setBusy(false) }
   }
 
@@ -44,7 +46,7 @@ function ResendVerification({ email }) {
     <div className="mt-5">
       {err && <p className="text-xs text-red-500 mb-2">{err}</p>}
       {sent && (
-        <p className="text-sm font-semibold text-[#3D5C28] mb-2">Email renvoyé !</p>
+        <p className="text-sm font-semibold text-[#3D5C28] mb-2">{t('register.verify.resent')}</p>
       )}
       <button
         onClick={send}
@@ -52,10 +54,10 @@ function ResendVerification({ email }) {
         className="text-sm font-semibold text-[#756B5B] bg-transparent border-none cursor-pointer hover:text-[#252840] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
       >
         {busy
-          ? 'Envoi…'
+          ? t('actions.sending')
           : countdown > 0
-            ? `Renvoyer dans 0:${String(countdown).padStart(2, '0')}`
-            : "Renvoyer l'email de confirmation"}
+            ? t('auth.resendIn', { seconds: String(countdown).padStart(2, '0') })
+            : t('register.verify.resend')}
       </button>
     </div>
   )
@@ -73,17 +75,26 @@ const ALL_SKILLS = [
   'Music Theory','Violin','Business','Marketing','Finance','Statistics','Data Analysis',
 ]
 
-const DAYS  = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi']
-const SLOTS = ['Matin', 'Midi', 'Soir']
-
-const STEP_META = [
-  { label: 'Compte',        desc: 'Informations personnelles' },
-  { label: 'Compétences',   desc: 'Enseignement & apprentissage' },
-  { label: 'Disponibilités',desc: 'Vos créneaux libres' },
+// `key` est la valeur PERSISTÉE (côté API et localStorage) : elle ne doit jamais
+// être traduite. Seul l'affichage passe par i18n.
+const DAYS = [
+  { key: 'Lundi',    labelKey: 'days.mon', shortKey: 'daysShort.mon' },
+  { key: 'Mardi',    labelKey: 'days.tue', shortKey: 'daysShort.tue' },
+  { key: 'Mercredi', labelKey: 'days.wed', shortKey: 'daysShort.wed' },
+  { key: 'Jeudi',    labelKey: 'days.thu', shortKey: 'daysShort.thu' },
+  { key: 'Vendredi', labelKey: 'days.fri', shortKey: 'daysShort.fri' },
 ]
+const SLOTS = [
+  { key: 'Matin', labelKey: 'slots.morning' },
+  { key: 'Midi',  labelKey: 'slots.noon'    },
+  { key: 'Soir',  labelKey: 'slots.evening' },
+]
+
+const STEP_META = ['account', 'skills', 'availability']
 
 export default function Register() {
   const navigate   = useNavigate()
+  const { t }      = useTranslation()
   const { login }  = useAuthStore()
   const fileRef    = useRef()
 
@@ -136,20 +147,20 @@ export default function Register() {
   }
 
   const handleStep0 = () => {
-    if (!form.firstName.trim()) { setError('Le prénom est requis'); return }
-    if (!form.lastName.trim())  { setError('Le nom est requis'); return }
-    if (!form.email.trim())     { setError("L'email est requis"); return }
-    if (form.password.length < 8) { setError('Mot de passe : 8 caractères minimum'); return }
+    if (!form.firstName.trim()) { setError(t('register.errors.firstName')); return }
+    if (!form.lastName.trim())  { setError(t('register.errors.lastName')); return }
+    if (!form.email.trim())     { setError(t('register.errors.email')); return }
+    if (form.password.length < 8) { setError(t('register.errors.password')); return }
     setError(''); setStep(1)
   }
 
   const handleStep1 = async () => {
     if (form.teaches.length === 0 && form.wants.length === 0) {
-      setError('Ajoute au moins une compétence à enseigner ET une à apprendre pour continuer')
+      setError(t('register.errors.bothSkills'))
       return
     }
-    if (form.teaches.length === 0) { setSkillToggle('teaches'); setError('Ajoute au moins une compétence à enseigner'); return }
-    if (form.wants.length   === 0) { setSkillToggle('wants');   setError('Ajoute au moins une compétence à apprendre'); return }
+    if (form.teaches.length === 0) { setSkillToggle('teaches'); setError(t('register.errors.teaches')); return }
+    if (form.wants.length   === 0) { setSkillToggle('wants');   setError(t('register.errors.wants')); return }
     setError(''); setLoading(true)
     try {
       const res = await api.post('/auth/register', {
@@ -175,7 +186,7 @@ export default function Register() {
         setStep('verify-email')
       }
     } catch (err) {
-      setError(err.response?.data?.message || err.message || "Échec de l'inscription")
+      setError(err.response?.data?.message || err.message || t('register.errors.failed'))
     } finally { setLoading(false) }
   }
 
@@ -201,14 +212,16 @@ export default function Register() {
                 <rect x="3" y="8" width="30" height="22" rx="3"/><path d="M3 15l15 9 15-9"/>
               </svg>
             </div>
-            <h1 className="text-2xl font-black tracking-tight text-[#252840]">Vérifie ta boîte mail !</h1>
+            <h1 className="text-2xl font-black tracking-tight text-[#252840]">{t('register.verify.title')}</h1>
             <p className="mt-3 text-sm text-[#756B5B] leading-relaxed">
-              Un email de confirmation a été envoyé à{' '}
-              <strong className="text-[#252840]">{form.email}</strong>.
-              Clique sur le bouton qu'il contient pour activer ton compte.
+              <Trans
+                i18nKey="register.verify.text"
+                values={{ email: form.email }}
+                components={{ strong: <strong className="text-[#252840]" /> }}
+              />
             </p>
-            <p className="mt-2 text-sm text-[#B0A898]">
-              Pense à vérifier ton dossier spam si tu ne vois rien.
+            <p className="mt-2 text-sm text-[color:var(--muted-fg)]">
+              {t('auth.spamHint')}
             </p>
             <ResendVerification email={form.email} />
           </div>
@@ -226,21 +239,21 @@ export default function Register() {
               <path d="M6 19l7 7L30 10"/>
             </svg>
           </div>
-          <h1 className="text-4xl font-black tracking-tight text-[#252840]">Bienvenue sur SkillBridge !</h1>
-          <p className="mt-3 text-[#756B5B]">Ton compte est prêt. Tu peux maintenant trouver des pairs et apprendre.</p>
+          <h1 className="text-4xl font-black tracking-tight text-[#252840]">{t('register.done.title')}</h1>
+          <p className="mt-3 text-[#756B5B]">{t('register.done.subtitle')}</p>
           <div className="mt-6 rounded-3xl bg-[#252840] p-6 text-center">
-            <p className="text-sm text-[#F8F4EA]/70 mb-1">Crédits de bienvenue</p>
+            <p className="text-sm text-[#F8F4EA]/70 mb-1">{t('register.done.welcomeCredits')}</p>
             <p className="text-5xl font-black text-[#C8864B]">120</p>
-            <p className="text-sm font-semibold text-[#F8F4EA]/60 mt-1">crédits offerts · 2 heures d'apprentissage</p>
+            <p className="text-sm font-semibold text-[#F8F4EA]/60 mt-1">{t('register.done.creditsHint')}</p>
           </div>
           <div className="mt-6 flex flex-col gap-3">
             <button onClick={() => navigate('/connection')}
-              className="w-full py-3 rounded-full bg-[#C8864B] text-white font-bold border-none cursor-pointer hover:bg-[#B07030] transition-colors">
-              Explorer les membres
+              className="w-full py-3 rounded-full bg-warm-strong text-white font-bold border-none cursor-pointer hover:bg-warm-dk transition-colors">
+              {t('register.done.explore')}
             </button>
             <button onClick={() => navigate('/profile')}
               className="w-full py-3 rounded-full bg-transparent text-[#756B5B] font-semibold border-none cursor-pointer hover:text-[#252840] transition-colors">
-              Compléter mon profil →
+              {t('register.done.completeProfile')}
             </button>
           </div>
         </div>
@@ -256,15 +269,15 @@ export default function Register() {
           <img src="/skillbridge-logo-dark.webp" alt="SkillBridge" className="h-10 w-auto" />
         </div>
 
-        <h2 className="text-2xl font-black text-white mb-2">Rejoins la communauté de l'échange.</h2>
-        <p className="text-white/50 text-sm mb-12">Partage ce que tu sais, apprends ce que tu aimes.</p>
+        <h2 className="text-2xl font-black text-white mb-2">{t('register.aside.title')}</h2>
+        <p className="text-white/50 text-sm mb-12">{t('register.aside.subtitle')}</p>
 
         <div className="flex flex-col gap-6">
-          {STEP_META.map((s, i) => (
-            <div key={i} className="flex items-start gap-4">
+          {STEP_META.map((stepKey, i) => (
+            <div key={stepKey} className="flex items-start gap-4">
               <div className={`h-8 w-8 rounded-full flex items-center justify-center text-sm font-black flex-shrink-0 transition-all ${
                 i < step ? 'bg-[rgba(61,92,40,0.9)] text-white' :
-                i === step ? 'bg-[#C8864B] text-white' :
+                i === step ? 'bg-warm-strong text-white' :
                 'bg-white/10 text-white/40'
               }`}>
                 {i < step
@@ -272,8 +285,10 @@ export default function Register() {
                   : i + 1}
               </div>
               <div className={`pt-1 ${i === step ? 'opacity-100' : 'opacity-50'}`}>
-                <p className={`text-sm font-bold ${i === step ? 'text-white' : 'text-white/60'}`}>{s.label}</p>
-                <p className="text-xs text-white/40 mt-0.5">{s.desc}</p>
+                <p className={`text-sm font-bold ${i === step ? 'text-white' : 'text-white/60'}`}>
+                  {t(`register.steps.${stepKey}.label`)}
+                </p>
+                <p className="text-xs text-white/40 mt-0.5">{t(`register.steps.${stepKey}.desc`)}</p>
               </div>
             </div>
           ))}
@@ -292,8 +307,8 @@ export default function Register() {
 
           {/* Mobile progress */}
           <div className="flex items-center gap-1.5 mb-8 lg:hidden">
-            {STEP_META.map((_, i) => (
-              <div key={i} className={`flex-1 h-1 rounded-full transition-all ${i <= step ? 'bg-[#C8864B]' : 'bg-[#E8DDC7]'}`} />
+            {STEP_META.map((stepKey, i) => (
+              <div key={stepKey} className={`flex-1 h-1 rounded-full transition-all ${i <= step ? 'bg-[#C8864B]' : 'bg-[#E8DDC7]'}`} />
             ))}
           </div>
 
@@ -307,25 +322,26 @@ export default function Register() {
           {/* STEP 0 — Compte */}
           {step === 0 && (
             <div className="rounded-3xl border border-[#E8DDC7] bg-white p-8 shadow-soft">
-              <h2 className="text-2xl font-black tracking-tight text-[#252840]">Créer votre compte</h2>
-              <p className="mt-1 text-sm text-[#756B5B] mb-6">Ces infos seront visibles dans votre profil.</p>
+              <h2 className="text-2xl font-black tracking-tight text-[#252840]">{t('register.account.title')}</h2>
+              <p className="mt-1 text-sm text-[#756B5B] mb-6">{t('register.account.subtitle')}</p>
 
               {/* Avatar cliquable */}
               <div className="flex justify-center mb-6">
                 <button
                   type="button"
                   onClick={() => fileRef.current?.click()}
+                  aria-label={t('register.account.addPhoto')}
                   className="relative h-24 w-24 rounded-full border-2 border-dashed border-[#E8DDC7] overflow-hidden cursor-pointer bg-[#F8F4EA] hover:border-[#C8864B] transition-colors flex items-center justify-center"
                 >
                   {avatar ? (
-                    <img src={avatar} alt="avatar" className="w-full h-full object-cover" />
+                    <img src={avatar} alt={t('a11y.avatarPreview')} className="w-full h-full object-cover" />
                   ) : (
-                    <div className="flex flex-col items-center gap-1 text-[#B0A898]">
+                    <div className="flex flex-col items-center gap-1 text-[color:var(--muted-fg)]">
                       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
                         <path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/>
                         <circle cx="12" cy="13" r="4"/>
                       </svg>
-                      <span className="text-xs font-semibold">Photo</span>
+                      <span className="text-xs font-semibold">{t('register.account.photo')}</span>
                     </div>
                   )}
                   {uploading && (
@@ -339,19 +355,19 @@ export default function Register() {
 
               <div className="grid grid-cols-2 gap-3 mb-3">
                 <div>
-                  <label className="block text-xs font-bold text-[#252840] uppercase tracking-wide mb-1">Prénom</label>
+                  <label className="block text-xs font-bold text-[#252840] uppercase tracking-wide mb-1">{t('auth.fields.firstName')}</label>
                   <input
                     className="w-full h-11 rounded-xl border border-[#E8DDC7] bg-[#FDFAF4] px-4 text-sm outline-none focus:border-[#C8864B] transition-colors"
-                    placeholder="Alice"
+                    placeholder={t('auth.fields.firstNamePlaceholder')}
                     value={form.firstName}
                     onChange={e => set('firstName', e.target.value)}
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-[#252840] uppercase tracking-wide mb-1">Nom</label>
+                  <label className="block text-xs font-bold text-[#252840] uppercase tracking-wide mb-1">{t('auth.fields.lastName')}</label>
                   <input
                     className="w-full h-11 rounded-xl border border-[#E8DDC7] bg-[#FDFAF4] px-4 text-sm outline-none focus:border-[#C8864B] transition-colors"
-                    placeholder="Martin"
+                    placeholder={t('auth.fields.lastNamePlaceholder')}
                     value={form.lastName}
                     onChange={e => set('lastName', e.target.value)}
                   />
@@ -359,46 +375,46 @@ export default function Register() {
               </div>
 
               <div className="mb-3">
-                <label className="block text-xs font-bold text-[#252840] uppercase tracking-wide mb-1">Email</label>
+                <label className="block text-xs font-bold text-[#252840] uppercase tracking-wide mb-1">{t('auth.fields.email')}</label>
                 <input
                   type="email"
                   className="w-full h-11 rounded-xl border border-[#E8DDC7] bg-[#FDFAF4] px-4 text-sm outline-none focus:border-[#C8864B] transition-colors"
-                  placeholder="alice@example.com"
+                  placeholder={t('register.account.emailPlaceholder')}
                   value={form.email}
                   onChange={e => set('email', e.target.value)}
                 />
               </div>
 
               <div className="mb-3">
-                <label className="block text-xs font-bold text-[#252840] uppercase tracking-wide mb-1">Mot de passe</label>
+                <label className="block text-xs font-bold text-[#252840] uppercase tracking-wide mb-1">{t('auth.fields.password')}</label>
                 <input
                   type="password"
                   className="w-full h-11 rounded-xl border border-[#E8DDC7] bg-[#FDFAF4] px-4 text-sm outline-none focus:border-[#C8864B] transition-colors"
-                  placeholder="8 caractères minimum"
+                  placeholder={t('register.account.passwordPlaceholder')}
                   value={form.password}
                   onChange={e => set('password', e.target.value)}
                 />
               </div>
 
               <div className="mb-6">
-                <label className="block text-xs font-bold text-[#252840] uppercase tracking-wide mb-1">Bio (optionnel)</label>
+                <label className="block text-xs font-bold text-[#252840] uppercase tracking-wide mb-1">{t('register.account.bio')}</label>
                 <textarea
                   rows={3}
                   className="w-full rounded-xl border border-[#E8DDC7] bg-[#FDFAF4] px-4 py-3 text-sm outline-none focus:border-[#C8864B] transition-colors resize-none"
-                  placeholder="Dites-nous ce qui vous passionne…"
+                  placeholder={t('register.account.bioPlaceholder')}
                   value={form.bio}
                   onChange={e => set('bio', e.target.value)}
                 />
               </div>
 
               <button onClick={handleStep0}
-                className="w-full py-3 rounded-full bg-[#C8864B] text-white font-bold border-none cursor-pointer hover:bg-[#B07030] transition-colors">
-                Continuer →
+                className="w-full py-3 rounded-full bg-warm-strong text-white font-bold border-none cursor-pointer hover:bg-warm-dk transition-colors">
+                {t('register.continue')}
               </button>
               <p className="text-center text-xs text-[#756B5B] mt-4">
-                Déjà un compte ?{' '}
-                <button onClick={() => navigate('/')} className="font-bold text-[#252840] bg-transparent border-none cursor-pointer hover:text-[#C8864B]">
-                  Se connecter
+                {t('auth.register.hasAccount')}{' '}
+                <button onClick={() => navigate('/')} className="font-bold text-[#252840] bg-transparent border-none cursor-pointer hover:text-[color:var(--warm-strong)]">
+                  {t('nav.login')}
                 </button>
               </p>
             </div>
@@ -407,15 +423,15 @@ export default function Register() {
           {/* STEP 1 — Compétences */}
           {step === 1 && (
             <div className="rounded-3xl border border-[#E8DDC7] bg-white p-8 shadow-soft">
-              <h2 className="text-2xl font-black tracking-tight text-[#252840]">Vos compétences</h2>
-              <p className="mt-1 text-sm text-[#756B5B] mb-4">Ce que vous pouvez enseigner et ce que vous voulez apprendre.</p>
+              <h2 className="text-2xl font-black tracking-tight text-[#252840]">{t('register.skills.title')}</h2>
+              <p className="mt-1 text-sm text-[#756B5B] mb-4">{t('register.skills.subtitle')}</p>
 
               {/* Mini barre d'étapes */}
               <div className="flex items-center gap-2 mb-5">
-                {[['teaches', "J'enseigne"], ['wants', "J'apprends"]].map(([v, l], i) => (
+                {[['teaches', t('register.skills.teaches')], ['wants', t('register.skills.wants')]].map(([v, l], i) => (
                   <div key={v} className="flex items-center gap-2 flex-1">
                     <div className={`flex-1 h-1 rounded-full transition-all ${form[v].length > 0 ? 'bg-[#C8864B]' : skillToggle === v ? 'bg-[#252840]' : 'bg-[#E8DDC7]'}`} />
-                    <span className={`text-[10px] font-bold whitespace-nowrap ${form[v].length > 0 ? 'text-[#C8864B]' : skillToggle === v ? 'text-[#252840]' : 'text-[#B0A898]'}`}>
+                    <span className={`text-[10px] font-bold whitespace-nowrap ${form[v].length > 0 ? 'text-[color:var(--warm-strong)]' : skillToggle === v ? 'text-[#252840]' : 'text-[color:var(--muted-fg)]'}`}>
                       {i + 1}. {l}
                     </span>
                   </div>
@@ -424,7 +440,7 @@ export default function Register() {
 
               {/* Toggle */}
               <div className="inline-flex rounded-full border border-[#E8DDC7] bg-[#F8F4EA] p-1 mb-5">
-                {[['teaches', "J'enseigne"], ['wants', "J'apprends"]].map(([v, l]) => (
+                {[['teaches', t('register.skills.teaches')], ['wants', t('register.skills.wants')]].map(([v, l]) => (
                   <button key={v} onClick={() => setSkillToggle(v)}
                     className={`rounded-full px-5 py-2 text-sm font-semibold border-none cursor-pointer transition-colors ${
                       skillToggle === v
@@ -438,13 +454,13 @@ export default function Register() {
 
               {/* Search */}
               <div className="relative mb-4">
-                <svg className="absolute left-3 top-1/2 -translate-y-1/2 text-[#B0A898]" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round">
+                <svg className="absolute left-3 top-1/2 -translate-y-1/2 text-[color:var(--muted-fg)]" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round">
                   <circle cx="7" cy="7" r="5"/><path d="M12 12l2 2"/>
                 </svg>
                 <input
                   value={skillSearch}
                   onChange={e => setSkillSearch(e.target.value)}
-                  placeholder="Rechercher une compétence…"
+                  placeholder={t('register.skills.searchPlaceholder')}
                   className="w-full h-10 rounded-full border border-[#E8DDC7] bg-[#FDFAF4] pl-9 pr-4 text-sm outline-none focus:border-[#C8864B] transition-colors"
                 />
               </div>
@@ -473,30 +489,30 @@ export default function Register() {
                   value={customSkill}
                   onChange={e => setCustomSkill(e.target.value)}
                   onKeyDown={e => e.key === 'Enter' && addCustomSkill()}
-                  placeholder="Ajouter une compétence personnalisée…"
+                  placeholder={t('register.skills.customPlaceholder')}
                   className="flex-1 h-10 rounded-full border border-[#E8DDC7] bg-[#FDFAF4] px-4 text-sm outline-none focus:border-[#C8864B] transition-colors"
                 />
-                <button onClick={addCustomSkill}
-                  className="h-10 w-10 rounded-full bg-[#C8864B] text-white border-none cursor-pointer hover:bg-[#B07030] transition-colors flex items-center justify-center flex-shrink-0">
+                <button onClick={addCustomSkill} aria-label={t('register.skills.addCustom')}
+                  className="h-10 w-10 rounded-full bg-warm-strong text-white border-none cursor-pointer hover:bg-warm-dk transition-colors flex items-center justify-center flex-shrink-0">
                   <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><path d="M7 1v12M1 7h12"/></svg>
                 </button>
               </div>
 
               {(form.teaches.length === 0 || form.wants.length === 0) && !loading && (
-                <p className="text-xs text-[#C8864B] bg-[rgba(200,134,75,0.1)] rounded-xl px-4 py-2 mb-1">
-                  Ajoute au moins une compétence à enseigner ET une à apprendre pour continuer.
+                <p className="text-xs text-[color:var(--warm-strong)] bg-[rgba(200,134,75,0.1)] rounded-xl px-4 py-2 mb-1">
+                  {t('register.skills.hint')}
                 </p>
               )}
 
               <div className="flex gap-3">
                 <button onClick={() => { setError(''); setStep(0) }}
                   className="px-5 py-3 rounded-full border border-[#E8DDC7] text-[#756B5B] text-sm font-semibold bg-transparent cursor-pointer hover:border-[#252840] transition-colors">
-                  Retour
+                  {t('register.back')}
                 </button>
                 <button onClick={handleStep1}
                   disabled={loading}
-                  className="flex-1 py-3 rounded-full bg-[#C8864B] text-white font-bold border-none cursor-pointer hover:bg-[#B07030] transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
-                  {loading ? 'Création…' : 'Continuer →'}
+                  className="flex-1 py-3 rounded-full bg-warm-strong text-white font-bold border-none cursor-pointer hover:bg-warm-dk transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                  {loading ? t('register.skills.creating') : t('register.continue')}
                 </button>
               </div>
             </div>
@@ -505,28 +521,30 @@ export default function Register() {
           {/* STEP 2 — Disponibilités */}
           {step === 2 && (
             <div className="rounded-3xl border border-[#E8DDC7] bg-white p-8 shadow-soft">
-              <h2 className="text-2xl font-black tracking-tight text-[#252840]">Vos disponibilités</h2>
-              <p className="mt-1 text-sm text-[#756B5B] mb-5">Sélectionnez vos créneaux libres pour les échanges.</p>
+              <h2 className="text-2xl font-black tracking-tight text-[#252840]">{t('register.availability.title')}</h2>
+              <p className="mt-1 text-sm text-[#756B5B] mb-5">{t('register.availability.subtitle')}</p>
 
               <div className="overflow-hidden rounded-2xl border border-[#E8DDC7] mb-6">
                 <div className="grid bg-[#F8F4EA]" style={{ gridTemplateColumns: '56px repeat(5, 1fr)' }}>
                   <div className="p-2" />
                   {DAYS.map(d => (
-                    <div key={d} className="p-2 text-center text-xs font-bold text-[#252840] border-l border-[#E8DDC7]">
-                      {d.slice(0, 3)}
+                    <div key={d.key} className="p-2 text-center text-xs font-bold text-[#252840] border-l border-[#E8DDC7]">
+                      {t(d.shortKey)}
                     </div>
                   ))}
                 </div>
                 {SLOTS.map((slot, si) => (
-                  <div key={slot} className={`grid ${si < SLOTS.length - 1 ? 'border-t border-[#E8DDC7]' : ''}`}
+                  <div key={slot.key} className={`grid ${si < SLOTS.length - 1 ? 'border-t border-[#E8DDC7]' : ''}`}
                     style={{ gridTemplateColumns: '56px repeat(5, 1fr)' }}>
                     <div className="p-2 flex items-center">
-                      <span className="text-xs font-semibold text-[#252840]">{slot}</span>
+                      <span className="text-xs font-semibold text-[#252840]">{t(slot.labelKey)}</span>
                     </div>
                     {DAYS.map(day => {
-                      const active = !!avail[`${day}_${slot}`]
+                      const active = !!avail[`${day.key}_${slot.key}`]
                       return (
-                        <button key={day} onClick={() => toggleAvail(day, slot)}
+                        <button key={day.key} onClick={() => toggleAvail(day.key, slot.key)}
+                          aria-pressed={active}
+                          aria-label={t('register.availability.toggleSlot', { day: t(day.labelKey), slot: t(slot.labelKey) })}
                           className={`border-l border-[#E8DDC7] p-3 flex items-center justify-center cursor-pointer transition-all ${
                             active ? 'bg-[#3D5C28]' : 'bg-white hover:bg-[#F8F4EA]'
                           }`}>
@@ -545,11 +563,11 @@ export default function Register() {
               <div className="flex gap-3">
                 <button onClick={() => setStep(1)}
                   className="px-5 py-3 rounded-full border border-[#E8DDC7] text-[#756B5B] text-sm font-semibold bg-transparent cursor-pointer hover:border-[#252840] transition-colors">
-                  Retour
+                  {t('register.back')}
                 </button>
                 <button onClick={handleStep2}
-                  className="flex-1 py-3 rounded-full bg-[#C8864B] text-white font-bold border-none cursor-pointer hover:bg-[#B07030] transition-colors">
-                  Terminer l'inscription →
+                  className="flex-1 py-3 rounded-full bg-warm-strong text-white font-bold border-none cursor-pointer hover:bg-warm-dk transition-colors">
+                  {t('register.availability.finish')}
                 </button>
               </div>
             </div>

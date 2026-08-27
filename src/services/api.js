@@ -17,8 +17,20 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
+    const { status, data } = error.response ?? {}
+    if (status === 401) {
       useAuthStore.getState().logout()
+    }
+    // Compte suspendu : le backend renvoie 403 avec le motif et le chemin de
+    // recours. On le remonte au store pour que l'app bascule sur l'écran de
+    // suspension, quel que soit l'appel qui a déclenché la réponse — une
+    // sanction doit être motivée et contestable (DSA, art. 17 et 20).
+    if (status === 403 && data?.appealPath) {
+      useAuthStore.getState().setSuspension({
+        message:    data.message,
+        reason:     data.reason,
+        appealPath: data.appealPath,
+      })
     }
     return Promise.reject(error)
   }
@@ -35,6 +47,48 @@ export const authApi = {
   me:                ()      => api.get('/auth/me').then(r => r.data.user),
   verifyEmail:       (token) => api.get(`/auth/verify-email?token=${token}`).then(r => r.data),
   resendVerification:(email) => api.post('/auth/resend-verification', { email }).then(r => r.data),
+}
+
+// ── Signalements ────────────────────────────────────────
+// `reason` doit appartenir à REPORT_REASONS (voir plus bas) : le backend
+// rejette toute autre valeur.
+export const reportApi = {
+  create: (body) => api.post('/reports', body).then(r => r.data.report ?? r.data),
+  mine:   ()     => api.get('/reports/mine').then(r => r.data.reports ?? r.data),
+}
+
+// Valeurs acceptées par POST /reports — l'ordre fixe celui du formulaire.
+export const REPORT_REASONS = [
+  'HARASSMENT',
+  'INAPPROPRIATE_CONTENT',
+  'CHILD_SAFETY',
+  'IMPERSONATION',
+  'SPAM',
+  'OTHER',
+]
+
+// ── Blocages ────────────────────────────────────────────
+// Préférence personnelle : masque la personne pour soi, sans passer par la
+// modération. Distinct d'un signalement, qui lui est traité par l'équipe.
+export const blockApi = {
+  list:    ()   => api.get('/blocks').then(r => r.data.blocks ?? r.data),
+  block:   (id) => api.post(`/blocks/${id}`).then(r => r.data.block ?? r.data),
+  unblock: (id) => api.delete(`/blocks/${id}`).then(r => r.data),
+}
+
+// ── Recours (DSA) ───────────────────────────────────────
+export const appealApi = {
+  // Le 403 de suspension transporte son propre `appealPath` : on le suit quand
+  // il est fourni, pour que le backend puisse déplacer la route sans casser
+  // l'écran de recours.
+  create: (message, path = '/appeals') => api.post(path, { message }).then(r => r.data.appeal ?? r.data),
+  mine:   ()                           => api.get('/appeals/mine').then(r => r.data.appeals ?? r.data),
+}
+
+// ── Demande d'inscription d'un établissement ────────────
+// Endpoint public : appelé sans jeton.
+export const organizationApi = {
+  requestAccess: (body) => api.post('/organizations/requests', body).then(r => r.data.organization ?? r.data),
 }
 
 // ── Matches ─────────────────────────────────────────────
@@ -71,6 +125,27 @@ export const sessionApi = {
   accept:  (id)          => api.post(`/sessions/${id}/accept`).then(r => r.data),
   refuse:  (id)          => api.post(`/sessions/${id}/refuse`).then(r => r.data),
   update:  (id, body)    => api.patch(`/sessions/${id}`, body).then(r => r.data),
+  // Annule une session pas encore commencée, des deux côtés, et rembourse
+  // l'apprenant si elle avait déjà été acceptée. `end` ne marche que sur une
+  // session ACTIVE : le bouton « Annuler » l'appelait et échouait toujours.
+  cancel:  (id)          => api.post(`/sessions/${id}/cancel`).then(r => r.data),
+}
+
+// ── Droits RGPD ──────────────────────────────────────────
+// Ces deux routes existent et fonctionnent côté serveur. L'interface les a
+// longtemps affichées en « bientôt disponible » sur la foi d'un commentaire
+// périmé, ce qui privait l'utilisateur de droits que la loi lui garantit.
+export const privacyApi = {
+  // Article 15 & 20 : accès et portabilité.
+  exportData:    ()         => api.get('/users/me/export').then(r => r.data),
+  // Article 17 : effacement. Le compte est anonymisé, pas supprimé en dur, pour
+  // que les sessions et messages des autres restent cohérents.
+  deleteAccount: (password) => api.delete('/users/me', { data: { password } }).then(r => r.data),
+}
+
+// ── Assistance ───────────────────────────────────────────
+export const supportApi = {
+  createTicket: (body) => api.post('/support/tickets', body).then(r => r.data),
 }
 
 export default api

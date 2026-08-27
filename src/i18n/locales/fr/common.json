@@ -1,0 +1,972 @@
+{
+  "app": {
+    "name": "SkillBridge",
+    "taglineLine1": "Partager ce qu'on sait.",
+    "taglineLine2": "Apprendre ce qu'on aime."
+  },
+  "actions": {
+    "save": "Enregistrer",
+    "saving": "Enregistrement…",
+    "saved": "Préférences enregistrées",
+    "cancel": "Annuler",
+    "send": "Envoyer",
+    "sending": "Envoi…",
+    "close": "Fermer",
+    "back": "Retour",
+    "backHome": "Retour à l'accueil",
+    "loading": "Chargement…",
+    "comingSoon": "Bientôt disponible",
+    "copy": "Copier",
+    "copied": "Copié",
+    "required": "Champ obligatoire"
+  },
+  "nav": {
+    "home": "Accueil",
+    "connections": "Connexions",
+    "sessions": "Sessions",
+    "messages": "Messages",
+    "credits": "Crédits",
+    "profile": "Profil",
+    "myProfile": "Mon profil",
+    "settings": "Paramètres",
+    "login": "Se connecter",
+    "loginShort": "Connexion",
+    "register": "S'inscrire",
+    "registerFree": "S'inscrire gratuitement",
+    "logout": "Se déconnecter",
+    "install": "Installer l'app",
+    "menu": "Menu",
+    "unreadOne": "notification non lue",
+    "unreadOther": "notifications non lues",
+    "creditsCount": "{{count}} crédits"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "empty": "Aucune notification.",
+    "markAllRead": "Tout lire",
+    "justNow": "à l'instant",
+    "minutesAgo": "il y a {{count}} min",
+    "hoursAgo": "il y a {{count}} h"
+  },
+  "creditsPopover": {
+    "title": "Comment fonctionnent les crédits",
+    "rule1": "1 crédit = 1 minute de cours",
+    "rule2": "Quand tu réserves une session, les crédits sont mis de côté",
+    "rule3": "À la fin, l'enseignant les reçoit — et si la session est plus courte que prévu, la différence t'est remboursée",
+    "rule4": "Plafond : 500 crédits. Au plafond, apprends pour les dépenser.",
+    "balance": "solde actuel",
+    "seeCredits": "Voir mes crédits →",
+    "unit": "cr"
+  },
+  "auth": {
+    "login": {
+      "title": "Bienvenue !",
+      "subtitle": "Connectez-vous pour continuer vos échanges",
+      "submit": "Se connecter",
+      "submitting": "Connexion…",
+      "forgot": "Mot de passe oublié ?",
+      "noAccount": "Pas encore de compte ?",
+      "unverified": "Ton email n'est pas encore vérifié. Vérifie ta boîte mail ou renvoie le lien depuis /verify-email."
+    },
+    "register": {
+      "title": "Rejoindre SkillBridge",
+      "subtitle": "Créez votre compte et commencez à échanger",
+      "submit": "Créer mon compte",
+      "submitting": "Création du compte…",
+      "hasAccount": "Déjà un compte ?",
+      "switch": "Se connecter"
+    },
+    "fields": {
+      "email": "Email",
+      "emailPlaceholder": "vous@exemple.com",
+      "password": "Mot de passe",
+      "passwordWithMin": "Mot de passe (min. 8 caractères)",
+      "passwordPlaceholder": "••••••••",
+      "firstName": "Prénom",
+      "firstNamePlaceholder": "Alice",
+      "lastName": "Nom",
+      "lastNamePlaceholder": "Martin"
+    },
+    "spamHint": "Pense à vérifier ton dossier spam si tu ne vois rien.",
+    "resendIn": "Renvoyer dans 0:{{seconds}}"
+  },
+  "days": {
+    "mon": "Lundi",
+    "tue": "Mardi",
+    "wed": "Mercredi",
+    "thu": "Jeudi",
+    "fri": "Vendredi"
+  },
+  "daysShort": {
+    "mon": "Lun",
+    "tue": "Mar",
+    "wed": "Mer",
+    "thu": "Jeu",
+    "fri": "Ven",
+    "sat": "Sam",
+    "sun": "Dim"
+  },
+  "slots": {
+    "morning": "Matin",
+    "noon": "Midi",
+    "evening": "Soir",
+    "afternoon": "Après-midi"
+  },
+  "slotHints": {
+    "morning": "8h–12h",
+    "noon": "12h–14h",
+    "evening": "18h–22h"
+  },
+  "register": {
+    "aside": {
+      "title": "Rejoins la communauté de l'échange.",
+      "subtitle": "Partage ce que tu sais, apprends ce que tu aimes."
+    },
+    "steps": {
+      "account": {
+        "label": "Compte",
+        "desc": "Informations personnelles"
+      },
+      "skills": {
+        "label": "Compétences",
+        "desc": "Enseignement & apprentissage"
+      },
+      "availability": {
+        "label": "Disponibilités",
+        "desc": "Vos créneaux libres"
+      }
+    },
+    "account": {
+      "title": "Créer votre compte",
+      "subtitle": "Ces infos seront visibles dans votre profil.",
+      "photo": "Photo",
+      "addPhoto": "Ajouter une photo de profil",
+      "emailPlaceholder": "alice@example.com",
+      "passwordPlaceholder": "8 caractères minimum",
+      "bio": "Bio (optionnel)",
+      "bioPlaceholder": "Dites-nous ce qui vous passionne…"
+    },
+    "skills": {
+      "title": "Vos compétences",
+      "subtitle": "Ce que vous pouvez enseigner et ce que vous voulez apprendre.",
+      "teaches": "J'enseigne",
+      "wants": "J'apprends",
+      "searchPlaceholder": "Rechercher une compétence…",
+      "customPlaceholder": "Ajouter une compétence personnalisée…",
+      "addCustom": "Ajouter cette compétence",
+      "hint": "Ajoute au moins une compétence à enseigner ET une à apprendre pour continuer.",
+      "creating": "Création…"
+    },
+    "availability": {
+      "title": "Vos disponibilités",
+      "subtitle": "Sélectionnez vos créneaux libres pour les échanges.",
+      "finish": "Terminer l'inscription →",
+      "toggleSlot": "{{day}} — {{slot}}"
+    },
+    "continue": "Continuer →",
+    "back": "Retour",
+    "errors": {
+      "firstName": "Le prénom est requis",
+      "lastName": "Le nom est requis",
+      "email": "L'email est requis",
+      "password": "Mot de passe : 8 caractères minimum",
+      "bothSkills": "Ajoute au moins une compétence à enseigner ET une à apprendre pour continuer",
+      "teaches": "Ajoute au moins une compétence à enseigner",
+      "wants": "Ajoute au moins une compétence à apprendre",
+      "failed": "Échec de l'inscription"
+    },
+    "verify": {
+      "title": "Vérifie ta boîte mail !",
+      "text": "Un email de confirmation a été envoyé à <strong>{{email}}</strong>. Clique sur le bouton qu'il contient pour activer ton compte.",
+      "resent": "Email renvoyé !",
+      "resend": "Renvoyer l'email de confirmation",
+      "resendError": "Erreur lors du renvoi."
+    },
+    "done": {
+      "title": "Bienvenue sur SkillBridge !",
+      "subtitle": "Ton compte est prêt. Tu peux maintenant trouver des pairs et apprendre.",
+      "welcomeCredits": "Crédits de bienvenue",
+      "creditsHint": "crédits offerts · 2 heures d'apprentissage",
+      "explore": "Explorer les membres",
+      "completeProfile": "Compléter mon profil →"
+    }
+  },
+  "subjects": {
+    "maths": "Maths",
+    "physics": "Physique",
+    "network": "Réseau",
+    "cybersecurity": "Cybersécurité",
+    "english": "Anglais",
+    "database": "Base de données",
+    "designUi": "Design UI",
+    "dataScience": "Data Science",
+    "guitar": "Guitare",
+    "cooking": "Cuisine"
+  },
+  "home": {
+    "badge": "L'entraide entre élèves",
+    "heroTitleLine1": "Enseigne ce que tu sais.",
+    "heroTitleLine2": "Apprends ce qui te manque.",
+    "heroText": "SkillBridge réunit les élèves de ton école pour s'entraider. Pas d'argent, juste des crédits que tu gagnes en partageant et que tu dépenses en apprenant.",
+    "ctaExplore": "Explorer les membres",
+    "ctaJoin": "Rejoindre l'entraide",
+    "slideLabel": "Image {{index}}",
+    "how": {
+      "eyebrow": "Comment ça marche",
+      "title": "Trois façons de progresser ensemble"
+    },
+    "usages": {
+      "catchUp": {
+        "title": "Rattrape un cours",
+        "text": "Tu as séché un TD ? Un·e camarade te le reprend tranquille, à ton rythme."
+      },
+      "learnTech": {
+        "title": "Apprends une nouvelle techno",
+        "text": "React, Docker, Python… Des étudiants passionnés t'initient pas à pas."
+      },
+      "sharePassion": {
+        "title": "Partage ta passion",
+        "text": "Guitare, cuisine, photo : enseigne ce qui te fait kiffer et gagne des crédits."
+      }
+    },
+    "catalog": {
+      "eyebrow": "Le catalogue",
+      "title": "Matières & technos enseignées",
+      "text": "De l'algèbre à React, du réseau au design — quelqu'un a forcément ce qu'il te faut.",
+      "cta": "Trouver quelqu'un qui enseigne"
+    },
+    "creditsSection": {
+      "eyebrow": "Le système de crédits",
+      "title": "1 crédit = <highlight>1 minute</highlight> de cours.",
+      "text": "Pas de portefeuille, pas d'abonnement. Tu reçois des crédits en enseignant, tu les dépenses en apprenant. On démarre tous au même endroit, on grandit ensemble.",
+      "bullet1": "120 crédits offerts à l'inscription, pour démarrer sans stress.",
+      "bullet2": "Plafond de 500 crédits — pour t'inciter à apprendre, pas à thésauriser.",
+      "bullet3": "Zéro argent réel n'est jamais échangé.",
+      "stat1": "crédits offerts à l'inscription",
+      "stat2": "plafond — bouge-toi !",
+      "stat3": "= 1 crédit dépensé / gagné",
+      "stat4": "aucun argent n'est échangé"
+    }
+  },
+  "feed": {
+    "eyebrow": "Communauté",
+    "title": "Ce que les membres <highlight>partagent</highlight>",
+    "subtitle": "Progrès, découvertes et échanges de la communauté SkillBridge.",
+    "filters": {
+      "all": "Tout",
+      "languages": "Langues",
+      "music": "Musique",
+      "tech": "Tech",
+      "science": "Sciences",
+      "wellbeing": "Bien-être"
+    },
+    "composerPlaceholder": "Partagez une découverte, un progrès…",
+    "newPost": "Nouveau post",
+    "textPlaceholder": "Partagez votre progression, une astuce ou une pensée…",
+    "tagPlaceholder": "Compétence liée (ex: Python, Guitare…)",
+    "publish": "Publier",
+    "justNow": "À l'instant",
+    "me": "Moi",
+    "emptyTitle": "Aucun post pour l'instant",
+    "emptyText": "Soyez le premier à partager votre progression ou une découverte.",
+    "writePost": "Écrire un post",
+    "join": "Rejoindre SkillBridge",
+    "like": "J'aime",
+    "comments_one": "{{count}} commentaire",
+    "comments_other": "{{count}} commentaires"
+  },
+  "chat": {
+    "title": "Messages",
+    "searchPlaceholder": "Rechercher…",
+    "noConversations": "Aucune conversation",
+    "noConversationsHint": "Connecte-toi à d'autres élèves pour démarrer.",
+    "noResults": "Aucun résultat",
+    "selectConversation": "Sélectionnez une conversation",
+    "startConversation": "Commencez la conversation",
+    "messagePlaceholder": "Écrire un message…",
+    "send": "Envoyer le message",
+    "attach": "Joindre un fichier",
+    "conversationActions": "Actions",
+    "pin": "Épingler",
+    "soon": "bientôt",
+    "deleteMessage": "Supprimer le message",
+    "today": "Aujourd'hui",
+    "yesterday": "Hier",
+    "attachments": {
+      "image": "Image",
+      "video": "Vidéo",
+      "file": "Fichier"
+    },
+    "units": {
+      "b": "o",
+      "kb": "Ko",
+      "mb": "Mo"
+    },
+    "toasts": {
+      "fileSent": "Fichier envoyé",
+      "fileError": "Erreur lors de l'envoi du fichier",
+      "imageSent": "Image envoyée",
+      "imageError": "Erreur lors de l'envoi de l'image",
+      "videoSent": "Vidéo envoyée",
+      "videoError": "Erreur lors de l'envoi de la vidéo"
+    },
+    "preview": "Aperçu"
+  },
+  "forgotPassword": {
+    "title": "Réinitialise ton mot de passe",
+    "subtitle": "Entre ton adresse email et nous t'enverrons un lien de réinitialisation.",
+    "emailPlaceholder": "toi@exemple.com",
+    "submit": "Envoyer le lien",
+    "error": "Erreur lors de l'envoi",
+    "sentTitle": "Email envoyé",
+    "sentText": "Si un compte existe pour <strong>{{email}}</strong>, tu recevras un lien de réinitialisation dans quelques minutes.",
+    "resend": "Renvoyer le lien",
+    "backToLogin": "Retour à la connexion"
+  },
+  "resetPassword": {
+    "title": "Nouveau mot de passe",
+    "subtitle": "Choisissez un nouveau mot de passe sécurisé.",
+    "newPassword": "Nouveau mot de passe",
+    "newPasswordPlaceholder": "8 caractères minimum",
+    "confirmPassword": "Confirmer le mot de passe",
+    "confirmPasswordPlaceholder": "Répéter le mot de passe",
+    "submit": "Réinitialiser le mot de passe",
+    "submitting": "Réinitialisation…",
+    "doneTitle": "Mot de passe réinitialisé !",
+    "doneText": "Votre mot de passe a été mis à jour. Vous pouvez maintenant vous connecter.",
+    "invalidTitle": "Lien invalide",
+    "invalidText": "Ce lien est invalide ou a expiré.",
+    "requestNewLink": "Demander un nouveau lien",
+    "errors": {
+      "invalidLink": "Lien invalide ou expiré.",
+      "tooShort": "Le mot de passe doit contenir au moins 8 caractères.",
+      "mismatch": "Les mots de passe ne correspondent pas.",
+      "failed": "Erreur lors de la réinitialisation"
+    }
+  },
+  "verifyEmail": {
+    "checking": "Vérification en cours…",
+    "successTitle": "Email vérifié !",
+    "successText": "Ton adresse email a bien été confirmée. Tu peux maintenant te connecter.",
+    "errorTitle": "Lien invalide ou expiré",
+    "errorText": "Ce lien de vérification n'est plus valide. Entre ton email pour en recevoir un nouveau.",
+    "resent": "Email de vérification envoyé !",
+    "emailLabel": "Ton adresse email",
+    "resend": "Renvoyer le lien",
+    "resendError": "Erreur lors de l'envoi."
+  },
+  "cookies": {
+    "text": "Nous utilisons des cookies pour améliorer ton expérience. En utilisant SkillBridge, tu acceptes notre <privacy>politique de confidentialité</privacy> et nos <terms>conditions générales d'utilisation</terms>.",
+    "accept": "Accepter",
+    "decline": "Refuser"
+  },
+  "footer": {
+    "navigation": "Navigation",
+    "legal": "Légal",
+    "help": "Aide",
+    "legalNotice": "Mentions légales",
+    "privacy": "Politique de confidentialité",
+    "terms": "CGU",
+    "settings": "Paramètres",
+    "helpCenter": "Aide / FAQ",
+    "support": "Contacter l'assistance",
+    "report": "Signaler un contenu",
+    "credits": "SkillBridge · HETIC Fast Tracks 2026 · Jimel · Yanis · Mahamane · Yahia",
+    "schools": "Inscrire mon établissement"
+  },
+  "language": {
+    "label": "Langue",
+    "fr": "Français",
+    "en": "English",
+    "select": "Choisir la langue"
+  },
+  "settings": {
+    "eyebrow": "Ton compte",
+    "title": "Paramètres",
+    "subtitle": "Gère ta langue, tes notifications, ta confidentialité et tes données personnelles.",
+    "localOnly": "Ces préférences sont enregistrées sur cet appareil uniquement. La synchronisation avec ton compte arrivera avec l'API de préférences.",
+    "language": {
+      "title": "Langue",
+      "description": "Choisis la langue de l'interface. Ton choix est mémorisé sur cet appareil."
+    },
+    "notifications": {
+      "title": "Notifications",
+      "description": "Choisis ce dont tu veux être prévenu.",
+      "email": "Notifications par email",
+      "emailHint": "Un résumé de tes demandes de connexion et de tes sessions à venir.",
+      "push": "Notifications sur l'appareil",
+      "pushHint": "Des alertes sur ce navigateur quand il se passe quelque chose.",
+      "messages": "Nouveaux messages",
+      "messagesHint": "Être prévenu à chaque message reçu.",
+      "sessionReminders": "Rappels de session",
+      "sessionRemindersHint": "Un rappel avant le début de chaque session."
+    },
+    "privacy": {
+      "title": "Confidentialité",
+      "description": "Contrôle ce que les autres membres voient de toi.",
+      "visibility": "Visibilité de mon profil",
+      "visibilityPublic": "Public",
+      "visibilityPublicHint": "Ton profil est visible par tous les visiteurs, même sans compte.",
+      "visibilityMembers": "Membres inscrits",
+      "visibilityMembersHint": "Seuls les membres connectés voient ton profil.",
+      "visibilityConnections": "Mes connexions",
+      "visibilityConnectionsHint": "Seules les personnes avec qui tu es connecté voient ton profil.",
+      "suggestions": "Apparaître dans les suggestions",
+      "suggestionsHint": "Ton profil peut être proposé à d'autres membres qui cherchent ta compétence.",
+      "availability": "Afficher mes disponibilités",
+      "availabilityHint": "Les autres membres voient les créneaux où tu es disponible."
+    },
+    "account": {
+      "title": "Mon compte",
+      "description": "Exporte ou supprime tes données personnelles (RGPD, articles 15 et 17).",
+      "loggedOut": "Connecte-toi pour exporter tes données ou supprimer ton compte.",
+      "export": "Exporter mes données",
+      "exportHint": "Recevoir une copie de tes données personnelles dans un format lisible par machine.",
+      "delete": "Supprimer mon compte",
+      "deleteHint": "Suppression définitive de ton compte, de ton profil, de tes sessions et de tes messages. Cette action est irréversible.",
+      "contactSupport": "Passer par l'assistance",
+      "logout": "Se déconnecter",
+      "deleteConfirm": "Cette action est définitive. Ton profil, tes compétences et tes messages seront anonymisés, et tu perdras l'accès à ton compte immédiatement.",
+      "deletePassword": "Confirme avec ton mot de passe",
+      "deleteFinal": "Supprimer définitivement",
+      "rightsNote": "Ces deux droits sont garantis par le RGPD (articles 15, 17 et 20). Une question sur tes données ?"
+    },
+    "legal": {
+      "title": "Informations légales",
+      "description": "Les documents qui encadrent l'utilisation de SkillBridge."
+    }
+  },
+  "help": {
+    "eyebrow": "Centre d'aide",
+    "title": "Aide & questions fréquentes",
+    "subtitle": "Les réponses aux questions qu'on nous pose le plus souvent. Si tu ne trouves pas, l'assistance est là.",
+    "searchPlaceholder": "Rechercher une question…",
+    "noResults": "Aucune question ne correspond à ta recherche.",
+    "stillStuck": "Tu ne trouves pas ta réponse ?",
+    "stillStuckText": "L'équipe répond aux demandes sous [DÉLAI DE RÉPONSE] jours ouvrés.",
+    "contactCta": "Contacter l'assistance",
+    "reportCta": "Signaler un utilisateur ou un contenu",
+    "faq": [
+      {
+        "q": "Qu'est-ce que SkillBridge ?",
+        "a": "SkillBridge est une plateforme d'échange de compétences entre lycéens. Tu enseignes ce que tu sais, tu gagnes des crédits, et tu dépenses ces crédits pour apprendre ce qui t'intéresse auprès d'autres membres. Aucun argent réel n'est échangé."
+      },
+      {
+        "q": "Comment fonctionnent les crédits ?",
+        "a": "1 crédit = 1 minute de cours. Tu reçois 120 crédits à l'inscription. Quand tu réserves une session, les crédits sont mis de côté ; à la fin, l'enseignant reçoit les crédits réellement consommés et la différence t'est remboursée. Le solde est plafonné à 500 crédits pour encourager les échanges."
+      },
+      {
+        "q": "Faut-il un âge minimum pour s'inscrire ?",
+        "a": "SkillBridge s'adresse aux lycéens de 15 à 18 ans. En dessous de 15 ans, la loi française exige l'autorisation d'un titulaire de l'autorité parentale pour le traitement des données personnelles. Les conditions exactes sont précisées dans les CGU."
+      },
+      {
+        "q": "Comment trouver quelqu'un avec qui échanger ?",
+        "a": "Va dans Connexions : tu y verras des suggestions basées sur les compétences que tu cherches et celles que tu proposes. Envoie une demande de connexion, puis discutez dans la messagerie avant de planifier une session."
+      },
+      {
+        "q": "Comment se déroule une session ?",
+        "a": "Une session se crée depuis l'onglet Sessions. L'autre personne l'accepte, puis vous vous retrouvez dans la salle de session à l'heure prévue. Le minuteur décompte le temps réellement passé, et les crédits sont transférés à la fin."
+      },
+      {
+        "q": "J'ai oublié mon mot de passe, que faire ?",
+        "a": "Depuis l'écran de connexion, clique sur « Mot de passe oublié ? » et saisis ton adresse email. Tu recevras un lien de réinitialisation valable quelques minutes. Pense à vérifier tes spams."
+      },
+      {
+        "q": "Quelqu'un se comporte mal, comment le signaler ?",
+        "a": "Utilise le formulaire de signalement, accessible depuis le pied de page et depuis cette page. Décris précisément la situation : chaque signalement est examiné par l'équipe de modération. En cas de danger immédiat, contacte le 3018 (violences numériques) ou le 17."
+      },
+      {
+        "q": "Comment supprimer mon compte ou récupérer mes données ?",
+        "a": "Rends-toi dans Paramètres, section « Mon compte ». L'export et la suppression automatiques arrivent bientôt ; en attendant, l'assistance traite ces demandes manuellement, dans les délais prévus par le RGPD."
+      },
+      {
+        "q": "SkillBridge est-il payant ?",
+        "a": "Non. L'inscription et l'utilisation sont gratuites, et les crédits ne s'achètent pas : ils se gagnent en enseignant. Aucun moyen de paiement ne t'est demandé."
+      }
+    ]
+  },
+  "support": {
+    "eyebrow": "Assistance",
+    "title": "Contacter l'assistance",
+    "subtitle": "Un bug, une question, un problème de compte ? Décris-nous ça, on te répond par email.",
+    "fields": {
+      "topic": "Sujet de la demande",
+      "topicPlaceholder": "Choisis un sujet",
+      "email": "Ton email",
+      "emailPlaceholder": "toi@exemple.com",
+      "emailHint": "C'est à cette adresse que la réponse sera envoyée.",
+      "subject": "Objet",
+      "subjectPlaceholder": "Résume ta demande en une phrase",
+      "message": "Message",
+      "messagePlaceholder": "Décris ce qui se passe, avec le maximum de détails (ce que tu faisais, ce que tu attendais, ce qui s'est passé)."
+    },
+    "topics": {
+      "account": "Compte et connexion",
+      "credits": "Crédits",
+      "sessions": "Sessions et messagerie",
+      "bug": "Bug ou problème technique",
+      "privacy": "Données personnelles (RGPD)",
+      "report": "Signalement d'un utilisateur ou d'un contenu",
+      "other": "Autre"
+    },
+    "errors": {
+      "topic": "Sélectionne un sujet dans la liste.",
+      "email": "Entre une adresse email valide.",
+      "subject": "Donne un objet à ta demande.",
+      "message": "Décris ta demande en 20 caractères minimum."
+    },
+    "submit": "Envoyer ma demande",
+    "responseTime": "Délai de réponse annoncé : [DÉLAI DE RÉPONSE] jours ouvrés.",
+    "emergency": "Urgence : en cas de danger immédiat, appelle le 17 (police) ou le 3018 (violences numériques, gratuit et anonyme). SkillBridge n'est pas un service d'urgence.",
+    "sentTitle": "Ta demande est envoyée",
+    "sentText": "Notre équipe l'a bien reçue et te répondra à {{email}}.",
+    "newRequest": "Nouvelle demande"
+  },
+  "report": {
+    "eyebrow": "Modération",
+    "title": "Signaler un utilisateur",
+    "subtitle": "Les signalements sont confidentiels : la personne signalée n'est pas informée de ton identité.",
+    "openButton": "Signaler",
+    "targetUser": "Personne signalée",
+    "optional": "facultatif",
+    "fields": {
+      "reason": "Motif du signalement",
+      "reasonPlaceholder": "Choisis un motif",
+      "details": "Ce qui s'est passé",
+      "detailsPlaceholder": "Décris les faits : quand, où (message, profil, session), et ce qui a été dit ou fait."
+    },
+    "reasons": {
+      "HARASSMENT": "Harcèlement, insultes ou intimidation",
+      "INAPPROPRIATE_CONTENT": "Contenu inapproprié (sexuel, violent, haineux)",
+      "CHILD_SAFETY": "Mise en danger d'un mineur",
+      "IMPERSONATION": "Usurpation d'identité ou faux compte",
+      "SPAM": "Spam, publicité ou arnaque",
+      "OTHER": "Autre motif"
+    },
+    "errors": {
+      "reason": "Sélectionne un motif dans la liste.",
+      "details": "Décris les faits en 20 caractères minimum.",
+      "alreadyPending": "Tu as déjà un signalement en cours d'examen contre cette personne. L'équipe le traite.",
+      "tooMany": "Trop de signalements envoyés en peu de temps. Réessaie dans une heure.",
+      "failed": "L'envoi a échoué. Réessaie dans un instant."
+    },
+    "submit": "Envoyer le signalement",
+    "sentTitle": "Signalement transmis",
+    "sentText": "L'équipe de modération l'examine. Tu ne seras pas mis en relation avec cette personne pendant l'examen. Nous ne communiquons pas le détail des suites données, pour protéger la vie privée de chacun.",
+    "noTargetTitle": "Personne à signaler introuvable",
+    "noTargetText": "Un signalement doit viser un membre précis. Ouvre son profil et utilise le bouton « Signaler » qui s'y trouve.",
+    "emergency": "Si une personne est en danger immédiat, n'attends pas : 17 (police), 119 (enfance en danger), 3018 (violences numériques).",
+    "confidential": "Ton signalement est confidentiel. Les abus de signalement peuvent entraîner des sanctions."
+  },
+  "profile": {
+    "eyebrow": "Mon profil",
+    "edit": "Modifier",
+    "newSession": "Séance",
+    "banner": "Bannière",
+    "removeBanner": "Retirer photo",
+    "logout": "Déconnexion",
+    "tabs": {
+      "skills": "Compétences",
+      "card": "Ma carte",
+      "availability": "Disponibilités",
+      "sessions": "Sessions",
+      "transactions": "Historique"
+    },
+    "editModal": {
+      "title": "Modifier le profil",
+      "bio": "Bio",
+      "bioPlaceholder": "Parlez de vous…",
+      "avatar": "Photo de profil",
+      "avatarHint": "JPG, PNG · max 5 MB",
+      "change": "Changer",
+      "uploading": "Upload…"
+    },
+    "skillModal": {
+      "teachTitle": "Compétence à enseigner",
+      "learnTitle": "Objectif d'apprentissage",
+      "subtitle": "Recherchez ou sélectionnez dans la liste",
+      "searchPlaceholder": "Rechercher une compétence…",
+      "addCustom": "+ Ajouter \"{{skill}}\" (personnalisé)"
+    },
+    "stats": {
+      "available": "Crédits disponibles",
+      "earned": "Crédits gagnés",
+      "spent": "Crédits dépensés"
+    },
+    "skills": {
+      "teaching": "J'enseigne ({{count}})",
+      "learning": "Je veux apprendre ({{count}})",
+      "add": "Ajouter",
+      "noTeach": "Aucune compétence ajoutée.",
+      "noWant": "Aucun objectif ajouté."
+    },
+    "card": {
+      "title": "Ma carte de visite",
+      "changePhoto": "Changer photo de profil",
+      "manageSkills": "Gérer mes compétences",
+      "setAvailability": "Configurer disponibilités",
+      "teaches": "Enseigne"
+    },
+    "availability": {
+      "title": "Mes créneaux disponibles",
+      "subtitle": "L'heure exacte se convient dans le chat avec votre pair.",
+      "saved": "Enregistré"
+    },
+    "sessions": {
+      "empty": "Aucune séance pour l'instant",
+      "create": "Créer une séance",
+      "teaching": "Tu enseignes",
+      "learning": "Tu apprends"
+    },
+    "transactions": {
+      "empty": "Aucune transaction",
+      "emptyHint": "Les crédits apparaissent ici après vos séances.",
+      "givenTo": "Donnée à",
+      "receivedFrom": "Reçue de"
+    },
+    "status": {
+      "scheduled": "À venir",
+      "active": "En direct",
+      "completed": "Terminée",
+      "cancelled": "Annulée"
+    },
+    "genericError": "Erreur"
+  },
+  "member": {
+    "rateAfter": "Notez après un cours",
+    "shares": "Partage",
+    "learns": "Apprend",
+    "available": "Dispo",
+    "chosen": "Choisi",
+    "unavailable": "—",
+    "noAvailability": "Disponibilités à confirmer via le chat.",
+    "reviews": "{{count}} avis",
+    "creditsActive": "actifs sur la plateforme",
+    "credits": "{{count}} crédits",
+    "selectedSlot": "Créneau sélectionné : {{slot}}",
+    "book": "Réserver une session",
+    "bookSlot": "Réserver — {{slot}}",
+    "slotLabel": "{{day}} — {{slot}}"
+  },
+  "credits": {
+    "eyebrow": "Tes crédits",
+    "title": "{{count}} crédits",
+    "titleUnit": "crédits",
+    "subtitle": "soit <strong>{{count}} minutes</strong> de cours disponibles.",
+    "capReached": "Plafond atteint — dépense tes crédits en apprenant quelque chose de nouveau",
+    "findSomeone": "Trouver quelqu'un",
+    "progress": "Progression vers le plafond",
+    "capHint": "Plafond à {{limit}} crédits pour t'inciter à apprendre plutôt qu'à thésauriser.",
+    "capRemaining": " · {{count}} cr avant le plafond",
+    "stats": {
+      "balance": "Solde",
+      "earned": "Gagnés au total",
+      "spent": "Dépensés au total",
+      "unit": "crédits"
+    },
+    "history": "Historique",
+    "creditPerMinute": "1 cr = 1 min",
+    "empty": "Aucune transaction pour l'instant.",
+    "emptyHint": "Les crédits apparaissent ici après tes séances terminées.",
+    "with": "avec {{name}} · {{date}}",
+    "notForSale": "Les crédits ne s'achètent pas. Ils se gagnent, en enseignant.",
+    "howTitle": "Comment fonctionnent les crédits",
+    "how1Title": "1 crédit = 1 minute",
+    "how1Text": "Chaque crédit correspond à une minute de session d'apprentissage.",
+    "how2Title": "Réservation à la création",
+    "how2Text": "Quand tu crées une session, les crédits sont mis de côté immédiatement.",
+    "how3Title": "Versement + remboursement prorata",
+    "how3Text": "À la fin, l'enseignant reçoit les crédits consommés. Si la session est plus courte, la différence t'est remboursée.",
+    "how4Title": "Plafond {{limit}} crédits",
+    "how4Text": "Atteint le plafond ? Utilise tes crédits pour apprendre. L'objectif, c'est d'apprendre, pas de thésauriser.",
+    "ctaFind": "Trouver quelqu'un à apprendre",
+    "ctaCreate": "Créer une session",
+    "session": "Session",
+    "unit": "cr."
+  },
+  "becomeSharer": {
+    "doneTitle": "Profil donneur créé !",
+    "doneText": "Vos compétences sont visibles dans la page Connexion. Les membres peuvent maintenant vous trouver et réserver une session.",
+    "seeConnections": "Voir la page Connexion",
+    "myProfile": "Mon profil",
+    "back": "Retour",
+    "previousStep": "Étape précédente",
+    "step1Label": "Compétences",
+    "step2Label": "Bio & Disponibilités",
+    "step1Title": "Que souhaitez-vous partager ?",
+    "step2Title": "Votre profil donneur",
+    "step1Text": "Choisissez les compétences que vous pouvez enseigner aux autres membres.",
+    "step2Text": "Décrivez-vous et indiquez vos créneaux disponibles.",
+    "continue": "Continuer",
+    "bio": "Bio courte",
+    "bioPlaceholder": "Décrivez votre parcours et ce que vous pouvez apporter aux membres…",
+    "rate": "Tarif en crédits par minute",
+    "rateOption": "{{count}} crédit/min",
+    "slots": "Mes créneaux disponibles",
+    "submit": "Créer mon profil donneur",
+    "errors": {
+      "skills": "Sélectionnez au moins une compétence.",
+      "generic": "Une erreur est survenue."
+    }
+  },
+  "categories": {
+    "all": "Tous les membres",
+    "allShort": "Tous",
+    "languages": "Langues & Communication",
+    "tech": "Tech & Code",
+    "design": "Design & Créativité",
+    "music": "Musique & Arts",
+    "science": "Sciences & Maths",
+    "wellness": "Sport & Bien-être",
+    "business": "Business & Finance"
+  },
+  "connection": {
+    "eyebrow": "Connexions",
+    "title": "Avec qui veux-tu apprendre aujourd'hui ?",
+    "searchPlaceholder": "Cherche par nom, matière, techno…",
+    "tabDiscover": "Découvrir",
+    "tabRequests": "Demandes",
+    "teaches": "Enseigne",
+    "wants": "Veut apprendre",
+    "availability": "Disponibilités",
+    "availabilityHint": "Choisis un ou plusieurs créneaux.",
+    "free": "Libre",
+    "loginToBook": "Connectez-vous pour réserver",
+    "sendRequest": "Envoyer une demande de réservation",
+    "wantsToConnect": "souhaite se connecter avec vous",
+    "loginToSee": "Connecte-toi pour voir les membres",
+    "noMatch": "Aucun·e camarade ne correspond. Essaie un autre filtre.",
+    "matchesGoals": "Correspond à vos objectifs",
+    "requestSent": "Demande envoyée",
+    "book": "Réserver",
+    "toasts": {
+      "requestSent": "Demande envoyée",
+      "requestError": "Erreur lors de la demande",
+      "accepted": "Connexion acceptée",
+      "genericError": "Erreur"
+    }
+  },
+  "sessions": {
+    "eyebrow": "Mes sessions",
+    "new": "Nouvelle session",
+    "newPlus": "+ Nouvelle session",
+    "tabTeach": "J'enseigne",
+    "tabLearn": "Je reçois",
+    "emptyTeach": "Aucune session à donner",
+    "emptyLearn": "Aucune session à recevoir",
+    "emptyTeachHint": "Créez une session avec l'un de vos pairs connectés.",
+    "emptyLearnHint": "Demandez à un pair de planifier une session avec vous.",
+    "youTeach": "tu enseignes",
+    "youLearn": "tu apprends",
+    "fallbackTitle": "Session",
+    "join": "Rejoindre",
+    "reply": "Répondre",
+    "edit": "Modifier",
+    "cancel": "Annuler",
+    "status": {
+      "pending": "En attente",
+      "scheduled": "À venir",
+      "active": "En direct",
+      "completed": "Terminée",
+      "cancelled": "Refusée"
+    },
+    "editModal": {
+      "title": "Modifier et re-proposer",
+      "sessionTitle": "Titre",
+      "duration": "Durée (crédits)",
+      "datetime": "Date et heure",
+      "submit": "Re-proposer"
+    },
+    "detail": {
+      "learner": "Apprenant",
+      "teacher": "Enseignant",
+      "pending": "Proposition en attente",
+      "date": "Date",
+      "estimatedDuration": "Durée estimée",
+      "reservedCredits": "Crédits réservés",
+      "minutes": "{{count}} min",
+      "credits": "{{count}} cr",
+      "status": "Statut",
+      "accept": "Accepter",
+      "accepting": "Acceptation…",
+      "refuse": "Refuser",
+      "refusing": "Refus…",
+      "joining": "Connexion…"
+    },
+    "cancelModal": {
+      "title": "Annuler cette séance ?",
+      "text": "La séance sera marquée comme annulée. Les crédits réservés seront remboursés.",
+      "confirm": "Confirmer l'annulation",
+      "cancelling": "Annulation…"
+    },
+    "toasts": {
+      "durationInvalid": "La durée doit être un entier positif",
+      "reproposed": "Session re-proposée",
+      "editError": "Erreur lors de la modification",
+      "joinError": "Impossible de rejoindre",
+      "accepted": "Session acceptée",
+      "refused": "Session refusée",
+      "cancelled": "Session annulée",
+      "cancelError": "Erreur lors de l'annulation",
+      "loadError": "Erreur de chargement",
+      "genericError": "Erreur"
+    }
+  },
+  "newSession": {
+    "title": "Nouvelle session",
+    "subtitle": "Planifiez une session d'enseignement ou d'apprentissage",
+    "back": "Retour",
+    "sessionTitle": "Titre de la session",
+    "titlePlaceholder": "ex. Maths — Dérivées & Intégrales",
+    "description": "Description",
+    "descriptionPlaceholder": "Ce que vous allez couvrir…",
+    "category": "Catégorie",
+    "date": "Date",
+    "time": "Heure",
+    "duration": "Durée (min)",
+    "durationOption": "{{count}} min",
+    "creditsPerMinute": "Crédits / minute",
+    "creditsOption": "{{count}} cr/min",
+    "costSummary": "Durée : {{duration}} min — {{count}} crédits requis pour que l'apprenant accepte",
+    "costHint": "Ces crédits sont débités chez l'apprenant à l'acceptation. À la fin, ils te sont versés au prorata ; la différence lui est remboursée.",
+    "mode": "Mode de session",
+    "modeClosed": "Session cadrée",
+    "modeClosedText": "Vous invitez des participants précis parmi vos connexions. Accès limité aux personnes invitées.",
+    "modeOpen": "Session ouverte",
+    "modeOpenText": "Toute personne avec le lien peut rejoindre. Un lien de partage est généré après création.",
+    "selected": "Sélectionné",
+    "invite": "Inviter des participants",
+    "noConnections": "Aucune connexion acceptée pour le moment. Connectez-vous à des membres d'abord.",
+    "maxParticipants": "Nombre max de participants (2–10)",
+    "selectedCount_one": "{{count}} participant sélectionné",
+    "selectedCount_other": "{{count}} participants sélectionnés",
+    "groupSession": "Session de groupe : {{count}} participants invités.",
+    "openSettings": "Paramètres de la session ouverte",
+    "openLimit": "Limite de participants (optionnel)",
+    "openLimitPlaceholder": "Laisser vide = illimité",
+    "openLinkHint": "Un lien de partage sera généré après création de la session.",
+    "submit": "Créer la session",
+    "creating": "Création…",
+    "createdTitle": "Session créée !",
+    "createdText": "Partagez ce lien pour inviter des participants.",
+    "seeSessions": "Voir mes sessions →",
+    "errors": {
+      "mode": "Sélectionnez un mode de session",
+      "invite": "Invitez au moins un participant pour une session cadrée",
+      "failed": "Erreur lors de la création"
+    }
+  },
+  "sessionRoom": {
+    "loading": "Chargement…",
+    "with": "avec {{name}}",
+    "start": "Démarrer la session",
+    "joining": "Connexion…",
+    "waitingHost": "En attente que le donneur démarre…",
+    "joinNow": "Rejoindre maintenant",
+    "endedTitle": "Session terminée !",
+    "endedText": "Merci pour cet échange de compétences.",
+    "duration": "Durée",
+    "creditsPaid": "Crédits versés à l'enseignant",
+    "creditsEarned": "Crédits gagnés",
+    "creditsSpent": "Crédits dépensés",
+    "remainingBalance": "Solde restant",
+    "refunded": "+{{count}} crédits remboursés (session plus courte que prévu)",
+    "rateSession": "Évaluer cette session",
+    "thanksRating": "Merci pour votre évaluation !",
+    "backToSessions": "Retour aux sessions",
+    "endSession": "Terminer la session",
+    "hostPanel": "Panneau hôte",
+    "lock": "Verrouiller la session",
+    "unlock": "Déverrouiller",
+    "participantLimit": "Limite participants",
+    "connectedParticipants": "Participants connectés",
+    "sessionInfo": "Info session",
+    "role": "Rôle",
+    "roleTeacher": "Donneur",
+    "roleLearner": "Receveur",
+    "reserved": "Réservés",
+    "credits": "{{count}} cr",
+    "toasts": {
+      "noParticipant": "Impossible d'identifier le participant à noter.",
+      "ratingSent": "Merci pour votre évaluation !",
+      "ratingError": "Erreur lors de l'envoi de la note.",
+      "limitError": "Erreur lors de la modification de la limite."
+    }
+  },
+  "a11y": {
+    "skipToContent": "Aller au contenu principal",
+    "closeDialog": "Fermer la fenêtre",
+    "openMenu": "Ouvrir le menu",
+    "closeMenu": "Fermer le menu",
+    "notifications": "Notifications, {{count}} non lues",
+    "errorPrefix": "Erreur :",
+    "requiredField": "obligatoire",
+    "loading": "Chargement en cours",
+    "rateStars": "Noter {{count}} sur 5",
+    "avatarPreview": "Aperçu de votre photo de profil",
+    "logoHome": "SkillBridge — accueil"
+  },
+  "block": {
+    "action": "Bloquer",
+    "unblock": "Débloquer",
+    "blocked": "Bloqué",
+    "confirmTitle": "Bloquer {{name}} ?",
+    "confirmText": "Cette personne ne pourra plus te contacter ni voir ton profil. Tu peux la débloquer à tout moment depuis tes paramètres. Bloquer n'alerte pas la modération : pour cela, utilise le signalement.",
+    "confirm": "Bloquer cette personne",
+    "title": "Personnes bloquées",
+    "description": "Ces membres ne peuvent plus te contacter. Le blocage est une préférence personnelle, il n'est pas transmis à la modération.",
+    "empty": "Tu n'as bloqué personne.",
+    "loadError": "Impossible de charger la liste des personnes bloquées.",
+    "actionError": "L'action a échoué. Réessaie dans un instant.",
+    "blockedOn": "Bloqué le {{date}}"
+  },
+  "suspension": {
+    "eyebrow": "Compte suspendu",
+    "title": "Ton compte est suspendu",
+    "reasonLabel": "Motif retenu",
+    "noReason": "Aucun motif détaillé n'a été transmis.",
+    "rights": "Tu peux contester cette décision. Un membre de l'équipe, différent de celui qui a pris la sanction, réexaminera ton dossier.",
+    "appealTitle": "Contester la décision",
+    "appealLabel": "Explique pourquoi cette décision te semble injustifiée",
+    "appealPlaceholder": "Donne les éléments qui peuvent éclairer l'équipe : contexte, mise au point, éléments de preuve…",
+    "appealHint": "Entre 20 et 2000 caractères.",
+    "submit": "Envoyer mon recours",
+    "sentTitle": "Recours transmis",
+    "sentText": "Ton recours est enregistré. L'équipe te répondra par email à l'adresse de ton compte.",
+    "errors": {
+      "tooShort": "Ton message doit faire au moins 20 caractères.",
+      "tooLong": "Ton message ne doit pas dépasser 2000 caractères.",
+      "alreadyPending": "Un recours est déjà en cours d'examen. Inutile d'en envoyer un second.",
+      "notSuspended": "Ton compte n'est pas suspendu : aucun recours n'est nécessaire.",
+      "failed": "L'envoi a échoué. Réessaie dans un instant."
+    },
+    "logout": "Se déconnecter"
+  },
+  "orgRequest": {
+    "eyebrow": "Établissements",
+    "title": "Inscrire mon établissement",
+    "subtitle": "Vous êtes enseignant, CPE ou membre de la direction ? Demandez l'ouverture de SkillBridge pour vos élèves.",
+    "intro": "La demande est examinée par l'équipe avant activation. Aucun compte élève n'est créé à cette étape.",
+    "fields": {
+      "name": "Nom de l'établissement",
+      "namePlaceholder": "Lycée Victor Hugo",
+      "contactName": "Votre nom",
+      "contactNamePlaceholder": "Prénom et nom",
+      "contactEmail": "Votre email professionnel",
+      "contactEmailPlaceholder": "vous@etablissement.fr",
+      "emailDomain": "Domaine email de l'établissement",
+      "emailDomainPlaceholder": "etablissement.fr",
+      "emailDomainHint": "Facultatif. Permet de reconnaître automatiquement les élèves de votre établissement."
+    },
+    "errors": {
+      "name": "Indiquez le nom de l'établissement.",
+      "contactName": "Indiquez votre nom.",
+      "contactEmail": "Entrez une adresse email valide.",
+      "failed": "L'envoi a échoué. Réessaie dans un instant."
+    },
+    "submit": "Envoyer la demande",
+    "sentTitle": "Demande envoyée",
+    "sentText": "Votre demande est enregistrée et sera examinée par l'équipe. Vous recevrez notre réponse à l'adresse indiquée.",
+    "pendingNotice": "Statut : en attente d'examen."
+  }
+}

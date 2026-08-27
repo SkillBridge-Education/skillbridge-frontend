@@ -1,4 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
+import useFocusTrap from '../hooks/useFocusTrap'
 import { Search, Star, Send, X } from 'lucide-react'
 import useAuthStore from '../store/authStore'
 import api from '../services/api'
@@ -44,19 +46,32 @@ function AvatarCircle({ user: u, name, color, size = 56 }) {
   )
 }
 
-const DAYS  = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi']
-const SLOTS = ['Matin', 'Midi', 'Soir']
+// `key` compose la clé de disponibilité persistée ("Lundi_Matin") : jamais traduite.
+const DAYS = [
+  { key: 'Lundi',    labelKey: 'daysShort.mon' },
+  { key: 'Mardi',    labelKey: 'daysShort.tue' },
+  { key: 'Mercredi', labelKey: 'daysShort.wed' },
+  { key: 'Jeudi',    labelKey: 'daysShort.thu' },
+  { key: 'Vendredi', labelKey: 'daysShort.fri' },
+]
+const SLOTS = [
+  { key: 'Matin', labelKey: 'slots.morning' },
+  { key: 'Midi',  labelKey: 'slots.noon'    },
+  { key: 'Soir',  labelKey: 'slots.evening' },
+]
 
-const FILTERS = [{ key: 'all', label: 'Tous' }, ...CATEGORIES.filter(c => c.key !== 'all')]
+const FILTERS = [{ key: 'all', labelKey: 'categories.allShort' }, ...CATEGORIES.filter(c => c.key !== 'all')]
 
 export default function Connection() {
   const { user, openModal } = useAuthStore()
   const addToast = useToast()
+  const { t } = useTranslation()
 
   const [tab,       setTab]       = useState('discover')
   const [filter,    setFilter]    = useState('all')
   const [search,    setSearch]    = useState('')
   const [selected,  setSelected]  = useState(null)
+  const bookingRef = useFocusTrap(!!selected, () => setSelected(null))
   const [pickedSlots, setPickedSlots] = useState({})
 
   const [incoming,  setIncoming]  = useState([])
@@ -146,9 +161,9 @@ export default function Connection() {
       await api.post('/matches/request', { receiverId: memberId })
       setRequested(prev => new Set([...prev, memberId]))
       setSelected(null)
-      addToast?.('Demande envoyée', 'success')
+      addToast?.(t('connection.toasts.requestSent'), 'success')
     } catch (e) {
-      addToast?.(e.response?.data?.message || 'Erreur lors de la demande', 'error')
+      addToast?.(e.response?.data?.message || t('connection.toasts.requestError'), 'error')
     }
   }
 
@@ -157,8 +172,8 @@ export default function Connection() {
       await api.patch(`/matches/${matchId}`, { status: 'ACCEPTED' })
       setIncoming(prev => prev.filter(m => m.id !== matchId))
       setRequested(prev => new Set([...prev, requesterId]))
-      addToast?.('Connexion acceptée', 'success')
-    } catch (e) { addToast?.(e.response?.data?.message || 'Erreur', 'error') }
+      addToast?.(t('connection.toasts.accepted'), 'success')
+    } catch (e) { addToast?.(e.response?.data?.message || t('connection.toasts.genericError'), 'error') }
   }
 
   const handleDecline = async (matchId) => {
@@ -180,6 +195,10 @@ export default function Connection() {
           onClick={() => setSelected(null)}
         >
           <div
+            ref={bookingRef}
+            role="dialog"
+            aria-modal="true"
+            aria-label={t('connection.sendRequest')}
             className="bg-white rounded-3xl w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-soft border border-[#E8DDC7] animate-modal-in"
             onClick={e => e.stopPropagation()}
           >
@@ -214,12 +233,12 @@ export default function Connection() {
               <div className="grid gap-3 sm:grid-cols-2">
                 {selected.teaches.length > 0 && (
                   <div className="rounded-2xl p-4" style={{ background: 'var(--cream)' }}>
-                    <p className="text-xs font-bold uppercase tracking-wider mb-2" style={{ color: 'var(--orange-warm)' }}>Enseigne</p>
+                    <p className="text-xs font-bold uppercase tracking-wider mb-2" style={{ color: 'var(--orange-warm)' }}>{t('connection.teaches')}</p>
                     <div className="flex flex-wrap gap-1.5">
                       {selected.teaches.map(s => (
                         <span key={s.id ?? s.name}
                           className="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold bg-white text-[#252840]">
-                          {s.isMatch && <Star className="h-3 w-3 fill-current text-[#C8864B] text-[#C8864B]" />}
+                          {s.isMatch && <Star className="h-3 w-3 fill-current text-[color:var(--warm-strong)] text-[color:var(--warm-strong)]" />}
                           {s.name}
                         </span>
                       ))}
@@ -228,7 +247,7 @@ export default function Connection() {
                 )}
                 {selected.wants.length > 0 && (
                   <div className="rounded-2xl p-4" style={{ background: 'var(--cream)' }}>
-                    <p className="text-xs font-bold uppercase tracking-wider mb-2" style={{ color: 'var(--learn)' }}>Veut apprendre</p>
+                    <p className="text-xs font-bold uppercase tracking-wider mb-2" style={{ color: 'var(--learn)' }}>{t('connection.wants')}</p>
                     <div className="flex flex-wrap gap-1.5">
                       {selected.wants.map(w => (
                         <span key={w} className="rounded-full bg-white px-2.5 py-1 text-xs font-semibold">{w}</span>
@@ -240,22 +259,22 @@ export default function Connection() {
 
               {/* Slot picker */}
               <div>
-                <p className="text-sm font-bold text-[#252840]">Disponibilités</p>
-                <p className="text-xs mt-0.5" style={{ color: 'var(--muted-foreground)' }}>Choisis un ou plusieurs créneaux.</p>
+                <p className="text-sm font-bold text-[#252840]">{t('connection.availability')}</p>
+                <p className="text-xs mt-0.5" style={{ color: 'var(--muted-foreground)' }}>{t('connection.availabilityHint')}</p>
                 <div className="mt-3 overflow-x-auto rounded-2xl border border-[#E8DDC7]">
                   <table className="text-center text-sm" style={{ minWidth: '380px', width: '100%' }}>
                     <thead>
                       <tr style={{ background: 'var(--cream)' }}>
                         <th className="p-2" />
-                        {DAYS.map(d => <th key={d} className="p-2 text-xs font-semibold text-[#252840]">{d.slice(0, 3)}</th>)}
+                        {DAYS.map(d => <th key={d.key} className="p-2 text-xs font-semibold text-[#252840]">{t(d.labelKey)}</th>)}
                       </tr>
                     </thead>
                     <tbody>
                       {SLOTS.map(slot => (
-                        <tr key={slot} className="border-t border-[#E8DDC7]">
-                          <td className="p-2 text-left text-xs font-semibold text-[#252840]" style={{ background: 'var(--cream)', whiteSpace: 'nowrap' }}>{slot}</td>
+                        <tr key={slot.key} className="border-t border-[#E8DDC7]">
+                          <td className="p-2 text-left text-xs font-semibold text-[#252840]" style={{ background: 'var(--cream)', whiteSpace: 'nowrap' }}>{t(slot.labelKey)}</td>
                           {DAYS.map(day => {
-                            const k   = `${day}_${slot}`
+                            const k   = `${day.key}_${slot.key}`
                             const avail = !!memberAvail[k]
                             const picked = !!pickedSlots[k]
                             return (
@@ -272,7 +291,7 @@ export default function Connection() {
                                     minWidth: '52px',
                                   }}
                                 >
-                                  {avail ? (picked ? '✓' : 'Libre') : '—'}
+                                  {avail ? (picked ? '✓' : t('connection.free')) : t('member.unavailable')}
                                 </button>
                               </td>
                             )
@@ -297,7 +316,7 @@ export default function Connection() {
                   style={{ background: 'var(--orange-warm)' }}
                 >
                   <Send size={16} />
-                  {!user ? 'Connectez-vous pour réserver' : 'Envoyer une demande de réservation'}
+                  {!user ? t('connection.loginToBook') : t('connection.sendRequest')}
                 </button>
               )}
             </div>
@@ -309,11 +328,11 @@ export default function Connection() {
       <section className="relative overflow-hidden py-16" style={{ background: 'var(--cream)' }}>
         <div className="relative mx-auto max-w-7xl px-6">
           <Reveal>
-            <p className="text-sm font-bold uppercase tracking-wider" style={{ color: 'var(--orange-warm)' }}>Connexions</p>
+            <p className="text-sm font-bold uppercase tracking-wider" style={{ color: 'var(--orange-warm)' }}>{t('connection.eyebrow')}</p>
           </Reveal>
           <Reveal delay={1}>
             <h1 className="mt-3 text-4xl font-extrabold tracking-tight sm:text-5xl">
-              Avec qui veux-tu apprendre aujourd'hui ?
+              {t('connection.title')}
             </h1>
           </Reveal>
           <Reveal delay={2}>
@@ -323,7 +342,7 @@ export default function Connection() {
                 <input
                   value={search}
                   onChange={e => setSearch(e.target.value)}
-                  placeholder="Cherche par nom, matière, techno…"
+                  placeholder={t('connection.searchPlaceholder')}
                   className="w-full rounded-full border border-[#E8DDC7] bg-white py-3 pl-11 pr-5 text-sm shadow-sm outline-none transition"
                   style={{ '--tw-ring-color': 'var(--orange-warm)' }}
                   onFocus={e => e.target.style.borderColor = 'var(--orange-warm)'}
@@ -345,7 +364,7 @@ export default function Connection() {
                     borderColor: filter === f.key ? 'var(--ink)' : 'var(--border)',
                   }}
                 >
-                  {f.label}
+                  {t(f.labelKey)}
                 </button>
               ))}
             </div>
@@ -356,16 +375,17 @@ export default function Connection() {
       {/* Tabs */}
       <div className="mx-auto max-w-7xl px-6 pb-3">
         <div className="inline-flex rounded-full border border-[#E8DDC7] p-1" style={{ background: 'var(--cream)' }}>
-          {['Découvrir', 'Demandes'].map(t => {
-            const active = t === 'Découvrir' ? tab === 'discover' : tab === 'requests'
+          {['discover', 'requests'].map(tabKey => {
+            const active = tab === tabKey
             return (
               <button
-                key={t}
-                onClick={() => setTab(t === 'Découvrir' ? 'discover' : 'requests')}
+                key={tabKey}
+                onClick={() => setTab(tabKey)}
                 className="rounded-full px-5 py-2 text-sm font-semibold border-none cursor-pointer transition-colors"
                 style={{ background: active ? 'var(--ink)' : 'transparent', color: active ? 'white' : 'var(--muted-foreground)' }}
               >
-                {t}{t === 'Demandes' && incoming.length > 0 ? ` (${incoming.length})` : ''}
+                {tabKey === 'discover' ? t('connection.tabDiscover') : t('connection.tabRequests')}
+                {tabKey === 'requests' && incoming.length > 0 ? ` (${incoming.length})` : ''}
               </button>
             )
           })}
@@ -393,7 +413,7 @@ export default function Connection() {
                         </div>
                         <div className="min-w-0">
                           <p className="font-bold text-[#252840] truncate">{m.requester?.firstName} {m.requester?.lastName}</p>
-                          <p className="text-sm" style={{ color: 'var(--muted-foreground)' }}>souhaite se connecter avec vous</p>
+                          <p className="text-sm" style={{ color: 'var(--muted-foreground)' }}>{t('connection.wantsToConnect')}</p>
                         </div>
                       </div>
                       <div className="flex gap-2 flex-shrink-0">
@@ -420,16 +440,16 @@ export default function Connection() {
             <>
               {!user ? (
                 <div className="text-center py-20">
-                  <p className="text-lg font-semibold text-[#252840] mb-4">Connecte-toi pour voir les membres</p>
+                  <p className="text-lg font-semibold text-[#252840] mb-4">{t('connection.loginToSee')}</p>
                   <button onClick={() => openModal('login')}
                     className="px-6 py-3 rounded-full text-white font-bold border-none cursor-pointer transition"
                     style={{ background: 'var(--ink)' }}>
-                    Se connecter
+                    {t('nav.login')}
                   </button>
                 </div>
               ) : filtered.length === 0 ? (
                 <p className="rounded-3xl bg-white p-8 text-center shadow-sm" style={{ color: 'var(--muted-foreground)' }}>
-                  Aucun·e camarade ne correspond. Essaie un autre filtre.
+                  {t('connection.noMatch')}
                 </p>
               ) : (
                 <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
@@ -453,7 +473,7 @@ export default function Connection() {
 
                         {m.teaches.length > 0 && (
                           <div className="mt-4">
-                            <p className="text-xs font-bold uppercase tracking-wider mb-2" style={{ color: 'rgba(37,40,64,0.6)' }}>Enseigne</p>
+                            <p className="text-xs font-bold uppercase tracking-wider mb-2" style={{ color: 'rgba(37,40,64,0.6)' }}>{t('connection.teaches')}</p>
                             <div className="flex flex-wrap gap-1.5">
                               {m.teaches.slice(0, 4).map(s => (
                                 <span
@@ -477,13 +497,13 @@ export default function Connection() {
                           <span className="mt-3 inline-flex items-center gap-1.5 self-start rounded-full px-3 py-1 text-xs font-bold"
                             style={{ background: 'rgba(63,107,76,0.12)', color: 'var(--learn)' }}>
                             <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M1.5 5l3 3 5-5"/></svg>
-                            Correspond à vos objectifs
+                            {t('connection.matchesGoals')}
                           </span>
                         )}
 
                         {requested.has(m.id) ? (
                           <div className="mt-5 w-full py-2.5 rounded-full text-sm font-bold text-center" style={{ background: 'rgba(63,107,76,0.10)', color: 'var(--learn)' }}>
-                            Demande envoyée
+                            {t('connection.requestSent')}
                           </div>
                         ) : (
                           <button
@@ -491,7 +511,7 @@ export default function Connection() {
                             className="mt-5 inline-flex items-center justify-center gap-2 self-stretch rounded-full py-2.5 text-sm font-bold text-white transition hover:-translate-y-0.5 border-none cursor-pointer"
                             style={{ background: 'var(--orange-warm)' }}
                           >
-                            Réserver
+                            {t('connection.book')}
                           </button>
                         )}
                       </article>

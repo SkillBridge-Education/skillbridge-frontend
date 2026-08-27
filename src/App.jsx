@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { useEffect } from 'react'
+import SkipLink        from './components/SkipLink'
 import Navbar          from './components/Navbar'
 import BottomNav       from './components/BottomNav'
 import CookieBanner    from './components/CookieBanner'
@@ -20,6 +21,15 @@ import Credits         from './pages/Credits'
 import ForgotPassword  from './pages/ForgotPassword'
 import ResetPassword   from './pages/ResetPassword'
 import VerifyEmail     from './pages/VerifyEmail'
+import SettingsPage    from './pages/Settings'
+import LegalNotice     from './pages/LegalNotice'
+import PrivacyPolicy   from './pages/PrivacyPolicy'
+import Terms           from './pages/Terms'
+import Help            from './pages/Help'
+import Support         from './pages/Support'
+import Report          from './pages/Report'
+import SuspendedAccount from './pages/SuspendedAccount'
+import OrganizationRequest from './pages/OrganizationRequest'
 import useAuthStore    from './store/authStore'
 import { authApi }     from './services/api'
 
@@ -30,7 +40,7 @@ function ProtectedRoute({ children }) {
 }
 
 export default function App() {
-  const { token, setUser, logout, markAuthReady } = useAuthStore()
+  const { token, setUser, logout, markAuthReady, suspension } = useAuthStore()
 
   useEffect(() => {
     if (!token) { markAuthReady(); return }
@@ -52,12 +62,19 @@ export default function App() {
   return (
     <BrowserRouter>
       <ToastProvider>
+        <SkipLink />
         <Navbar />
         {/* Spacer for fixed navbar */}
         <div className="h-16 flex-shrink-0" aria-hidden="true" />
         <CookieBanner />
         <AuthModal />
-        <div className="pb-16 md:pb-0">
+        {/* tabIndex={-1} : cible programmable du lien d'évitement, sans
+            ajouter la zone à l'ordre de tabulation. */}
+        <div id="main-content" tabIndex={-1} className="pb-16 md:pb-0">
+        {/* Compte suspendu : l'écran de motivation et de recours remplace
+            l'application. Le laisser naviguer n'aurait aucun sens, chaque
+            appel repartant en 403. */}
+        {suspension ? <SuspendedAccount /> : (
         <Routes>
           <Route path="/"                  element={<HomePage />} />
           <Route path="/register"          element={<RegisterPage />} />
@@ -68,6 +85,22 @@ export default function App() {
           <Route path="/match"             element={<Navigate to="/connection" replace />} />
           <Route path="/forgot-password"   element={<ForgotPassword />} />
           <Route path="/reset-password"    element={<ResetPassword />} />
+
+          {/* Paramètres, aide et documents légaux — accessibles sans compte */}
+          <Route path="/settings"          element={<SettingsPage />} />
+          <Route path="/legal-notice"      element={<LegalNotice />} />
+          <Route path="/privacy"           element={<PrivacyPolicy />} />
+          <Route path="/terms"             element={<Terms />} />
+          <Route path="/help"              element={<Help />} />
+          <Route path="/support"           element={<Support />} />
+          <Route path="/report"            element={<Report />} />
+          <Route path="/schools"           element={<OrganizationRequest />} />
+          <Route path="/etablissements"    element={<Navigate to="/schools" replace />} />
+          {/* Alias historiques / liens externes */}
+          <Route path="/mentions-legales"  element={<Navigate to="/legal-notice" replace />} />
+          <Route path="/cgu"               element={<Navigate to="/terms" replace />} />
+          <Route path="/confidentialite"   element={<Navigate to="/privacy" replace />} />
+
           <Route path="/chat"              element={<ProtectedRoute><ChatPage /></ProtectedRoute>} />
           <Route path="/profile"           element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
           <Route path="/credits"           element={<ProtectedRoute><Credits /></ProtectedRoute>} />
@@ -76,6 +109,7 @@ export default function App() {
           <Route path="/sessions/:id"      element={<ProtectedRoute><SessionRoom /></ProtectedRoute>} />
           <Route path="/become-sharer"     element={<ProtectedRoute><BecomeSharer /></ProtectedRoute>} />
         </Routes>
+        )}
         </div>
         <BottomNav />
       </ToastProvider>

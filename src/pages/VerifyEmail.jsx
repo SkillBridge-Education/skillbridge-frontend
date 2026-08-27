@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link, useSearchParams, useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { authApi } from '../services/api'
 
 const RESEND_DELAY = 60
@@ -7,12 +8,12 @@ const RESEND_DELAY = 60
 function Logo() {
   return (
     <Link to="/" className="flex items-center gap-2 no-underline">
-      <span className="grid h-8 w-8 place-items-center rounded-lg bg-[#C8864B] text-white flex-shrink-0">
+      <span className="grid h-8 w-8 place-items-center rounded-lg bg-warm-strong text-white flex-shrink-0">
         <span className="text-sm font-black leading-none">S</span>
       </span>
       <span className="text-xl font-black tracking-tight">
         <span className="text-[#252840]">Skill</span>
-        <span className="text-[#C8864B]">Bridge</span>
+        <span className="text-[color:var(--warm-strong)]">Bridge</span>
       </span>
     </Link>
   )
@@ -21,6 +22,7 @@ function Logo() {
 export default function VerifyEmail() {
   const [params]  = useSearchParams()
   const navigate  = useNavigate()
+  const { t }     = useTranslation()
   const token     = params.get('token')
 
   const [phase,     setPhase]     = useState('loading')
@@ -60,7 +62,7 @@ export default function VerifyEmail() {
       setResent(true)
       startCountdown()
     } catch (err) {
-      setResendErr(err.response?.data?.message || "Erreur lors de l'envoi.")
+      setResendErr(err.response?.data?.message || t('verifyEmail.resendError'))
     } finally { setSending(false) }
   }
 
@@ -76,7 +78,7 @@ export default function VerifyEmail() {
           {phase === 'loading' && (
             <div className="flex flex-col items-center gap-4 py-4">
               <div className="w-8 h-8 border-2 border-[#252840]/20 border-t-[#252840] rounded-full animate-spin" />
-              <p className="text-sm text-[#756B5B]">Vérification en cours…</p>
+              <p className="text-sm text-[#756B5B]">{t('verifyEmail.checking')}</p>
             </div>
           )}
 
@@ -87,15 +89,15 @@ export default function VerifyEmail() {
                   <path d="M4 14l7 7L24 7"/>
                 </svg>
               </span>
-              <h1 className="text-2xl font-black tracking-tight text-[#252840]">Email vérifié !</h1>
+              <h1 className="text-2xl font-black tracking-tight text-[#252840]">{t('verifyEmail.successTitle')}</h1>
               <p className="mt-2 text-sm text-[#756B5B] mb-6">
-                Ton adresse email a bien été confirmée. Tu peux maintenant te connecter.
+                {t('verifyEmail.successText')}
               </p>
               <button
                 onClick={() => navigate('/')}
-                className="w-full py-3 rounded-full bg-[#C8864B] text-white text-sm font-bold border-none cursor-pointer hover:bg-[#B07030] transition-colors"
+                className="w-full py-3 rounded-full bg-warm-strong text-white text-sm font-bold border-none cursor-pointer hover:bg-warm-dk transition-colors"
               >
-                Se connecter
+                {t('nav.login')}
               </button>
             </div>
           )}
@@ -108,15 +110,15 @@ export default function VerifyEmail() {
                   <path d="M14 9v5M14 18h.01"/>
                 </svg>
               </span>
-              <h1 className="text-2xl font-black tracking-tight text-[#252840] text-center">Lien invalide ou expiré</h1>
+              <h1 className="text-2xl font-black tracking-tight text-[#252840] text-center">{t('verifyEmail.errorTitle')}</h1>
               <p className="mt-2 text-sm text-[#756B5B] mb-6 text-center">
-                Ce lien de vérification n'est plus valide. Entre ton email pour en recevoir un nouveau.
+                {t('verifyEmail.errorText')}
               </p>
 
               {resent && (
                 <div className="flex items-center gap-2 bg-[#3D5C28]/10 px-4 py-3 rounded-xl mb-3">
                   <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#3D5C28" strokeWidth="2" strokeLinecap="round"><path d="M2 7l3 3 7-6"/></svg>
-                  <p className="text-sm font-semibold text-[#3D5C28]">Email de vérification envoyé !</p>
+                  <p className="text-sm font-semibold text-[#3D5C28]">{t('verifyEmail.resent')}</p>
                 </div>
               )}
 
@@ -125,12 +127,15 @@ export default function VerifyEmail() {
                   <p className="text-red-500 text-sm bg-red-50 px-3 py-2 rounded-lg">{resendErr}</p>
                 )}
                 <div>
-                  <label className="block text-sm font-bold text-[#252840] mb-1">Ton adresse email</label>
+                  <label htmlFor="verify-email" className="block text-sm font-bold text-[#252840] mb-1">
+                    {t('verifyEmail.emailLabel')}
+                  </label>
                   <input
+                    id="verify-email"
                     type="email"
                     value={email}
                     onChange={e => setEmail(e.target.value)}
-                    placeholder="toi@exemple.com"
+                    placeholder={t('forgotPassword.emailPlaceholder')}
                     required
                     className="w-full h-11 rounded-xl border border-[#E8DDC7] bg-[#FDFAF4] px-4 text-sm outline-none focus:border-[#C8864B] transition-colors"
                   />
@@ -141,15 +146,15 @@ export default function VerifyEmail() {
                   className="w-full py-3 rounded-full bg-[#252840] text-white text-sm font-bold border-none cursor-pointer hover:bg-[#363B6B] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {sending
-                    ? 'Envoi…'
+                    ? t('actions.sending')
                     : countdown > 0
-                      ? `Renvoyer dans 0:${String(countdown).padStart(2, '0')}`
-                      : 'Renvoyer le lien'}
+                      ? t('auth.resendIn', { seconds: String(countdown).padStart(2, '0') })
+                      : t('verifyEmail.resend')}
                 </button>
               </form>
 
-              <p className="mt-3 text-xs text-center text-[#B0A898]">
-                Pense à vérifier ton dossier spam si tu ne vois rien.
+              <p className="mt-3 text-xs text-center text-[color:var(--muted-fg)]">
+                {t('auth.spamHint')}
               </p>
 
               <button
@@ -157,7 +162,7 @@ export default function VerifyEmail() {
                 className="mt-4 flex w-full items-center justify-center gap-1 text-sm font-semibold text-[#756B5B] bg-transparent border-none cursor-pointer hover:text-[#252840] transition-colors"
               >
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"><path d="M9 2L4 7l5 5"/></svg>
-                Retour à l'accueil
+                {t('actions.backHome')}
               </button>
             </div>
           )}

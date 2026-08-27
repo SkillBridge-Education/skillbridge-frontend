@@ -1,0 +1,348 @@
+{
+  "eyebrow": "Informations légales",
+  "disclaimer": {
+    "badge": "Gabarit",
+    "title": "⚠️ Document type à faire relire par un juriste avant mise en production",
+    "text": "Cette page est un modèle de travail, volontairement incomplet. Tous les éléments entre crochets (par exemple [NOM DE L'ÉDITEUR], [ADRESSE], [CONTACT DPO]) doivent être remplacés par les informations réelles de l'éditeur, et l'ensemble doit être validé par un professionnel du droit avant toute publication. En l'état, ce document n'a aucune valeur juridique et n'engage personne."
+  },
+  "lastUpdated": "Dernière mise à jour : [DATE DE MISE À JOUR]",
+  "toc": "Sommaire",
+  "relatedTitle": "Documents liés",
+  "notice": {
+    "title": "Mentions légales",
+    "intro": "Conformément à la loi n° 2004-575 du 21 juin 2004 pour la confiance dans l'économie numérique (LCEN), les informations suivantes sont portées à la connaissance des utilisateurs du service SkillBridge.",
+    "sections": [
+      {
+        "title": "1. Éditeur du service",
+        "body": [
+          "Le service SkillBridge est édité par :"
+        ],
+        "items": [
+          "Dénomination sociale : [NOM DE L'ÉDITEUR]",
+          "Forme juridique : [FORME JURIDIQUE — SAS, association loi 1901, etc.]",
+          "Capital social : [MONTANT DU CAPITAL]",
+          "Siège social : [ADRESSE COMPLÈTE]",
+          "Immatriculation : RCS [VILLE] n° [NUMÉRO RCS] — SIRET [NUMÉRO SIRET]",
+          "Numéro de TVA intracommunautaire : [NUMÉRO DE TVA]",
+          "Adresse email de contact : [EMAIL DE CONTACT]",
+          "Téléphone : [NUMÉRO DE TÉLÉPHONE]"
+        ]
+      },
+      {
+        "title": "2. Directeur de la publication",
+        "body": [
+          "Le directeur de la publication est [NOM DU DIRECTEUR DE LA PUBLICATION], en qualité de [FONCTION].",
+          "Toute demande relative au contenu éditorial peut lui être adressée à [EMAIL DU DIRECTEUR DE LA PUBLICATION]."
+        ]
+      },
+      {
+        "title": "3. Hébergeur",
+        "body": [
+          "Le service est hébergé par :"
+        ],
+        "items": [
+          "Dénomination : [NOM DE L'HÉBERGEUR]",
+          "Adresse : [ADRESSE DE L'HÉBERGEUR]",
+          "Téléphone : [TÉLÉPHONE DE L'HÉBERGEUR]",
+          "Localisation des serveurs : [PAYS / RÉGION D'HÉBERGEMENT]"
+        ]
+      },
+      {
+        "title": "4. Propriété intellectuelle",
+        "body": [
+          "La structure générale du service, les textes, les éléments graphiques, le logo et la charte visuelle sont la propriété de [NOM DE L'ÉDITEUR] ou font l'objet d'une licence d'utilisation.",
+          "Toute reproduction, représentation ou adaptation, totale ou partielle, sans autorisation écrite préalable est interdite et constitue une contrefaçon au sens des articles L. 335-2 et suivants du code de la propriété intellectuelle.",
+          "Les contenus publiés par les utilisateurs restent la propriété de leurs auteurs, dans les conditions décrites par les conditions générales d'utilisation."
+        ]
+      },
+      {
+        "title": "5. Liens hypertextes",
+        "body": [
+          "Le service peut contenir des liens vers des sites tiers. [NOM DE L'ÉDITEUR] n'exerce aucun contrôle sur ces sites et décline toute responsabilité quant à leur contenu ou à leurs pratiques en matière de données personnelles."
+        ]
+      },
+      {
+        "title": "6. Signalement de contenu illicite",
+        "body": [
+          "Conformément à l'article 6 de la LCEN et au règlement (UE) 2022/2065 sur les services numériques (DSA), tout utilisateur peut signaler un contenu qu'il estime illicite.",
+          "Point de contact pour les signalements : [EMAIL DE SIGNALEMENT]. Un formulaire de signalement est également accessible depuis le service.",
+          "Le signalement doit préciser la nature du contenu, sa localisation et les motifs pour lesquels il devrait être retiré. Tout signalement manifestement abusif peut engager la responsabilité de son auteur."
+        ]
+      },
+      {
+        "title": "7. Protection des mineurs",
+        "body": [
+          "Le service s'adresse à un public de lycéens. Les conditions d'âge, les obligations relatives au consentement parental et les mesures de modération sont détaillées dans les conditions générales d'utilisation et la politique de confidentialité.",
+          "[À COMPLÉTER : dispositif de modération, moyens de vérification de l'âge, procédure d'alerte.]"
+        ]
+      },
+      {
+        "title": "8. Données personnelles et cookies",
+        "body": [
+          "Le traitement des données personnelles est décrit dans la politique de confidentialité. L'usage des cookies et traceurs y est également détaillé.",
+          "Contact du délégué à la protection des données (DPO) : [CONTACT DPO]."
+        ]
+      },
+      {
+        "title": "9. Droit applicable et litiges",
+        "body": [
+          "Les présentes mentions légales sont soumises au droit français.",
+          "Conformément aux articles L. 611-1 et suivants du code de la consommation, l'utilisateur peut recourir gratuitement au médiateur de la consommation suivant : [NOM ET COORDONNÉES DU MÉDIATEUR].",
+          "La plateforme européenne de règlement en ligne des litiges est accessible à l'adresse indiquée par la Commission européenne.",
+          "À défaut de résolution amiable, les tribunaux compétents seront ceux désignés par les règles de droit commun."
+        ]
+      }
+    ]
+  },
+  "privacy": {
+    "title": "Politique de confidentialité",
+    "intro": "Cette politique explique quelles données personnelles sont collectées lors de l'utilisation de SkillBridge, pourquoi elles le sont, combien de temps elles sont conservées et quels droits tu peux exercer. Elle est rédigée conformément au règlement (UE) 2016/679 (RGPD) et à la loi Informatique et Libertés.",
+    "sections": [
+      {
+        "title": "1. Responsable du traitement",
+        "body": [
+          "Le responsable du traitement est [NOM DE L'ÉDITEUR], [FORME JURIDIQUE], dont le siège social est situé [ADRESSE COMPLÈTE].",
+          "Délégué à la protection des données (DPO) : [CONTACT DPO].",
+          "Pour toute question relative à tes données : [EMAIL DE CONTACT RGPD]."
+        ]
+      },
+      {
+        "title": "2. Données collectées",
+        "body": [
+          "Nous collectons uniquement les données nécessaires au fonctionnement du service :"
+        ],
+        "items": [
+          "Données de compte : prénom, nom, adresse email, mot de passe (stocké sous forme chiffrée), date de création du compte.",
+          "Données de profil : photo, bannière, compétences enseignées et recherchées, disponibilités, description.",
+          "Contenus créés : messages échangés, sessions planifiées, signalements envoyés.",
+          "Données d'usage du service : solde et historique de crédits, sessions suivies ou animées.",
+          "Données techniques : adresse IP, type de navigateur, journaux de connexion, identifiants de session. [À COMPLÉTER selon la configuration réelle des logs.]",
+          "Données facultatives : toute information que tu choisis d'ajouter à ton profil."
+        ]
+      },
+      {
+        "title": "3. Finalités et bases légales",
+        "body": [
+          "Chaque traitement repose sur une base légale prévue à l'article 6 du RGPD :"
+        ],
+        "items": [
+          "Création et gestion du compte, mise en relation entre membres, tenue du solde de crédits — exécution du contrat (art. 6.1.b).",
+          "Sécurité du service, prévention de la fraude et des abus, modération des signalements — intérêt légitime (art. 6.1.f).",
+          "Envoi de notifications facultatives et mesure d'audience non essentielle — consentement (art. 6.1.a), retirable à tout moment.",
+          "Conservation des journaux de connexion et réponse aux réquisitions — obligation légale (art. 6.1.c)."
+        ]
+      },
+      {
+        "title": "4. Cas particulier des mineurs",
+        "body": [
+          "Le service s'adresse à des lycéens, dont une partie sont mineurs.",
+          "En France, l'article 45 de la loi Informatique et Libertés fixe à 15 ans l'âge à partir duquel un mineur peut consentir seul au traitement de ses données pour un service de la société de l'information. En dessous de cet âge, le consentement doit être donné conjointement par le mineur et par le ou les titulaires de l'autorité parentale.",
+          "[À COMPLÉTER : âge minimum retenu par l'éditeur, modalités de recueil et de vérification de l'autorisation parentale, information spécifique adressée aux parents.]"
+        ]
+      },
+      {
+        "title": "5. Destinataires et sous-traitants",
+        "body": [
+          "Les données sont accessibles aux personnes habilitées de [NOM DE L'ÉDITEUR] et aux prestataires techniques agissant comme sous-traitants au sens de l'article 28 du RGPD :"
+        ],
+        "items": [
+          "Hébergement : [NOM DE L'HÉBERGEUR] — [PAYS]",
+          "Envoi d'emails transactionnels : [NOM DU PRESTATAIRE EMAIL] — [PAYS]",
+          "Stockage des images : [NOM DU PRESTATAIRE DE STOCKAGE] — [PAYS]",
+          "Visioconférence des sessions : [NOM DU PRESTATAIRE VISIO] — [PAYS]",
+          "Mesure d'audience : [NOM DE L'OUTIL DE MESURE, LE CAS ÉCHÉANT]"
+        ]
+      },
+      {
+        "title": "6. Transferts hors Union européenne",
+        "body": [
+          "[À COMPLÉTER : indiquer si des données sont transférées hors UE, vers quels pays, et sur quel fondement — décision d'adéquation, clauses contractuelles types, mesures supplémentaires.]",
+          "En l'absence de transfert, cette section doit l'indiquer explicitement."
+        ]
+      },
+      {
+        "title": "7. Durées de conservation",
+        "body": [
+          "Les données ne sont pas conservées plus longtemps que nécessaire :"
+        ],
+        "items": [
+          "Compte actif : pendant toute la durée d'utilisation du service.",
+          "Compte inactif : suppression ou anonymisation après [DURÉE — ex. 2 ans] sans connexion, après information préalable.",
+          "Après suppression du compte : effacement sous [DURÉE — ex. 30 jours], hors obligations légales de conservation.",
+          "Journaux de connexion : [DURÉE — ex. 12 mois], conformément aux obligations légales.",
+          "Signalements et éléments de modération : [DURÉE].",
+          "Données de facturation, le cas échéant : 10 ans (obligation comptable)."
+        ]
+      },
+      {
+        "title": "8. Sécurité",
+        "body": [
+          "Des mesures techniques et organisationnelles sont mises en œuvre pour protéger les données : chiffrement des mots de passe, chiffrement des communications (HTTPS), contrôle des accès, journalisation.",
+          "[À COMPLÉTER : mesures réellement en place — sauvegardes, tests d'intrusion, politique de gestion des incidents et de notification des violations de données à la CNIL sous 72 heures.]"
+        ]
+      },
+      {
+        "title": "9. Tes droits",
+        "body": [
+          "Conformément aux articles 15 à 22 du RGPD, tu disposes des droits suivants :"
+        ],
+        "items": [
+          "Droit d'accès : obtenir une copie des données te concernant.",
+          "Droit de rectification : corriger des données inexactes ou incomplètes.",
+          "Droit à l'effacement : demander la suppression de tes données.",
+          "Droit à la limitation du traitement.",
+          "Droit d'opposition, notamment aux traitements fondés sur l'intérêt légitime.",
+          "Droit à la portabilité : recevoir tes données dans un format structuré et lisible par machine.",
+          "Droit de retirer ton consentement à tout moment, sans remettre en cause les traitements déjà effectués.",
+          "Droit de définir des directives relatives au sort de tes données après ton décès."
+        ]
+      },
+      {
+        "title": "10. Comment exercer tes droits",
+        "body": [
+          "Ces droits s'exercent depuis la page Paramètres du service, ou par email à [EMAIL DE CONTACT RGPD] / [CONTACT DPO].",
+          "Une réponse est apportée dans un délai d'un mois, prolongeable de deux mois en cas de demande complexe. Une preuve d'identité peut être demandée en cas de doute raisonnable.",
+          "Si tu estimes que tes droits ne sont pas respectés, tu peux introduire une réclamation auprès de la CNIL (3 place de Fontenoy, TSA 80715, 75334 Paris Cedex 07, cnil.fr)."
+        ]
+      },
+      {
+        "title": "11. Cookies et traceurs",
+        "body": [
+          "Le service utilise des cookies et technologies similaires :"
+        ],
+        "items": [
+          "Cookies strictement nécessaires : maintien de la session, sécurité, mémorisation de la langue et des préférences. Ils ne requièrent pas de consentement.",
+          "Cookies de mesure d'audience : [À COMPLÉTER — outil utilisé, durée de vie, caractère exempté ou non de consentement].",
+          "Cookies publicitaires : [AUCUN / À COMPLÉTER].",
+          "Durée de conservation des consentements : [DURÉE — recommandation CNIL : 6 mois].",
+          "Le choix exprimé via le bandeau peut être modifié à tout moment depuis les paramètres du navigateur ou la page Paramètres."
+        ]
+      },
+      {
+        "title": "12. Modification de la politique",
+        "body": [
+          "Cette politique peut être modifiée pour tenir compte d'évolutions légales ou techniques. En cas de changement substantiel, les utilisateurs sont informés par email ou par une information visible dans le service.",
+          "La date de dernière mise à jour figure en haut de cette page."
+        ]
+      }
+    ]
+  },
+  "terms": {
+    "title": "Conditions générales d'utilisation",
+    "intro": "Les présentes conditions générales d'utilisation (CGU) définissent les règles d'accès et d'usage du service SkillBridge. En créant un compte, tu déclares les avoir lues et acceptées.",
+    "sections": [
+      {
+        "title": "1. Objet",
+        "body": [
+          "SkillBridge est une plateforme d'échange de compétences entre lycéens. Elle permet de proposer des compétences, d'en rechercher, d'échanger des messages et d'organiser des sessions d'apprentissage rémunérées en crédits internes.",
+          "Le service est édité par [NOM DE L'ÉDITEUR] (voir les mentions légales)."
+        ]
+      },
+      {
+        "title": "2. Qui peut utiliser le service",
+        "body": [
+          "Le service s'adresse aux lycéens âgés de [ÂGE MINIMUM] à [ÂGE MAXIMUM] ans.",
+          "[À COMPLÉTER : conditions exactes d'âge, nécessité d'une autorisation parentale en dessous de 15 ans, modalités de vérification.]",
+          "L'utilisateur s'engage à fournir des informations exactes lors de son inscription et à les tenir à jour."
+        ]
+      },
+      {
+        "title": "3. Compte utilisateur",
+        "body": [
+          "La création d'un compte nécessite une adresse email valide, vérifiée par un lien de confirmation.",
+          "Le compte est personnel : le partage d'identifiants est interdit. L'utilisateur est responsable de la confidentialité de son mot de passe et de toute activité réalisée depuis son compte.",
+          "Tout usage suspect doit être signalé sans délai à [EMAIL DE CONTACT]."
+        ]
+      },
+      {
+        "title": "4. Crédits",
+        "body": [
+          "Les crédits sont une unité interne au service. Ils n'ont aucune valeur monétaire, ne peuvent être ni achetés, ni vendus, ni convertis en argent, ni transférés hors du service.",
+          "Un crédit correspond à une minute de session. Les crédits sont réservés à la création d'une session puis transférés à l'enseignant à l'issue de celle-ci, au prorata du temps réellement effectué.",
+          "Le solde est plafonné à 500 crédits. [À COMPLÉTER : sort des crédits en cas de suppression ou de suspension du compte.]"
+        ]
+      },
+      {
+        "title": "5. Règles de conduite",
+        "body": [
+          "Chacun doit pouvoir apprendre en sécurité. Sont notamment interdits :"
+        ],
+        "items": [
+          "le harcèlement, les insultes, les menaces et l'intimidation ;",
+          "les propos haineux, racistes, sexistes, homophobes ou discriminatoires ;",
+          "les contenus à caractère sexuel, violent ou choquant ;",
+          "toute sollicitation à caractère sexuel, en particulier envers un mineur ;",
+          "l'usurpation d'identité et les faux comptes ;",
+          "le spam, la publicité et les demandes d'argent ;",
+          "la diffusion de données personnelles d'un tiers sans son accord ;",
+          "toute activité illicite ou contraire à l'ordre public."
+        ]
+      },
+      {
+        "title": "6. Contenus publiés par les utilisateurs",
+        "body": [
+          "L'utilisateur reste titulaire des droits sur les contenus qu'il publie. Il concède à [NOM DE L'ÉDITEUR] une licence non exclusive et gratuite d'hébergement et d'affichage, limitée à ce qui est nécessaire au fonctionnement du service et pour la durée de publication.",
+          "L'utilisateur garantit disposer des droits nécessaires sur les contenus qu'il publie."
+        ]
+      },
+      {
+        "title": "7. Signalement et modération",
+        "body": [
+          "Un formulaire de signalement est accessible depuis le service et le pied de page. Chaque signalement est examiné dans un délai de [DÉLAI DE TRAITEMENT].",
+          "L'éditeur peut retirer un contenu manifestement illicite ou contraire aux présentes CGU, et informe l'auteur de la mesure ainsi que des voies de contestation, conformément au règlement (UE) 2022/2065 (DSA).",
+          "[À COMPLÉTER : organisation de la modération, procédure interne de recours, délais.]"
+        ]
+      },
+      {
+        "title": "8. Sanctions",
+        "body": [
+          "En cas de manquement, l'éditeur peut, selon la gravité : adresser un avertissement, retirer un contenu, restreindre l'accès à certaines fonctionnalités, suspendre puis résilier le compte.",
+          "Les faits susceptibles de constituer une infraction pénale peuvent être signalés aux autorités compétentes."
+        ]
+      },
+      {
+        "title": "9. Sessions entre membres et responsabilité",
+        "body": [
+          "Les sessions sont organisées directement entre membres. L'éditeur fournit un outil de mise en relation : il n'est ni enseignant, ni employeur, ni organisateur des sessions, et ne garantit ni la qualité ni l'exactitude des contenus pédagogiques échangés.",
+          "L'éditeur est tenu à une obligation de moyens quant à la disponibilité du service. Sa responsabilité ne saurait être engagée en cas de dommage indirect. [À COMPLÉTER ET À FAIRE VALIDER : clauses limitatives de responsabilité, dont l'opposabilité aux consommateurs et aux mineurs doit être vérifiée.]"
+        ]
+      },
+      {
+        "title": "10. Disponibilité du service",
+        "body": [
+          "Le service peut être interrompu pour maintenance, mise à jour ou raison de sécurité. L'éditeur s'efforce d'informer les utilisateurs des interruptions programmées.",
+          "Aucun niveau de disponibilité n'est garanti. [À COMPLÉTER si un engagement de service est proposé.]"
+        ]
+      },
+      {
+        "title": "11. Données personnelles",
+        "body": [
+          "Le traitement des données personnelles est décrit dans la politique de confidentialité, qui fait partie intégrante des présentes CGU."
+        ]
+      },
+      {
+        "title": "12. Durée, résiliation et suppression du compte",
+        "body": [
+          "Les CGU s'appliquent tant que le compte existe. L'utilisateur peut supprimer son compte à tout moment depuis la page Paramètres, sans motif ni frais.",
+          "L'éditeur peut résilier un compte en cas de manquement grave ou répété, après information de l'utilisateur sauf urgence ou obligation légale.",
+          "[À COMPLÉTER : conséquences de la suppression sur les sessions planifiées, les messages et les crédits.]"
+        ]
+      },
+      {
+        "title": "13. Modification des CGU",
+        "body": [
+          "Les CGU peuvent être modifiées. Les utilisateurs sont informés au moins [DÉLAI DE PRÉAVIS] avant l'entrée en vigueur des nouvelles conditions. La poursuite de l'utilisation du service après cette date vaut acceptation.",
+          "En cas de refus, l'utilisateur peut supprimer son compte."
+        ]
+      },
+      {
+        "title": "14. Droit applicable et litiges",
+        "body": [
+          "Les présentes CGU sont soumises au droit français.",
+          "En cas de difficulté, l'utilisateur est invité à contacter [EMAIL DE CONTACT] afin de rechercher une solution amiable. Il peut également recourir gratuitement au médiateur de la consommation : [NOM ET COORDONNÉES DU MÉDIATEUR].",
+          "À défaut d'accord, le litige sera porté devant les juridictions compétentes conformément aux règles de droit commun."
+        ]
+      }
+    ]
+  }
+}

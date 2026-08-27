@@ -1,4 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
+import useFocusTrap from '../hooks/useFocusTrap'
 import { useNavigate } from 'react-router-dom'
 import useAuthStore from '../store/authStore'
 import { sessionApi } from '../services/api'
@@ -7,11 +9,11 @@ import { useToast } from '../components/Toast'
 import CreditIcon from '../components/CreditIcon'
 
 const STATUS_STYLE = {
-  PENDING_CONFIRMATION: { bg: 'bg-[rgba(200,134,75,0.12)]', text: 'text-[#C8864B]', label: 'En attente' },
-  SCHEDULED:            { bg: 'bg-[rgba(61,92,40,0.12)]',   text: 'text-[#3D5C28]', label: 'À venir'     },
-  ACTIVE:               { bg: 'bg-[rgba(200,134,75,0.15)]', text: 'text-[#C8864B]', label: 'En direct'   },
-  COMPLETED:            { bg: 'bg-[rgba(37,40,64,0.1)]',    text: 'text-[#252840]', label: 'Terminée'    },
-  CANCELLED:            { bg: 'bg-red-50',                  text: 'text-red-500',   label: 'Refusée'     },
+  PENDING_CONFIRMATION: { bg: 'bg-[rgba(200,134,75,0.12)]', text: 'text-[color:var(--warm-strong)]', labelKey: 'sessions.status.pending' },
+  SCHEDULED:            { bg: 'bg-[rgba(61,92,40,0.12)]',   text: 'text-[#3D5C28]', labelKey: 'sessions.status.scheduled' },
+  ACTIVE:               { bg: 'bg-[rgba(200,134,75,0.15)]', text: 'text-[color:var(--warm-strong)]', labelKey: 'sessions.status.active' },
+  COMPLETED:            { bg: 'bg-[rgba(37,40,64,0.1)]',    text: 'text-[#252840]', labelKey: 'sessions.status.completed' },
+  CANCELLED:            { bg: 'bg-red-50',                  text: 'text-red-500',   labelKey: 'sessions.status.cancelled' },
 }
 
 function CalIcon() {
@@ -23,6 +25,8 @@ function CalIcon() {
 }
 
 function EditSessionModal({ session, onClose, onSaved }) {
+  const { t } = useTranslation()
+  const dialogRef = useFocusTrap(true, onClose)
   const addToast  = useToast()
   const [saving,   setSaving]   = useState(false)
   const [duration, setDuration] = useState(String(session.creditsReserved))
@@ -35,7 +39,7 @@ function EditSessionModal({ session, onClose, onSaved }) {
     e.preventDefault()
     const dur = parseInt(duration, 10)
     if (!Number.isInteger(dur) || dur <= 0) {
-      addToast?.('La durée doit être un entier positif', 'error')
+      addToast?.(t('sessions.toasts.durationInvalid'), 'error')
       return
     }
     setSaving(true)
@@ -45,20 +49,21 @@ function EditSessionModal({ session, onClose, onSaved }) {
         scheduledAt: dateVal ? new Date(dateVal).toISOString() : undefined,
         title: title.trim() || undefined,
       })
-      addToast?.('Session re-proposée', 'success')
+      addToast?.(t('sessions.toasts.reproposed'), 'success')
       onSaved()
       onClose()
     } catch (e) {
-      addToast?.(e.response?.data?.message || 'Erreur lors de la modification', 'error')
+      addToast?.(e.response?.data?.message || t('sessions.toasts.editError'), 'error')
     } finally { setSaving(false) }
   }
 
   return (
     <div className="fixed inset-0 z-[500] bg-black/50 backdrop-blur-sm flex items-center justify-center p-4" onClick={onClose}>
-      <div className="bg-white rounded-3xl p-8 w-[440px] max-w-full shadow-soft border border-[#E8DDC7] animate-fade-up"
+      <div ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby="edit-session-title"
+        className="bg-white rounded-3xl p-8 w-[440px] max-w-full shadow-soft border border-[#E8DDC7] animate-fade-up"
         onClick={e => e.stopPropagation()}>
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-black text-[#252840]">Modifier et re-proposer</h2>
+          <h2 id="edit-session-title" className="text-xl font-black text-[#252840]">{t('sessions.editModal.title')}</h2>
           <button onClick={onClose}
             className="w-8 h-8 rounded-full bg-[#F8F4EA] border-none cursor-pointer text-[#756B5B] flex items-center justify-center hover:bg-[#E8DDC7] transition-colors flex-shrink-0">
             <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M1 1l10 10M11 1L1 11"/></svg>
@@ -67,7 +72,7 @@ function EditSessionModal({ session, onClose, onSaved }) {
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <div>
-            <label className="text-xs font-semibold text-[#756B5B] block mb-1">Titre</label>
+            <label className="text-xs font-semibold text-[#756B5B] block mb-1">{t('sessions.editModal.sessionTitle')}</label>
             <input
               value={title}
               onChange={e => setTitle(e.target.value)}
@@ -76,7 +81,7 @@ function EditSessionModal({ session, onClose, onSaved }) {
             />
           </div>
           <div>
-            <label className="text-xs font-semibold text-[#756B5B] block mb-1">Durée (crédits)</label>
+            <label className="text-xs font-semibold text-[#756B5B] block mb-1">{t('sessions.editModal.duration')}</label>
             <input
               type="number"
               min="1"
@@ -86,7 +91,7 @@ function EditSessionModal({ session, onClose, onSaved }) {
             />
           </div>
           <div>
-            <label className="text-xs font-semibold text-[#756B5B] block mb-1">Date et heure</label>
+            <label className="text-xs font-semibold text-[#756B5B] block mb-1">{t('sessions.editModal.datetime')}</label>
             <input
               type="datetime-local"
               value={dateVal}
@@ -96,8 +101,8 @@ function EditSessionModal({ session, onClose, onSaved }) {
           </div>
           <div className="flex gap-3 pt-2">
             <button type="submit" disabled={saving}
-              className="flex-1 py-3 rounded-full bg-[#C8864B] text-white text-sm font-bold border-none cursor-pointer hover:bg-[#B07030] transition-colors disabled:opacity-50">
-              {saving ? 'Enregistrement…' : 'Re-proposer'}
+              className="flex-1 py-3 rounded-full bg-warm-strong text-white text-sm font-bold border-none cursor-pointer hover:bg-warm-dk transition-colors disabled:opacity-50">
+              {saving ? t('actions.saving') : t('sessions.editModal.submit')}
             </button>
             <button type="button" onClick={onClose}
               className="px-5 py-3 rounded-full border border-[#E8DDC7] text-[#756B5B] text-sm font-semibold bg-transparent cursor-pointer hover:border-[#252840] transition-colors">
@@ -111,6 +116,8 @@ function EditSessionModal({ session, onClose, onSaved }) {
 }
 
 function SessionDetailModal({ session, user, onClose, onAction }) {
+  const { t, i18n } = useTranslation()
+  const dialogRef = useFocusTrap(true, onClose)
   const [joining,       setJoining]       = useState(false)
   const [acting,        setActing]        = useState(null)
   const [learnerCredits, setLearnerCredits] = useState(null)
@@ -139,7 +146,7 @@ function SessionDetailModal({ session, user, onClose, onAction }) {
       await api.post(`/sessions/${session.id}/join`)
       navigate(`/sessions/${session.id}`)
     } catch (e) {
-      addToast?.(e.response?.data?.message || 'Impossible de rejoindre', 'error')
+      addToast?.(e.response?.data?.message || t('sessions.toasts.joinError'), 'error')
     } finally { setJoining(false) }
   }
 
@@ -151,7 +158,7 @@ function SessionDetailModal({ session, user, onClose, onAction }) {
       const meRes = await api.get('/users/me')
       const updatedUser = meRes.data.user ?? meRes.data
       if (updatedUser) useAuthStore.getState().setUser(updatedUser)
-      addToast?.('Session acceptée', 'success')
+      addToast?.(t('sessions.toasts.accepted'), 'success')
       onAction()
       onClose()
     } catch (e) {
@@ -163,7 +170,7 @@ function SessionDetailModal({ session, user, onClose, onAction }) {
     setActing('refuse')
     try {
       await sessionApi.refuse(session.id)
-      addToast?.('Session refusée', 'info')
+      addToast?.(t('sessions.toasts.refused'), 'info')
       onAction()
       onClose()
     } catch (e) {
@@ -173,15 +180,16 @@ function SessionDetailModal({ session, user, onClose, onAction }) {
 
   const formatDate = (iso) => {
     if (!iso) return '—'
-    return new Date(iso).toLocaleString('fr', { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })
+    return new Date(iso).toLocaleString(i18n.language, { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })
   }
 
   return (
     <div className="fixed inset-0 z-[500] bg-black/50 backdrop-blur-sm flex items-center justify-center p-4" onClick={onClose}>
-      <div className="bg-white rounded-3xl p-8 w-[440px] max-w-full shadow-soft border border-[#E8DDC7] animate-fade-up"
+      <div ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby="session-detail-title"
+        className="bg-white rounded-3xl p-8 w-[440px] max-w-full shadow-soft border border-[#E8DDC7] animate-fade-up"
         onClick={e => e.stopPropagation()}>
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-black text-[#252840] truncate pr-4">{session.title || 'Session'}</h2>
+          <h2 id="session-detail-title" className="text-xl font-black text-[#252840] truncate pr-4">{session.title || t('sessions.fallbackTitle')}</h2>
           <button onClick={onClose}
             className="w-8 h-8 rounded-full bg-[#F8F4EA] border-none cursor-pointer text-[#756B5B] flex items-center justify-center hover:bg-[#E8DDC7] transition-colors flex-shrink-0">
             <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M1 1l10 10M11 1L1 11"/></svg>
@@ -194,13 +202,13 @@ function SessionDetailModal({ session, user, onClose, onAction }) {
           </div>
           <div>
             <p className="text-sm font-bold text-[#252840]">{partnerName || '—'}</p>
-            <p className="text-xs text-[#756B5B]">{isTeacher ? 'Apprenant' : 'Enseignant'}</p>
+            <p className="text-xs text-[#756B5B]">{isTeacher ? t('sessions.detail.learner') : t('sessions.detail.teacher')}</p>
           </div>
         </div>
 
         {isLearnerPending && (
           <div className="mb-5 p-4 rounded-2xl bg-[rgba(200,134,75,0.08)] border border-[rgba(200,134,75,0.25)]">
-            <p className="text-sm font-semibold text-[#C8864B] mb-1">Proposition en attente</p>
+            <p className="text-sm font-semibold text-[color:var(--warm-strong)] mb-1">{t('sessions.detail.pending')}</p>
             <p className="text-xs text-[#756B5B] mb-2">
               {session.creditsReserved} crédits seront réservés sur ton solde si tu acceptes.
             </p>
@@ -219,9 +227,9 @@ function SessionDetailModal({ session, user, onClose, onAction }) {
 
         <div className="flex flex-col gap-3 mb-6">
           {[
-            { label: 'Date',             value: formatDate(session.startsAt) },
-            { label: 'Durée estimée',    value: `${session.creditsReserved} min` },
-            { label: 'Crédits réservés', value: `${session.creditsReserved} cr` },
+            { label: t('sessions.detail.date'),             value: formatDate(session.startsAt) },
+            { label: t('sessions.detail.estimatedDuration'), value: t('sessions.detail.minutes', { count: session.creditsReserved }) },
+            { label: t('sessions.detail.reservedCredits'),   value: t('sessions.detail.credits', { count: session.creditsReserved }) },
           ].map(row => (
             <div key={row.label} className="flex items-center justify-between py-2 border-b border-[#F0EAE0] last:border-0">
               <span className="text-xs text-[#756B5B] font-medium">{row.label}</span>
@@ -229,8 +237,8 @@ function SessionDetailModal({ session, user, onClose, onAction }) {
             </div>
           ))}
           <div className="flex items-center justify-between py-2">
-            <span className="text-xs text-[#756B5B] font-medium">Statut</span>
-            <span className={`rounded-full px-3 py-1 text-xs font-semibold ${st.bg} ${st.text}`}>{st.label}</span>
+            <span className="text-xs text-[#756B5B] font-medium">{t('sessions.detail.status')}</span>
+            <span className={`rounded-full px-3 py-1 text-xs font-semibold ${st.bg} ${st.text}`}>{t(st.labelKey)}</span>
           </div>
         </div>
 
@@ -238,22 +246,22 @@ function SessionDetailModal({ session, user, onClose, onAction }) {
           <div className="flex gap-3">
             <button onClick={handleAccept} disabled={!!acting || !hasEnoughCredits}
               className="flex-1 py-3 rounded-full bg-[#3D5C28] text-white text-sm font-bold border-none cursor-pointer hover:bg-[#2D4A1E] transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
-              {acting === 'accept' ? 'Acceptation…' : 'Accepter'}
+              {acting === 'accept' ? t('sessions.detail.accepting') : t('sessions.detail.accept')}
             </button>
             <button onClick={handleRefuse} disabled={!!acting}
               className="flex-1 py-3 rounded-full border-2 border-red-400 text-red-500 text-sm font-bold bg-transparent cursor-pointer hover:bg-red-50 transition-colors disabled:opacity-50">
-              {acting === 'refuse' ? 'Refus…' : 'Refuser'}
+              {acting === 'refuse' ? t('sessions.detail.refusing') : t('sessions.detail.refuse')}
             </button>
           </div>
         ) : (
           <div className="flex gap-3">
             {canJoin && (
               <button onClick={handleJoin} disabled={joining}
-                className="flex-1 py-3 rounded-full bg-[#C8864B] text-white text-sm font-bold border-none cursor-pointer hover:bg-[#B07030] transition-colors disabled:opacity-50 flex items-center justify-center gap-2">
+                className="flex-1 py-3 rounded-full bg-warm-strong text-white text-sm font-bold border-none cursor-pointer hover:bg-warm-dk transition-colors disabled:opacity-50 flex items-center justify-center gap-2">
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
                   <rect x="1" y="3" width="9" height="9" rx="2"/><path d="M10 5l4-2v8l-4-2"/>
                 </svg>
-                {joining ? 'Connexion…' : 'Rejoindre'}
+                {joining ? t('sessions.detail.joining') : t('sessions.join')}
               </button>
             )}
             <button onClick={() => { navigate(`/sessions/${session.id}`); onClose() }}
@@ -268,6 +276,7 @@ function SessionDetailModal({ session, user, onClose, onAction }) {
 }
 
 export default function Sessions() {
+  const { t, i18n } = useTranslation()
   const navigate  = useNavigate()
   const { user }  = useAuthStore()
   const addToast  = useToast()
@@ -279,6 +288,7 @@ export default function Sessions() {
   const [confirmId,  setConfirmId]  = useState(null)
   const [cancelling, setCancelling] = useState(null)
   const [selected,   setSelected]   = useState(null)
+  const confirmRef = useFocusTrap(!!confirmId, () => setConfirmId(null))
   const [editTarget, setEditTarget] = useState(null)
 
   const loadSessions = useCallback(async () => {
@@ -288,9 +298,12 @@ export default function Sessions() {
       setSessions(data)
       setError('')
     } catch (e) {
-      if (sessions.length === 0) setError(e.response?.data?.message || 'Erreur de chargement')
+      if (sessions.length === 0) setError(e.response?.data?.message || t('sessions.toasts.loadError'))
     } finally { setLoading(false) }
-  }, [user])
+    // `sessions.length` est volontairement hors dépendances : l'inclure
+    // relancerait le polling à chaque chargement (comportement d'origine).
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user, t])
 
   useEffect(() => {
     loadSessions()
@@ -304,9 +317,9 @@ export default function Sessions() {
       await api.post(`/sessions/${sessionId}/end`, { durationSeconds: 0 })
       setConfirmId(null)
       loadSessions()
-      addToast?.('Session annulée', 'info')
+      addToast?.(t('sessions.toasts.cancelled'), 'info')
     } catch (e) {
-      addToast?.(e.response?.data?.message || "Erreur lors de l'annulation", 'error')
+      addToast?.(e.response?.data?.message || t('sessions.toasts.cancelError'), 'error')
     } finally { setCancelling(null) }
   }
 
@@ -316,7 +329,7 @@ export default function Sessions() {
 
   const formatDate = (iso) => {
     if (!iso) return '—'
-    return new Date(iso).toLocaleString('fr', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })
+    return new Date(iso).toLocaleString(i18n.language, { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })
   }
 
   return (
@@ -341,19 +354,20 @@ export default function Sessions() {
 
       {confirmId && (
         <div className="fixed inset-0 z-[500] bg-black/50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl p-8 w-[400px] max-w-full shadow-soft border border-[#E8DDC7]">
-            <h2 className="text-lg font-black text-[#252840] mb-2">Annuler cette séance ?</h2>
+          <div ref={confirmRef} role="alertdialog" aria-modal="true" aria-labelledby="cancel-session-title"
+            className="bg-white rounded-3xl p-8 w-[400px] max-w-full shadow-soft border border-[#E8DDC7]">
+            <h2 id="cancel-session-title" className="text-lg font-black text-[#252840] mb-2">{t('sessions.cancelModal.title')}</h2>
             <p className="text-sm text-[#756B5B] mb-6">
-              La séance sera marquée comme annulée. Les crédits réservés seront remboursés.
+              {t('sessions.cancelModal.text')}
             </p>
             <div className="flex gap-3">
               <button onClick={() => handleCancel(confirmId)} disabled={!!cancelling}
                 className="flex-1 py-3 rounded-full bg-red-500 text-white text-sm font-bold border-none cursor-pointer hover:bg-red-600 transition-colors disabled:opacity-50">
-                {cancelling ? 'Annulation…' : "Confirmer l'annulation"}
+                {cancelling ? t('sessions.cancelModal.cancelling') : t('sessions.cancelModal.confirm')}
               </button>
               <button onClick={() => setConfirmId(null)}
                 className="px-5 py-3 rounded-full border border-[#E8DDC7] text-[#756B5B] text-sm font-semibold bg-transparent cursor-pointer hover:border-[#252840] transition-colors">
-                Retour
+                {t('actions.back')}
               </button>
             </div>
           </div>
@@ -376,22 +390,22 @@ export default function Sessions() {
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
                 <path d="M7 1v12M1 7h12"/>
               </svg>
-              Nouvelle session
+              {t('sessions.new')}
             </button>
           </div>
 
           <div className="inline-flex rounded-full border border-[#E8DDC7] bg-[#F8F4EA] p-1 shadow-sm">
             <button onClick={() => setTab('teach')}
               className={`rounded-full px-6 py-2.5 text-sm font-bold border-none cursor-pointer transition-all ${
-                tab === 'teach' ? 'bg-[#C8864B] text-white shadow-sm' : 'bg-transparent text-[#756B5B] hover:text-[#252840]'
+                tab === 'teach' ? 'bg-warm-strong text-white shadow-sm' : 'bg-transparent text-[#756B5B] hover:text-[#252840]'
               }`}>
-              J'enseigne
+              {t('sessions.tabTeach')}
             </button>
             <button onClick={() => setTab('learn')}
               className={`rounded-full px-6 py-2.5 text-sm font-bold border-none cursor-pointer transition-all ${
                 tab === 'learn' ? 'bg-[#3D5C28] text-white shadow-sm' : 'bg-transparent text-[#756B5B] hover:text-[#252840]'
               }`}>
-              Je reçois
+              {t('sessions.tabLearn')}
             </button>
           </div>
         </div>
@@ -410,16 +424,14 @@ export default function Sessions() {
         {!loading && list.length === 0 && (
           <div className="rounded-3xl border border-dashed border-[#E8DDC7] bg-white p-12 text-center">
             <p className="text-lg font-semibold text-[#252840] mb-2">
-              {tab === 'teach' ? 'Aucune session à donner' : 'Aucune session à recevoir'}
+              {tab === 'teach' ? t('sessions.emptyTeach') : t('sessions.emptyLearn')}
             </p>
             <p className="text-sm text-[#756B5B] mb-6">
-              {tab === 'teach'
-                ? "Créez une session avec l'un de vos pairs connectés."
-                : 'Demandez à un pair de planifier une session avec vous.'}
+              {tab === 'teach' ? t('sessions.emptyTeachHint') : t('sessions.emptyLearnHint')}
             </p>
             <button onClick={() => navigate('/sessions/new')}
               className="px-6 py-3 rounded-full bg-[#252840] text-white text-sm font-bold border-none cursor-pointer hover:bg-[#363B6B] transition-colors">
-              + Nouvelle session
+              {t('sessions.newPlus')}
             </button>
           </div>
         )}
@@ -447,14 +459,25 @@ export default function Sessions() {
               >
                 {/* Status + credits */}
                 <div className="flex items-start justify-between gap-2 mb-4">
-                  <span className={`rounded-full px-3 py-1 text-xs font-bold ${st.bg} ${st.text}`}>{st.label}</span>
+                  <span className={`rounded-full px-3 py-1 text-xs font-bold ${st.bg} ${st.text}`}>{t(st.labelKey)}</span>
                   <span className="inline-flex items-center gap-1 rounded-full bg-[#F8F4EA] px-3 py-1 text-xs font-bold text-[#252840]">
                     <CreditIcon size="sm" /> {s.creditsReserved} cr
                   </span>
                 </div>
 
-                {/* Title */}
-                <h3 className="font-bold text-[#252840] text-base leading-tight mb-3">{s.title || 'Session'}</h3>
+                {/* Title — porte l'action d'ouverture : la carte <article> est
+                    cliquable au pointeur mais n'est pas atteignable au clavier,
+                    et elle contient déjà d'autres boutons (rejoindre, annuler…)
+                    qu'on ne peut pas imbriquer dans un bouton englobant. */}
+                <h3 className="font-bold text-[#252840] text-base leading-tight mb-3">
+                  <button
+                    type="button"
+                    onClick={e => { e.stopPropagation(); setSelected(s) }}
+                    className="bg-transparent border-none p-0 text-left font-bold text-[#252840] text-base leading-tight cursor-pointer hover:underline"
+                  >
+                    {s.title || t('sessions.fallbackTitle')}
+                  </button>
+                </h3>
 
                 {/* Partner */}
                 <div className="flex items-center gap-3 mb-4">
@@ -464,7 +487,7 @@ export default function Sessions() {
                   </div>
                   <div className="text-sm min-w-0">
                     <p className="font-semibold text-[#252840] truncate">{partnerName || '—'}</p>
-                    <p className="text-xs text-[#756B5B]">{tab === 'teach' ? 'tu enseignes' : 'tu apprends'}</p>
+                    <p className="text-xs text-[#756B5B]">{tab === 'teach' ? t('sessions.youTeach') : t('sessions.youLearn')}</p>
                   </div>
                 </div>
 
@@ -476,28 +499,28 @@ export default function Sessions() {
                   <div className="flex gap-2 flex-wrap justify-end">
                     {isLive && (
                       <button onClick={e => { e.stopPropagation(); navigate(`/sessions/${s.id}`) }}
-                        className="inline-flex items-center gap-1.5 rounded-full bg-[#C8864B] px-3 py-1.5 text-xs font-bold text-white border-none cursor-pointer hover:bg-[#B07030] transition-colors">
-                        Rejoindre
+                        className="inline-flex items-center gap-1.5 rounded-full bg-warm-strong px-3 py-1.5 text-xs font-bold text-white border-none cursor-pointer hover:bg-warm-dk transition-colors">
+                        {t('sessions.join')}
                       </button>
                     )}
                     {isLearnerPending && (
                       <>
                         <button onClick={e => { e.stopPropagation(); setSelected(s) }}
                           className="rounded-full bg-[#3D5C28] px-3 py-1.5 text-xs font-bold text-white border-none cursor-pointer hover:bg-[#2D4A1E] transition-colors">
-                          Répondre
+                          {t('sessions.reply')}
                         </button>
                       </>
                     )}
                     {canEdit && (
                       <button onClick={e => { e.stopPropagation(); setEditTarget(s) }}
-                        className="rounded-full border border-[#C8864B] px-3 py-1.5 text-xs font-semibold text-[#C8864B] bg-transparent cursor-pointer hover:bg-[rgba(200,134,75,0.08)] transition-colors">
-                        Modifier
+                        className="rounded-full border border-[#C8864B] px-3 py-1.5 text-xs font-semibold text-[color:var(--warm-strong)] bg-transparent cursor-pointer hover:bg-[rgba(200,134,75,0.08)] transition-colors">
+                        {t('sessions.edit')}
                       </button>
                     )}
                     {canCancel && (
                       <button onClick={e => { e.stopPropagation(); setConfirmId(s.id) }}
                         className="rounded-full border border-red-200 px-3 py-1.5 text-xs font-semibold text-red-500 bg-transparent cursor-pointer hover:bg-red-50 transition-colors">
-                        Annuler
+                        {t('sessions.cancel')}
                       </button>
                     )}
                   </div>

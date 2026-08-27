@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { Trans, useTranslation } from 'react-i18next'
 import { BookOpen, GraduationCap, Heart, ArrowRight, Sparkles } from 'lucide-react'
 import Footer from '../components/Footer'
 import Reveal from '../components/Reveal'
@@ -8,45 +9,53 @@ import useAuthStore from '../store/authStore'
 
 const HERO_IMGS = ['/hero-1.webp', '/hero-2.webp', '/hero-3.webp']
 
+// `name` est la clé canonique consommée par <TechIcon /> : elle reste en
+// français. `labelKey` ne sert qu'à l'affichage des matières traduisibles ;
+// les noms propres (React, Docker…) n'en ont pas.
 const PILLS = [
-  'React', 'Python', 'Maths', 'Anglais', 'Design UI',
-  'Guitare', 'Cuisine', 'Docker', 'Physique', 'TypeScript', 'Réseau',
+  { name: 'React'      },
+  { name: 'Python'     },
+  { name: 'Maths',      labelKey: 'subjects.maths'    },
+  { name: 'Anglais',    labelKey: 'subjects.english'  },
+  { name: 'Design UI',  labelKey: 'subjects.designUi' },
+  { name: 'Guitare',    labelKey: 'subjects.guitar'   },
+  { name: 'Cuisine',    labelKey: 'subjects.cooking'  },
+  { name: 'Docker'     },
+  { name: 'Physique',   labelKey: 'subjects.physics'  },
+  { name: 'TypeScript' },
+  { name: 'Réseau',     labelKey: 'subjects.network'  },
 ]
 
 const SUBJECTS = [
-  'React', 'Python', 'Git', 'Docker', 'TypeScript', 'Node.js',
-  'Maths', 'Physique', 'Réseau', 'Cybersécurité', 'Anglais',
-  'Base de données', 'Design UI', 'Data Science',
+  { name: 'React'      },
+  { name: 'Python'     },
+  { name: 'Git'        },
+  { name: 'Docker'     },
+  { name: 'TypeScript' },
+  { name: 'Node.js'    },
+  { name: 'Maths',            labelKey: 'subjects.maths'         },
+  { name: 'Physique',         labelKey: 'subjects.physics'       },
+  { name: 'Réseau',           labelKey: 'subjects.network'       },
+  { name: 'Cybersécurité',    labelKey: 'subjects.cybersecurity' },
+  { name: 'Anglais',          labelKey: 'subjects.english'       },
+  { name: 'Base de données',  labelKey: 'subjects.database'      },
+  { name: 'Design UI',        labelKey: 'subjects.designUi'      },
+  { name: 'Data Science',     labelKey: 'subjects.dataScience'   },
 ]
 
 const USAGES = [
-  {
-    icon: BookOpen,
-    title: 'Rattrape un cours',
-    txt: 'Tu as séché un TD ? Un·e camarade te le reprend tranquille, à ton rythme.',
-    color: 'var(--peach)',
-    line:  'var(--orange-warm)',
-  },
-  {
-    icon: GraduationCap,
-    title: 'Apprends une nouvelle techno',
-    txt: "React, Docker, Python… Des étudiants passionnés t'initient pas à pas.",
-    color: 'var(--mint)',
-    line:  'var(--learn)',
-  },
-  {
-    icon: Heart,
-    title: 'Partage ta passion',
-    txt: 'Guitare, cuisine, photo : enseigne ce qui te fait kiffer et gagne des crédits.',
-    color: 'var(--lavender)',
-    line:  'var(--ink)',
-  },
+  { key: 'catchUp',      icon: BookOpen,       color: 'var(--peach)',    line: 'var(--orange-warm)' },
+  { key: 'learnTech',    icon: GraduationCap,  color: 'var(--mint)',     line: 'var(--learn)'       },
+  { key: 'sharePassion', icon: Heart,          color: 'var(--lavender)', line: 'var(--ink)'         },
 ]
 
 export default function HomePage() {
   const navigate = useNavigate()
+  const { t } = useTranslation()
   const { user, openModal } = useAuthStore()
   const [slide, setSlide] = useState(0)
+
+  const label = ({ name, labelKey }) => (labelKey ? t(labelKey) : name)
 
   useEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
@@ -79,21 +88,20 @@ export default function HomePage() {
           <Reveal>
             <span className="inline-flex items-center gap-2 rounded-full bg-white/15 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-white backdrop-blur">
               <Sparkles className="h-3.5 w-3.5" />
-              L'entraide entre élèves
+              {t('home.badge')}
             </span>
           </Reveal>
 
           <Reveal delay={1}>
             <h1 className="mt-6 max-w-4xl text-5xl font-extrabold leading-[1.05] tracking-tight text-white sm:text-6xl md:text-7xl">
-              Enseigne ce que tu sais.<br />
-              <span style={{ color: 'var(--orange-warm)' }}>Apprends ce qui te manque.</span>
+              {t('home.heroTitleLine1')}<br />
+              <span style={{ color: 'var(--orange-warm)' }}>{t('home.heroTitleLine2')}</span>
             </h1>
           </Reveal>
 
           <Reveal delay={2}>
             <p className="mt-6 max-w-2xl text-base text-white/85 sm:text-lg leading-relaxed">
-              SkillBridge réunit les élèves de ton école pour s'entraider. Pas d'argent, juste des
-              crédits que tu gagnes en partageant et que tu dépenses en apprenant.
+              {t('home.heroText')}
             </p>
           </Reveal>
 
@@ -105,7 +113,7 @@ export default function HomePage() {
                   className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-bold text-white shadow-lg transition hover:-translate-y-0.5 border-none cursor-pointer"
                   style={{ background: 'var(--orange-warm)' }}
                 >
-                  Explorer les membres <ArrowRight className="h-4 w-4" />
+                  {t('home.ctaExplore')} <ArrowRight className="h-4 w-4" />
                 </button>
               ) : (
                 <>
@@ -114,13 +122,13 @@ export default function HomePage() {
                     className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-bold text-white shadow-lg transition hover:-translate-y-0.5 border-none cursor-pointer"
                     style={{ background: 'var(--orange-warm)' }}
                   >
-                    Rejoindre l'entraide <ArrowRight className="h-4 w-4" />
+                    {t('home.ctaJoin')} <ArrowRight className="h-4 w-4" />
                   </button>
                   <button
                     onClick={() => openModal('login')}
                     className="rounded-full border border-white/60 px-6 py-3 text-sm font-bold text-white transition hover:bg-white hover:text-[#252840] bg-transparent cursor-pointer"
                   >
-                    Se connecter
+                    {t('nav.login')}
                   </button>
                 </>
               )}
@@ -130,7 +138,7 @@ export default function HomePage() {
           <Reveal delay={4}>
             <div className="mt-10 flex max-w-3xl flex-wrap items-center justify-center gap-2">
               {PILLS.map(p => (
-                <span key={p} className="pill bg-white/95 backdrop-blur">{p}</span>
+                <span key={p.name} className="pill bg-white/95 backdrop-blur">{label(p)}</span>
               ))}
             </div>
           </Reveal>
@@ -141,7 +149,7 @@ export default function HomePage() {
               <button
                 key={i}
                 onClick={() => setSlide(i)}
-                aria-label={`Image ${i + 1}`}
+                aria-label={t('home.slideLabel', { index: i + 1 })}
                 className={`h-1.5 rounded-full border-none cursor-pointer transition-all duration-300 ${
                   i === slide ? 'w-6 bg-white' : 'w-1.5 bg-white/40 hover:bg-white/60'
                 }`}
@@ -156,25 +164,27 @@ export default function HomePage() {
         <div className="relative mx-auto max-w-7xl px-6">
           <Reveal>
             <p className="text-center text-sm font-bold uppercase tracking-wider" style={{ color: 'var(--orange-warm)' }}>
-              Comment ça marche
+              {t('home.how.eyebrow')}
             </p>
           </Reveal>
           <Reveal delay={1}>
             <h2 className="mx-auto mt-3 max-w-3xl text-center text-4xl font-extrabold tracking-tight sm:text-5xl">
-              Trois façons de progresser ensemble
+              {t('home.how.title')}
             </h2>
           </Reveal>
 
           <div className="mt-14 grid gap-6 md:grid-cols-3">
             {USAGES.map((c, i) => (
-              <Reveal key={c.title} delay={(i + 1)}>
+              <Reveal key={c.key} delay={(i + 1)}>
                 <article className="card-lift relative h-full overflow-hidden rounded-3xl bg-white p-7 shadow-sm">
                   <div className="absolute inset-x-0 top-0 h-1.5" style={{ background: c.line }} />
                   <div className="flex h-20 w-20 items-center justify-center rounded-3xl" style={{ background: c.color }}>
                     <c.icon className="h-9 w-9 text-[#252840]" />
                   </div>
-                  <h3 className="mt-6 text-2xl font-bold tracking-tight">{c.title}</h3>
-                  <p className="mt-3 text-[15px] leading-relaxed" style={{ color: 'var(--muted-foreground)' }}>{c.txt}</p>
+                  <h3 className="mt-6 text-2xl font-bold tracking-tight">{t(`home.usages.${c.key}.title`)}</h3>
+                  <p className="mt-3 text-[15px] leading-relaxed" style={{ color: 'var(--muted-foreground)' }}>
+                    {t(`home.usages.${c.key}.text`)}
+                  </p>
                 </article>
               </Reveal>
             ))}
@@ -187,26 +197,26 @@ export default function HomePage() {
         <div className="relative mx-auto max-w-7xl px-6">
           <Reveal>
             <p className="text-center text-sm font-bold uppercase tracking-wider" style={{ color: 'var(--learn)' }}>
-              Le catalogue
+              {t('home.catalog.eyebrow')}
             </p>
           </Reveal>
           <Reveal delay={1}>
             <h2 className="mx-auto mt-3 max-w-3xl text-center text-4xl font-extrabold tracking-tight sm:text-5xl">
-              Matières &amp; technos enseignées
+              {t('home.catalog.title')}
             </h2>
           </Reveal>
           <Reveal delay={2}>
             <p className="mx-auto mt-3 max-w-2xl text-center" style={{ color: 'var(--muted-foreground)' }}>
-              De l'algèbre à React, du réseau au design — quelqu'un a forcément ce qu'il te faut.
+              {t('home.catalog.text')}
             </p>
           </Reveal>
 
           <div className="mt-12 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7">
             {SUBJECTS.map((s, i) => (
-              <Reveal key={s} delay={((i % 5) + 1)}>
+              <Reveal key={s.name} delay={((i % 5) + 1)}>
                 <div className="card-lift flex flex-col items-center gap-3 rounded-2xl bg-white p-5 shadow-sm">
-                  <TechIcon name={s} />
-                  <span className="text-center text-sm font-semibold">{s}</span>
+                  <TechIcon name={s.name} />
+                  <span className="text-center text-sm font-semibold">{label(s)}</span>
                 </div>
               </Reveal>
             ))}
@@ -219,7 +229,7 @@ export default function HomePage() {
                 className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-bold text-white shadow-lg transition hover:-translate-y-0.5 border-none cursor-pointer"
                 style={{ background: 'var(--ink)' }}
               >
-                Trouver quelqu'un qui enseigne <ArrowRight className="h-4 w-4" />
+                {t('home.catalog.cta')} <ArrowRight className="h-4 w-4" />
               </button>
             </div>
           </Reveal>
@@ -233,26 +243,28 @@ export default function HomePage() {
             <div>
               <Reveal>
                 <p className="text-sm font-bold uppercase tracking-wider" style={{ color: 'var(--orange-warm)' }}>
-                  Le système de crédits
+                  {t('home.creditsSection.eyebrow')}
                 </p>
               </Reveal>
               <Reveal delay={1}>
                 <h2 className="mt-3 text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl">
-                  1 crédit = <span style={{ color: 'var(--orange-warm)' }}>1 minute</span> de cours.
+                  <Trans
+                    i18nKey="home.creditsSection.title"
+                    components={{ highlight: <span style={{ color: 'var(--orange-warm)' }} /> }}
+                  />
                 </h2>
               </Reveal>
               <Reveal delay={2}>
                 <p className="mt-5 max-w-xl text-white/80 leading-relaxed">
-                  Pas de portefeuille, pas d'abonnement. Tu reçois des crédits en enseignant,
-                  tu les dépenses en apprenant. On démarre tous au même endroit, on grandit ensemble.
+                  {t('home.creditsSection.text')}
                 </p>
               </Reveal>
               <Reveal delay={3}>
                 <ul className="mt-6 space-y-3 text-white/85">
                   {[
-                    "120 crédits offerts à l'inscription, pour démarrer sans stress.",
-                    "Plafond de 500 crédits — pour t'inciter à apprendre, pas à thésauriser.",
-                    "Zéro argent réel n'est jamais échangé.",
+                    t('home.creditsSection.bullet1'),
+                    t('home.creditsSection.bullet2'),
+                    t('home.creditsSection.bullet3'),
                   ].map(item => (
                     <li key={item} className="flex items-start gap-3">
                       <span className="mt-1.5 inline-block h-2 w-2 rounded-full flex-shrink-0" style={{ background: 'var(--orange-warm)' }} />
@@ -265,10 +277,10 @@ export default function HomePage() {
 
             <div className="grid gap-4 sm:grid-cols-2">
               {[
-                { v: '120',   l: "crédits offerts à l'inscription", c: 'var(--orange-warm)' },
-                { v: '500',   l: 'plafond — bouge-toi !',           c: 'var(--peach)'       },
-                { v: '1 min', l: '= 1 crédit dépensé / gagné',      c: 'var(--mint)'        },
-                { v: '0 €',   l: "aucun argent n'est échangé",      c: 'var(--lavender)'    },
+                { v: '120',   l: t('home.creditsSection.stat1'), c: 'var(--orange-warm)' },
+                { v: '500',   l: t('home.creditsSection.stat2'), c: 'var(--peach)'       },
+                { v: '1 min', l: t('home.creditsSection.stat3'), c: 'var(--mint)'        },
+                { v: '0 €',   l: t('home.creditsSection.stat4'), c: 'var(--lavender)'    },
               ].map((s, i) => (
                 <Reveal key={s.l} delay={(i + 1)}>
                   <div className="card-lift rounded-3xl p-6 backdrop-blur ring-1 ring-white/10" style={{ background: 'rgba(255,255,255,0.05)' }}>

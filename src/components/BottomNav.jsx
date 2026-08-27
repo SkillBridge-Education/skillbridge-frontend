@@ -1,9 +1,10 @@
 import { Link, useLocation } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
 const TABS = [
   {
     to: '/',
-    label: 'Accueil',
+    labelKey: 'nav.home',
     icon: (
       <svg width="22" height="22" viewBox="0 0 22 22" fill="none"
         stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
@@ -14,7 +15,7 @@ const TABS = [
   },
   {
     to: '/connection',
-    label: 'Connexions',
+    labelKey: 'nav.connections',
     icon: (
       <svg width="22" height="22" viewBox="0 0 22 22" fill="none"
         stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
@@ -27,7 +28,7 @@ const TABS = [
   },
   {
     to: '/sessions',
-    label: 'Sessions',
+    labelKey: 'nav.sessions',
     icon: (
       <svg width="22" height="22" viewBox="0 0 22 22" fill="none"
         stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
@@ -38,7 +39,7 @@ const TABS = [
   },
   {
     to: '/chat',
-    label: 'Messages',
+    labelKey: 'nav.messages',
     icon: (
       <svg width="22" height="22" viewBox="0 0 22 22" fill="none"
         stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
@@ -48,7 +49,7 @@ const TABS = [
   },
   {
     to: '/profile',
-    label: 'Profil',
+    labelKey: 'nav.profile',
     icon: (
       <svg width="22" height="22" viewBox="0 0 22 22" fill="none"
         stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
@@ -61,6 +62,7 @@ const TABS = [
 
 export default function BottomNav() {
   const { pathname } = useLocation()
+  const { t } = useTranslation()
 
   const isActive = (to) =>
     to === '/' ? pathname === '/' : pathname === to || pathname.startsWith(to + '/')
@@ -78,7 +80,7 @@ export default function BottomNav() {
               style={{ color: active ? '#C8864B' : '#7A6E5C' }}
             >
               {tab.icon}
-              <span className="text-[10px] font-semibold leading-none">{tab.label}</span>
+              <span className="text-[10px] font-semibold leading-none">{t(tab.labelKey)}</span>
             </Link>
           )
         })}

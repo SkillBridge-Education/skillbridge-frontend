@@ -1,12 +1,23 @@
 // ProfileModal — Profil détaillé avec grille de disponibilité cliquable
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
+import useFocusTrap from '../hooks/useFocusTrap'
 import useAuthStore from '../store/authStore'
 
-const DAYS  = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim']
-const SLOTS = ['Matin', 'Après-midi', 'Soir']
+// `key` indexe member.availability : jamais traduite.
+const DAYS = [
+  { key: 'Lun', labelKey: 'daysShort.mon' },
+  { key: 'Mar', labelKey: 'daysShort.tue' },
+  { key: 'Mer', labelKey: 'daysShort.wed' },
+  { key: 'Jeu', labelKey: 'daysShort.thu' },
+  { key: 'Ven', labelKey: 'daysShort.fri' },
+  { key: 'Sam', labelKey: 'daysShort.sat' },
+  { key: 'Dim', labelKey: 'daysShort.sun' },
+]
+const SLOTS = ['slots.morning', 'slots.afternoon', 'slots.evening']
 
-function StarRatingFull({ value, count }) {
+function StarRatingFull({ value, count, t }) {
   return (
     <div className="flex items-center gap-[3px]">
       {[1, 2, 3, 4, 5].map(i => (
@@ -20,7 +31,7 @@ function StarRatingFull({ value, count }) {
         </svg>
       ))}
       <span className="text-[13px] text-[#7A6E5C] ml-1 font-semibold">
-        {value.toFixed(1)} · {count} avis
+        {value.toFixed(1)} · {t('member.reviews', { count })}
       </span>
     </div>
   )
@@ -28,14 +39,12 @@ function StarRatingFull({ value, count }) {
 
 export default function ProfileModal({ member, onClose }) {
   const navigate = useNavigate()
+  const { t } = useTranslation()
   const { user, openModal } = useAuthStore()
   const [selectedSlot, setSelectedSlot] = useState(null) // { day, slotIdx }
 
-  useEffect(() => {
-    const onKey = e => { if (e.key === 'Escape') onClose() }
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
-  }, [onClose])
+  // Échap, piégeage du focus et restitution au déclencheur.
+  const dialogRef = useFocusTrap(!!member, onClose)
 
   if (!member) return null
 
@@ -63,8 +72,9 @@ export default function ProfileModal({ member, onClose }) {
     navigate(`/sessions/new${query}`)
   }
 
+  const selectedDay = DAYS.find(d => d.key === selectedSlot?.day)
   const slotLabel = selectedSlot
-    ? `${selectedSlot.day} — ${SLOTS[selectedSlot.slotIdx]}`
+    ? t('member.slotLabel', { day: t(selectedDay.labelKey), slot: t(SLOTS[selectedSlot.slotIdx]) })
     : null
 
   return (
@@ -72,7 +82,13 @@ export default function ProfileModal({ member, onClose }) {
       className="fixed inset-0 z-[200] bg-[rgba(26,20,16,0.55)] backdrop-blur-sm flex items-center justify-center p-4"
       onClick={e => { if (e.target === e.currentTarget) onClose() }}
     >
-      <div className="bg-[#FDFAF4] rounded-2xl w-full max-w-[620px] max-h-[90vh] overflow-y-auto shadow-2xl">
+      <div
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="profile-modal-title"
+        className="bg-[#FDFAF4] rounded-2xl w-full max-w-[620px] max-h-[90vh] overflow-y-auto shadow-2xl"
+      >
 
         {/* Header */}
         <div className="flex items-start gap-5 p-7 pb-5 border-b border-black/[0.07]">
@@ -83,14 +99,14 @@ export default function ProfileModal({ member, onClose }) {
             {initials}
           </div>
           <div className="flex-1 min-w-0">
-            <h2 className="text-[22px] font-black tracking-tight text-[#1A1410]">
+            <h2 id="profile-modal-title" className="text-[22px] font-black tracking-tight text-[#1A1410]">
               {member.firstName} {member.lastName}
             </h2>
             <p className="text-[13px] text-[#7A6E5C] mt-[2px]">
               {[member.city, member.age ? `${member.age} ans` : null].filter(Boolean).join(' · ')}
             </p>
             <div className="mt-2">
-              <StarRatingFull value={member.reputation ?? 4.5} count={member.reviewCount ?? 0} />
+              <StarRatingFull value={member.reputation ?? 4.5} count={member.reviewCount ?? 0} t={t} />
             </div>
           </div>
           <button
@@ -117,15 +133,15 @@ export default function ProfileModal({ member, onClose }) {
                 <circle cx="8" cy="8" r="6.5"/>
                 <path d="M8 4.5v7M5.5 6.5h3.5a1 1 0 0 1 0 2H6a1 1 0 0 0 0 2H10"/>
               </svg>
-              <span className="text-[13px] font-bold text-[#252840]">{member.credits} crédits</span>
-              <span className="text-[12px] text-[#7A6E5C]">actifs sur la plateforme</span>
+              <span className="text-[13px] font-bold text-[#252840]">{t('member.credits', { count: member.credits })}</span>
+              <span className="text-[12px] text-[#7A6E5C]">{t('member.creditsActive')}</span>
             </div>
           )}
 
           {/* Skills partage */}
           {member.teaches?.length > 0 && (
             <div>
-              <p className="text-[11px] font-bold uppercase tracking-[0.6px] text-[#C8864B] mb-2">Partage</p>
+              <p className="text-[11px] font-bold uppercase tracking-[0.6px] text-[color:var(--warm-strong)] mb-2">{t('member.shares')}</p>
               <div className="flex flex-wrap gap-2">
                 {member.teaches.map(skill => (
                   <span key={skill} className="px-3 py-[5px] rounded-full bg-[#FAF5E8] text-[#3D3020] border border-[rgba(223,192,128,0.5)] text-[12px] font-semibold">
@@ -139,7 +155,7 @@ export default function ProfileModal({ member, onClose }) {
           {/* Skills apprend */}
           {member.wants?.length > 0 && (
             <div>
-              <p className="text-[11px] font-bold uppercase tracking-[0.6px] text-[#252840] mb-2">Apprend</p>
+              <p className="text-[11px] font-bold uppercase tracking-[0.6px] text-[#252840] mb-2">{t('member.learns')}</p>
               <div className="flex flex-wrap gap-2">
                 {member.wants.map(skill => (
                   <span key={skill} className="px-3 py-[5px] rounded-full bg-[#ECEEF8] text-[#252840] text-[12px] font-semibold">
@@ -161,35 +177,35 @@ export default function ProfileModal({ member, onClose }) {
                   <thead>
                     <tr>
                       <th className="text-left text-[#7A6E5C] font-semibold pb-2 pr-3 w-[50px]" />
-                      {SLOTS.map(slot => (
-                        <th key={slot} className="text-center text-[#7A6E5C] font-semibold pb-2 px-1 min-w-[72px]">
-                          {slot}
+                      {SLOTS.map(slotKey => (
+                        <th key={slotKey} className="text-center text-[#7A6E5C] font-semibold pb-2 px-1 min-w-[72px]">
+                          {t(slotKey)}
                         </th>
                       ))}
                     </tr>
                   </thead>
                   <tbody>
                     {DAYS.map(day => {
-                      const slots = member.availability[day] ?? [false, false, false]
+                      const slots = member.availability[day.key] ?? [false, false, false]
                       return (
-                        <tr key={day}>
-                          <td className="text-[12px] font-bold py-[4px] pr-3 text-[#1A1410]">{day}</td>
+                        <tr key={day.key}>
+                          <td className="text-[12px] font-bold py-[4px] pr-3 text-[#1A1410]">{t(day.labelKey)}</td>
                           {slots.map((avail, i) => {
-                            const isSelected = selectedSlot?.day === day && selectedSlot?.slotIdx === i
+                            const isSelected = selectedSlot?.day === day.key && selectedSlot?.slotIdx === i
                             return (
                               <td key={i} className="px-1 py-[4px] text-center">
                                 <button
-                                  onClick={() => handleSelectSlot(day, i)}
+                                  onClick={() => handleSelectSlot(day.key, i)}
                                   disabled={!avail}
                                   className={`w-full h-[26px] rounded-lg text-[10px] font-bold transition-all border-none cursor-pointer
                                     ${isSelected
                                       ? 'bg-[#252840] text-white'
                                       : avail
                                       ? 'bg-[#E4EED8] text-[#3D5C28] hover:bg-[#3D5C28] hover:text-white'
-                                      : 'bg-[#F5F3EE] text-[#C0B8AC] cursor-not-allowed'
+                                      : 'bg-[#F5F3EE] text-[color:var(--muted-fg)] cursor-not-allowed'
                                     }`}
                                 >
-                                  {isSelected ? 'Choisi' : avail ? 'Dispo' : '—'}
+                                  {isSelected ? t('member.chosen') : avail ? t('member.available') : t('member.unavailable')}
                                 </button>
                               </td>
                             )
@@ -201,12 +217,12 @@ export default function ProfileModal({ member, onClose }) {
                 </table>
               </div>
             ) : (
-              <p className="text-[13px] text-[#7A6E5C] italic">Disponibilités à confirmer via le chat.</p>
+              <p className="text-[13px] text-[#7A6E5C] italic">{t('member.noAvailability')}</p>
             )}
 
             {slotLabel && (
               <p className="mt-3 text-[12px] font-semibold text-[#252840] bg-[#ECEEF8] rounded-xl px-4 py-2">
-                Créneau sélectionné : {slotLabel}
+                {t('member.selectedSlot', { slot: slotLabel })}
               </p>
             )}
           </div>
@@ -216,7 +232,7 @@ export default function ProfileModal({ member, onClose }) {
             onClick={handleReserve}
             className="w-full py-4 rounded-2xl bg-[#252840] text-white text-[14px] font-black border-none cursor-pointer hover:bg-[#363B6B] transition-all"
           >
-            {slotLabel ? `Réserver — ${slotLabel}` : 'Réserver une session'}
+            {slotLabel ? t('member.bookSlot', { slot: slotLabel }) : t('member.book')}
           </button>
 
         </div>

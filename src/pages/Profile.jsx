@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
+import useFocusTrap from '../hooks/useFocusTrap'
 import { Camera, LogOut, Pencil } from 'lucide-react'
 import useAuthStore from '../store/authStore'
 import api from '../services/api'
@@ -26,25 +28,30 @@ const ALL_SKILLS = [
   'Music Theory','Violin','Business','Marketing','Finance','Statistics','Data Analysis',
 ]
 
-const DAYS  = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi']
-const SLOTS = ['Matin', 'Midi', 'Soir']
-const SLOT_HINTS = { Matin: '8h–12h', Midi: '12h–14h', Soir: '18h–22h' }
+// `key` est la valeur persistée (localStorage + PUT /users/me) : jamais traduite.
+const DAYS = [
+  { key: 'Lundi',    labelKey: 'days.mon' },
+  { key: 'Mardi',    labelKey: 'days.tue' },
+  { key: 'Mercredi', labelKey: 'days.wed' },
+  { key: 'Jeudi',    labelKey: 'days.thu' },
+  { key: 'Vendredi', labelKey: 'days.fri' },
+]
+const SLOTS = [
+  { key: 'Matin', labelKey: 'slots.morning', hintKey: 'slotHints.morning' },
+  { key: 'Midi',  labelKey: 'slots.noon',    hintKey: 'slotHints.noon'    },
+  { key: 'Soir',  labelKey: 'slots.evening', hintKey: 'slotHints.evening' },
+]
 
 function loadAvailability() {
   try { return JSON.parse(localStorage.getItem(AVAIL_KEY) || '{}') } catch { return {} }
 }
 
-const TABS = [
-  { key: 'skills',       label: 'Compétences' },
-  { key: 'card',         label: 'Ma carte' },
-  { key: 'availability', label: 'Disponibilités' },
-  { key: 'sessions',     label: 'Sessions' },
-  { key: 'transactions', label: 'Historique' },
-]
+const TABS = ['skills', 'card', 'availability', 'sessions', 'transactions']
 
 export default function Profile() {
   const { user, logout, setUser } = useAuthStore()
   const navigate = useNavigate()
+  const { t, i18n } = useTranslation()
   const fileRef   = useRef()
   const bannerRef = useRef()
 
@@ -71,6 +78,11 @@ export default function Profile() {
   const [addingSkill, setAddingSkill] = useState(false)
   const [skillSearch, setSkillSearch] = useState('')
   const [skillSaving, setSkillSaving] = useState(false)
+
+  // Déclarés après les états qu'ils observent (sinon zone morte temporelle),
+  // et avant tout `return` conditionnel : l'ordre des hooks doit rester stable.
+  const editRef  = useFocusTrap(editing, () => setEditing(false))
+  const skillRef = useFocusTrap(!!addingSkill, () => { setAddingSkill(false); setSkillSearch('') })
 
   // Animated banner gradient
   useEffect(() => {
@@ -121,7 +133,7 @@ export default function Profile() {
 
   const formatDate = (iso) => {
     if (!iso) return '—'
-    return new Date(iso).toLocaleDateString('fr', { day: '2-digit', month: 'short', year: 'numeric' })
+    return new Date(iso).toLocaleDateString(i18n.language, { day: '2-digit', month: 'short', year: 'numeric' })
   }
 
   const startEdit = () => {
@@ -205,7 +217,7 @@ export default function Profile() {
       else                  await api.post('/users/learning-goals', { name: skillName, category: 'General' })
       await loadProfile()
       setSkillSearch(''); setAddingSkill(false)
-    } catch (e) { alert(e.response?.data?.message || 'Erreur') }
+    } catch (e) { alert(e.response?.data?.message || t('profile.genericError')) }
     finally { setSkillSaving(false) }
   }
 
@@ -214,7 +226,7 @@ export default function Profile() {
       if (type === 'teach') await api.delete(`/users/skills/${id}`)
       else                  await api.delete(`/users/learning-goals/${id}`)
       await loadProfile()
-    } catch (e) { alert(e.response?.data?.message || 'Erreur') }
+    } catch (e) { alert(e.response?.data?.message || t('profile.genericError')) }
   }
 
   const filteredSkills = ALL_SKILLS.filter(s =>
@@ -230,25 +242,26 @@ export default function Profile() {
       {/* Edit modal */}
       {editing && (
         <div className="fixed inset-0 z-[500] bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="animate-modal-in bg-white rounded-3xl p-8 w-[440px] max-w-full max-h-[90vh] overflow-y-auto shadow-soft border border-[#E8DDC7]">
-            <h2 className="text-xl font-black text-[#252840] mb-5">Modifier le profil</h2>
-            {editError && <p className="text-red-500 text-sm mb-3 bg-red-50 px-3 py-2 rounded-lg">{editError}</p>}
+          <div ref={editRef} role="dialog" aria-modal="true" aria-labelledby="profile-edit-title"
+            className="animate-modal-in bg-white rounded-3xl p-8 w-[440px] max-w-full max-h-[90vh] overflow-y-auto shadow-soft border border-[#E8DDC7]">
+            <h2 id="profile-edit-title" className="text-xl font-black text-[#252840] mb-5">{t('profile.editModal.title')}</h2>
+            {editError && <p role="alert" className="text-red-600 text-sm mb-3 bg-red-50 px-3 py-2 rounded-lg">{editError}</p>}
             <div className="flex gap-3 mb-3">
               <div className="flex-1">
-                <label className="block text-xs font-bold text-[#252840] uppercase tracking-wide mb-1">Prénom</label>
+                <label className="block text-xs font-bold text-[#252840] uppercase tracking-wide mb-1">{t('auth.fields.firstName')}</label>
                 <input value={editFirst} onChange={e => setEditFirst(e.target.value)}
                   className="w-full h-11 px-3 rounded-xl border border-[#E8DDC7] bg-[#FDFAF4] text-sm outline-none focus:border-[#C8864B] transition-colors" />
               </div>
               <div className="flex-1">
-                <label className="block text-xs font-bold text-[#252840] uppercase tracking-wide mb-1">Nom</label>
+                <label className="block text-xs font-bold text-[#252840] uppercase tracking-wide mb-1">{t('auth.fields.lastName')}</label>
                 <input value={editLast} onChange={e => setEditLast(e.target.value)}
                   className="w-full h-11 px-3 rounded-xl border border-[#E8DDC7] bg-[#FDFAF4] text-sm outline-none focus:border-[#C8864B] transition-colors" />
               </div>
             </div>
             <div className="mb-4">
-              <label className="block text-xs font-bold text-[#252840] uppercase tracking-wide mb-1">Bio</label>
+              <label className="block text-xs font-bold text-[#252840] uppercase tracking-wide mb-1">{t('profile.editModal.bio')}</label>
               <textarea value={editBio} onChange={e => setEditBio(e.target.value)} rows={3}
-                placeholder="Parlez de vous…"
+                placeholder={t('profile.editModal.bioPlaceholder')}
                 className="w-full px-3 py-2 rounded-xl border border-[#E8DDC7] bg-[#FDFAF4] text-sm outline-none focus:border-[#C8864B] transition-colors resize-none" />
             </div>
             <div className="flex items-center gap-3 mb-5 p-4 bg-[#F8F4EA] rounded-2xl">
@@ -256,22 +269,22 @@ export default function Profile() {
                 {avatar ? <img src={avatar} alt="" className="w-full h-full object-cover" /> : <span className="text-white font-black text-base">{initials}</span>}
               </div>
               <div className="flex-1">
-                <p className="text-sm font-semibold text-[#252840]">Photo de profil</p>
-                <p className="text-xs text-[#756B5B]">JPG, PNG · max 5 MB</p>
+                <p className="text-sm font-semibold text-[#252840]">{t('profile.editModal.avatar')}</p>
+                <p className="text-xs text-[#756B5B]">{t('profile.editModal.avatarHint')}</p>
               </div>
               <button onClick={() => fileRef.current?.click()} disabled={uploading}
                 className="px-3 py-2 rounded-xl border border-[#E8DDC7] text-sm font-semibold text-[#252840] bg-white cursor-pointer hover:border-[#C8864B] transition-colors flex-shrink-0">
-                {uploading ? 'Upload…' : 'Changer'}
+                {uploading ? t('profile.editModal.uploading') : t('profile.editModal.change')}
               </button>
             </div>
             <div className="flex gap-2">
               <button onClick={saveEdit} disabled={editSaving}
                 className="flex-1 py-3 rounded-full bg-[#252840] text-white font-bold border-none cursor-pointer hover:bg-[#363B6B] transition-colors disabled:opacity-50">
-                {editSaving ? 'Enregistrement…' : 'Enregistrer'}
+                {editSaving ? t('actions.saving') : t('actions.save')}
               </button>
               <button onClick={() => setEditing(false)}
                 className="px-5 py-3 rounded-full border border-[#E8DDC7] text-[#756B5B] font-semibold bg-transparent cursor-pointer hover:border-[#252840] transition-colors">
-                Annuler
+                {t('actions.cancel')}
               </button>
             </div>
           </div>
@@ -281,18 +294,19 @@ export default function Profile() {
       {/* Skill add modal */}
       {addingSkill && (
         <div className="fixed inset-0 z-[500] bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="animate-modal-in bg-white rounded-3xl p-6 w-[440px] max-w-full shadow-soft border border-[#E8DDC7]">
-            <h2 className="text-lg font-black text-[#252840] mb-1">
-              {addingSkill === 'teach' ? 'Compétence à enseigner' : "Objectif d'apprentissage"}
+          <div ref={skillRef} role="dialog" aria-modal="true" aria-labelledby="profile-skill-title"
+            className="animate-modal-in bg-white rounded-3xl p-6 w-[440px] max-w-full shadow-soft border border-[#E8DDC7]">
+            <h2 id="profile-skill-title" className="text-lg font-black text-[#252840] mb-1">
+              {addingSkill === 'teach' ? t('profile.skillModal.teachTitle') : t('profile.skillModal.learnTitle')}
             </h2>
-            <p className="text-xs text-[#756B5B] mb-4">Recherchez ou sélectionnez dans la liste</p>
+            <p className="text-xs text-[#756B5B] mb-4">{t('profile.skillModal.subtitle')}</p>
             <input value={skillSearch} onChange={e => setSkillSearch(e.target.value)}
-              placeholder="Rechercher une compétence…"
+              placeholder={t('profile.skillModal.searchPlaceholder')}
               className="w-full h-11 px-4 rounded-full border border-[#E8DDC7] bg-[#FDFAF4] text-sm outline-none focus:border-[#C8864B] transition-colors mb-3" />
             {skillSearch.trim() && !ALL_SKILLS.some(s => s.toLowerCase() === skillSearch.toLowerCase()) && (
               <button onClick={() => handleAddSkill(skillSearch.trim(), addingSkill)} disabled={skillSaving}
-                className="w-full py-2 mb-2 rounded-full bg-[#C8864B] text-white text-sm font-bold border-none cursor-pointer hover:bg-[#B07030] transition-colors disabled:opacity-50">
-                + Ajouter "{skillSearch.trim()}" (personnalisé)
+                className="w-full py-2 mb-2 rounded-full bg-warm-strong text-white text-sm font-bold border-none cursor-pointer hover:bg-warm-dk transition-colors disabled:opacity-50">
+                {t('profile.skillModal.addCustom', { skill: skillSearch.trim() })}
               </button>
             )}
             <div className="flex flex-wrap gap-2 max-h-52 overflow-y-auto">
@@ -309,7 +323,7 @@ export default function Profile() {
             </div>
             <button onClick={() => { setAddingSkill(false); setSkillSearch('') }}
               className="w-full mt-4 py-2.5 rounded-full border border-[#E8DDC7] text-[#756B5B] text-sm font-semibold bg-transparent cursor-pointer hover:border-[#252840] transition-colors">
-              Fermer
+              {t('actions.close')}
             </button>
           </div>
         </div>
@@ -339,7 +353,7 @@ export default function Profile() {
                   onClick={() => fileRef.current?.click()}
                 >
                   {avatar
-                    ? <img src={avatar} alt="avatar" className="w-full h-full object-cover" />
+                    ? <img src={avatar} alt={t('a11y.avatarPreview')} className="w-full h-full object-cover" />
                     : <div className="w-full h-full flex items-center justify-center text-white font-black text-3xl">{initials}</div>
                   }
                 </div>
@@ -355,7 +369,7 @@ export default function Profile() {
                 <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleAvatarChange} />
               </div>
               <div>
-                <p className="text-xs font-bold uppercase tracking-wider text-white/70 mb-1">Mon profil</p>
+                <p className="text-xs font-bold uppercase tracking-wider text-white/70 mb-1">{t('profile.eyebrow')}</p>
                 <h1 className="text-3xl sm:text-4xl font-extrabold text-white leading-tight">{displayName || '—'}</h1>
                 <p className="text-sm text-white/70 mt-1">{user?.email}</p>
                 {profile?.bio && (
@@ -368,12 +382,12 @@ export default function Profile() {
             <div className="flex flex-wrap gap-2">
               <button onClick={startEdit}
                 className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-bold text-[#252840] cursor-pointer border-none transition hover:-translate-y-0.5">
-                <Pencil size={13} /> Modifier
+                <Pencil size={13} /> {t('profile.edit')}
               </button>
               <button onClick={() => navigate('/sessions/new')}
-                className="inline-flex items-center gap-2 rounded-full bg-[#C8864B] px-4 py-2 text-sm font-bold text-white cursor-pointer border-none transition hover:-translate-y-0.5">
+                className="inline-flex items-center gap-2 rounded-full bg-warm-strong px-4 py-2 text-sm font-bold text-white cursor-pointer border-none transition hover:-translate-y-0.5">
                 <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"><path d="M6 1v10M1 6h10"/></svg>
-                Séance
+                {t('profile.newSession')}
               </button>
               <button onClick={() => bannerRef.current?.click()} disabled={uploadingBanner}
                 className="inline-flex items-center gap-2 rounded-full border border-white/60 px-4 py-2 text-sm font-bold text-white cursor-pointer bg-transparent hover:bg-white/10 transition disabled:opacity-50">
@@ -381,17 +395,17 @@ export default function Profile() {
                   ? <div className="w-3.5 h-3.5 border-[1.5px] border-white/40 border-t-white rounded-full animate-spin" />
                   : <Camera size={13} color="white" strokeWidth={1.8} />
                 }
-                Bannière
+                {t('profile.banner')}
               </button>
               {banner && (
                 <button onClick={clearBanner}
                   className="rounded-full border border-white/40 px-4 py-2 text-sm font-semibold text-white/80 cursor-pointer bg-transparent hover:bg-white/10 transition">
-                  Retirer photo
+                  {t('profile.removeBanner')}
                 </button>
               )}
               <button onClick={() => { logout(); navigate('/') }}
                 className="inline-flex items-center gap-2 rounded-full border border-white/60 px-4 py-2 text-sm font-bold text-white cursor-pointer bg-transparent hover:bg-white/10 transition">
-                <LogOut size={13} /> Déconnexion
+                <LogOut size={13} /> {t('profile.logout')}
               </button>
             </div>
           </div>
@@ -402,9 +416,9 @@ export default function Profile() {
       <div className="relative -mt-6 z-10 mx-auto max-w-4xl px-4 sm:px-6">
         <div className="grid gap-3 rounded-3xl bg-white p-4 shadow-xl ring-1 ring-[#E8DDC7] sm:grid-cols-3 sm:p-5">
           {[
-            { value: credits,           label: 'Crédits disponibles', icon: <CreditIcon size="sm" />,                                                                                             color: '#C8864B' },
-            { value: `+${totalEarned}`, label: 'Crédits gagnés',      icon: <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M8 13V3M4 7l4-4 4 4"/></svg>, color: '#3D5C28' },
-            { value: totalSpent,        label: 'Crédits dépensés',    icon: <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M8 3v10M4 9l4 4 4-4"/></svg>, color: '#252840' },
+            { value: credits,           label: t('profile.stats.available'), icon: <CreditIcon size="sm" />,                                                                                             color: '#C8864B' },
+            { value: `+${totalEarned}`, label: t('profile.stats.earned'),      icon: <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M8 13V3M4 7l4-4 4 4"/></svg>, color: '#3D5C28' },
+            { value: totalSpent,        label: t('profile.stats.spent'),    icon: <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M8 3v10M4 9l4 4 4-4"/></svg>, color: '#252840' },
           ].map(stat => (
             <div key={stat.label} className="flex items-center gap-4 rounded-2xl p-4" style={{ background: 'var(--cream)' }}>
               <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-2xl text-white"
@@ -425,16 +439,16 @@ export default function Profile() {
 
         {/* Tab pills */}
         <div className="flex flex-wrap gap-2">
-          {TABS.map(t => (
-            <button key={t.key} onClick={() => setTab(t.key)}
+          {TABS.map(key => (
+            <button key={key} onClick={() => setTab(key)}
               className={`rounded-full px-4 py-2 text-sm font-bold transition cursor-pointer ${
-                tab === t.key
+                tab === key
                   ? 'bg-[#252840] text-white border-none'
-                  : 'border border-[#E8DDC7] bg-white text-[#252840] hover:border-[#C8864B] hover:text-[#C8864B]'
+                  : 'border border-[#E8DDC7] bg-white text-[#252840] hover:border-[#C8864B] hover:text-[color:var(--warm-strong)]'
               }`}>
-              {t.label}
-              {t.key === 'availability' && countSelected > 0 ? ` (${countSelected})` : ''}
-              {t.key === 'sessions' && sessions.length > 0 ? ` (${sessions.length})` : ''}
+              {t(`profile.tabs.${key}`)}
+              {key === 'availability' && countSelected > 0 ? ` (${countSelected})` : ''}
+              {key === 'sessions' && sessions.length > 0 ? ` (${sessions.length})` : ''}
             </button>
           ))}
         </div>
@@ -446,27 +460,27 @@ export default function Profile() {
           {tab === 'skills' && (
             <div className="grid gap-6 md:grid-cols-2">
               <div>
-                <p className="text-xs font-bold uppercase tracking-wider text-[#C8864B] mb-3">J'enseigne ({teaches.length})</p>
+                <p className="text-xs font-bold uppercase tracking-wider text-[color:var(--warm-strong)] mb-3">{t('profile.skills.teaching', { count: teaches.length })}</p>
                 <div className="flex flex-wrap gap-2">
                   {teaches.map(ts => (
-                    <span key={ts.id} className="inline-flex items-center gap-1.5 rounded-full bg-[rgba(200,134,75,0.12)] px-3 py-1.5 text-xs font-semibold text-[#C8864B]">
+                    <span key={ts.id} className="inline-flex items-center gap-1.5 rounded-full bg-[rgba(200,134,75,0.12)] px-3 py-1.5 text-xs font-semibold text-[color:var(--warm-strong)]">
                       {ts.skill?.name ?? ts}
                       <button onClick={() => handleRemoveSkill(ts.id, 'teach')}
-                        className="h-4 w-4 rounded-full bg-[#C8864B]/20 flex items-center justify-center cursor-pointer border-none hover:bg-red-400 hover:text-white transition-colors">
+                        className="h-4 w-4 rounded-full bg-warm-strong/20 flex items-center justify-center cursor-pointer border-none hover:bg-red-400 hover:text-white transition-colors">
                         <svg width="8" height="8" viewBox="0 0 8 8" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><path d="M1 1l6 6M7 1L1 7"/></svg>
                       </button>
                     </span>
                   ))}
                   <button onClick={() => setAddingSkill('teach')}
-                    className="inline-flex items-center gap-1 rounded-full border border-dashed border-[#E8DDC7] px-3 py-1.5 text-xs text-[#756B5B] cursor-pointer hover:border-[#C8864B] hover:text-[#C8864B] bg-transparent transition">
+                    className="inline-flex items-center gap-1 rounded-full border border-dashed border-[#E8DDC7] px-3 py-1.5 text-xs text-[#756B5B] cursor-pointer hover:border-[#C8864B] hover:text-[color:var(--warm-strong)] bg-transparent transition">
                     <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M5 1v8M1 5h8"/></svg>
                     Ajouter
                   </button>
                 </div>
-                {teaches.length === 0 && <p className="text-sm text-[#756B5B] italic mt-2">Aucune compétence ajoutée.</p>}
+                {teaches.length === 0 && <p className="text-sm text-[#756B5B] italic mt-2">{t('profile.skills.noTeach')}</p>}
               </div>
               <div>
-                <p className="text-xs font-bold uppercase tracking-wider text-[#3D5C28] mb-3">Je veux apprendre ({wants.length})</p>
+                <p className="text-xs font-bold uppercase tracking-wider text-[#3D5C28] mb-3">{t('profile.skills.learning', { count: wants.length })}</p>
                 <div className="flex flex-wrap gap-2">
                   {wants.map(lg => (
                     <span key={lg.id} className="inline-flex items-center gap-1.5 rounded-full bg-[rgba(61,92,40,0.12)] px-3 py-1.5 text-xs font-semibold text-[#3D5C28]">
@@ -483,7 +497,7 @@ export default function Profile() {
                     Ajouter
                   </button>
                 </div>
-                {wants.length === 0 && <p className="text-sm text-[#756B5B] italic mt-2">Aucun objectif ajouté.</p>}
+                {wants.length === 0 && <p className="text-sm text-[#756B5B] italic mt-2">{t('profile.skills.noWant')}</p>}
               </div>
             </div>
           )}
@@ -492,14 +506,14 @@ export default function Profile() {
           {tab === 'card' && (
             <div className="grid gap-6 lg:grid-cols-[1fr_280px] lg:items-start">
               <div>
-                <h3 className="text-xl font-bold text-[#252840] mb-2">Ma carte de visite</h3>
+                <h3 className="text-xl font-bold text-[#252840] mb-2">{t('profile.card.title')}</h3>
                 <p className="text-sm text-[#756B5B] mb-5">Cette carte s'affiche pour les autres élèves dans la page Connexions.</p>
                 <div className="flex flex-col gap-2">
                   {[
                     { label: 'Modifier nom / bio',         action: () => startEdit() },
-                    { label: 'Changer photo de profil',    action: () => fileRef.current?.click() },
-                    { label: 'Gérer mes compétences',      action: () => setTab('skills') },
-                    { label: 'Configurer disponibilités',  action: () => setTab('availability') },
+                    { label: t('profile.card.changePhoto'),     action: () => fileRef.current?.click() },
+                    { label: t('profile.card.manageSkills'),    action: () => setTab('skills') },
+                    { label: t('profile.card.setAvailability'), action: () => setTab('availability') },
                   ].map(item => (
                     <button key={item.label} onClick={item.action}
                       className="flex items-center justify-between w-full px-4 py-3.5 rounded-2xl bg-[#F8F4EA] hover:bg-[#F0EAE0] border-none cursor-pointer transition-colors text-left">
@@ -525,7 +539,7 @@ export default function Profile() {
                 </div>
                 {teaches.length > 0 && (
                   <div>
-                    <p className="text-xs text-white/60 mb-2">Enseigne</p>
+                    <p className="text-xs text-white/60 mb-2">{t('profile.card.teaches')}</p>
                     <div className="flex flex-wrap gap-1">
                       {teaches.slice(0, 4).map(ts => (
                         <span key={ts.id} className="px-2.5 py-1 rounded-lg bg-white/15 text-white text-xs font-semibold">
@@ -543,26 +557,28 @@ export default function Profile() {
           {/* Disponibilités */}
           {tab === 'availability' && (
             <div>
-              <h2 className="text-xl font-black text-[#252840] mb-1">Mes créneaux disponibles</h2>
-              <p className="text-sm text-[#756B5B] mb-5">L'heure exacte se convient dans le chat avec votre pair.</p>
+              <h2 className="text-xl font-black text-[#252840] mb-1">{t('profile.availability.title')}</h2>
+              <p className="text-sm text-[#756B5B] mb-5">{t('profile.availability.subtitle')}</p>
               <div className="overflow-x-auto rounded-2xl border border-[#E8DDC7]">
                 <div style={{ minWidth: '480px' }}>
                   <div className="grid bg-[#F8F4EA]" style={{ gridTemplateColumns: '100px repeat(5, 1fr)' }}>
                     <div className="p-3" />
                     {DAYS.map(day => (
-                      <div key={day} className="p-3 text-center text-xs font-bold text-[#252840] border-l border-[#E8DDC7]">{day}</div>
+                      <div key={day.key} className="p-3 text-center text-xs font-bold text-[#252840] border-l border-[#E8DDC7]">{t(day.labelKey)}</div>
                     ))}
                   </div>
                   {SLOTS.map((slot, si) => (
-                    <div key={slot} className={`grid ${si < SLOTS.length - 1 ? 'border-t border-[#E8DDC7]' : ''}`} style={{ gridTemplateColumns: '100px repeat(5, 1fr)' }}>
+                    <div key={slot.key} className={`grid ${si < SLOTS.length - 1 ? 'border-t border-[#E8DDC7]' : ''}`} style={{ gridTemplateColumns: '100px repeat(5, 1fr)' }}>
                       <div className="p-3 flex flex-col justify-center">
-                        <p className="text-xs font-bold text-[#252840]">{slot}</p>
-                        <p className="text-[10px] text-[#756B5B]">{SLOT_HINTS[slot]}</p>
+                        <p className="text-xs font-bold text-[#252840]">{t(slot.labelKey)}</p>
+                        <p className="text-[10px] text-[#756B5B]">{t(slot.hintKey)}</p>
                       </div>
                       {DAYS.map(day => {
-                        const active = !!avail[`${day}_${slot}`]
+                        const active = !!avail[`${day.key}_${slot.key}`]
                         return (
-                          <button key={day} onClick={() => toggleSlot(day, slot)}
+                          <button key={day.key} onClick={() => toggleSlot(day.key, slot.key)}
+                            aria-pressed={active}
+                            aria-label={t('register.availability.toggleSlot', { day: t(day.labelKey), slot: t(slot.labelKey) })}
                             className={`border-l border-[#E8DDC7] p-3 flex items-center justify-center cursor-pointer transition-all ${active ? 'bg-[#3D5C28] hover:bg-[#4E6035]' : 'bg-white hover:bg-[#F8F4EA]'}`}>
                             {active
                               ? <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round"><path d="M3 8l3.5 3.5L13 4"/></svg>
@@ -576,13 +592,13 @@ export default function Profile() {
               </div>
               <div className="mt-4 flex items-center gap-3">
                 <button onClick={handleSaveAvail}
-                  className="px-6 py-3 rounded-full bg-[#C8864B] text-white text-sm font-bold border-none cursor-pointer hover:bg-[#B07030] transition-colors">
-                  Enregistrer
+                  className="px-6 py-3 rounded-full bg-warm-strong text-white text-sm font-bold border-none cursor-pointer hover:bg-warm-dk transition-colors">
+                  {t('actions.save')}
                 </button>
                 {availSaved && (
                   <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#3D5C28]">
                     <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M2 7l4 4 6-6"/></svg>
-                    Enregistré
+                    {t('profile.availability.saved')}
                   </span>
                 )}
               </div>
@@ -594,10 +610,10 @@ export default function Profile() {
             <div>
               {sessions.length === 0 ? (
                 <div className="text-center py-8">
-                  <p className="text-lg font-semibold text-[#252840] mb-4">Aucune séance pour l'instant</p>
+                  <p className="text-lg font-semibold text-[#252840] mb-4">{t('profile.sessions.empty')}</p>
                   <button onClick={() => navigate('/sessions/new')}
                     className="px-6 py-3 rounded-full bg-[#252840] text-white text-sm font-bold border-none cursor-pointer hover:bg-[#363B6B] transition-colors">
-                    Créer une séance
+                    {t('profile.sessions.create')}
                   </button>
                 </div>
               ) : (
@@ -606,26 +622,34 @@ export default function Profile() {
                     const isTeacher = s.teacher?.id === user?.id
                     const partner   = isTeacher ? s.learner : s.teacher
                     const statusMap = {
-                      SCHEDULED: { label: 'À venir',   cls: 'bg-[rgba(61,92,40,0.12)] text-[#3D5C28]' },
-                      ACTIVE:    { label: 'En direct',  cls: 'bg-[rgba(200,134,75,0.15)] text-[#C8864B]' },
-                      COMPLETED: { label: 'Terminée',   cls: 'bg-[rgba(37,40,64,0.1)] text-[#252840]' },
-                      CANCELLED: { label: 'Annulée',    cls: 'bg-red-50 text-red-500' },
+                      SCHEDULED: { label: t('profile.status.scheduled'), cls: 'bg-[rgba(61,92,40,0.12)] text-[#3D5C28]' },
+                      ACTIVE:    { label: t('profile.status.active'),    cls: 'bg-[rgba(200,134,75,0.15)] text-[color:var(--warm-strong)]' },
+                      COMPLETED: { label: t('profile.status.completed'), cls: 'bg-[rgba(37,40,64,0.1)] text-[#252840]' },
+                      CANCELLED: { label: t('profile.status.cancelled'), cls: 'bg-red-50 text-red-500' },
                     }
                     const st = statusMap[s.status] ?? statusMap.SCHEDULED
                     return (
-                      <li key={s.id} onClick={() => navigate(`/sessions/${s.id}`)}
-                        className="flex items-center gap-4 py-4 cursor-pointer hover:bg-[#F8F4EA] rounded-xl px-2 transition-colors -mx-2">
-                        <div className="h-11 w-11 rounded-2xl bg-[#252840] text-white flex items-center justify-center font-bold text-sm flex-shrink-0">
+                      <li key={s.id}
+                        className="flex items-center gap-4 py-4 hover:bg-[#F8F4EA] rounded-xl px-2 transition-colors -mx-2">
+                        <div className="h-11 w-11 rounded-2xl bg-[#252840] text-white flex items-center justify-center font-bold text-sm flex-shrink-0" aria-hidden="true">
                           {partner?.firstName?.[0]}{partner?.lastName?.[0]}
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 mb-0.5">
-                            <span className="font-bold text-[#252840] truncate">{s.title}</span>
+                            {/* Le titre porte l'action : un <li> cliquable n'est
+                                ni focusable ni activable au clavier. */}
+                            <button
+                              type="button"
+                              onClick={() => navigate(`/sessions/${s.id}`)}
+                              className="font-bold text-[#252840] truncate bg-transparent border-none p-0 text-left cursor-pointer hover:underline"
+                            >
+                              {s.title}
+                            </button>
                             <span className={`rounded-full px-2.5 py-0.5 text-[10px] font-bold flex-shrink-0 ${st.cls}`}>{st.label}</span>
                           </div>
-                          <p className="text-xs text-[#756B5B]">{isTeacher ? 'Tu enseignes' : 'Tu apprends'} · {partner?.firstName} {partner?.lastName} · {formatDate(s.startsAt)}</p>
+                          <p className="text-xs text-[#756B5B]">{isTeacher ? t('profile.sessions.teaching') : t('profile.sessions.learning')} · {partner?.firstName} {partner?.lastName} · {formatDate(s.startsAt)}</p>
                         </div>
-                        <p className={`text-sm font-black flex-shrink-0 ${isTeacher ? 'text-[#3D5C28]' : 'text-[#C8864B]'}`}>
+                        <p className={`text-sm font-black flex-shrink-0 ${isTeacher ? 'text-[#3D5C28]' : 'text-[color:var(--warm-strong)]'}`}>
                           {isTeacher ? '+' : '-'}{s.creditsReserved} cr
                         </p>
                       </li>
@@ -641,8 +665,8 @@ export default function Profile() {
             <div>
               {sessions.filter(s => s.status === 'COMPLETED').length === 0 ? (
                 <div className="text-center py-8">
-                  <p className="text-lg font-semibold text-[#252840] mb-1">Aucune transaction</p>
-                  <p className="text-sm text-[#756B5B]">Les crédits apparaissent ici après vos séances.</p>
+                  <p className="text-lg font-semibold text-[#252840] mb-1">{t('profile.transactions.empty')}</p>
+                  <p className="text-sm text-[#756B5B]">{t('profile.transactions.emptyHint')}</p>
                 </div>
               ) : (
                 <ul className="divide-y divide-[#F0EAE0]">
@@ -660,10 +684,10 @@ export default function Profile() {
                           </div>
                           <div>
                             <p className="font-semibold text-[#252840]">{s.title}</p>
-                            <p className="text-xs text-[#756B5B]">{isTeacher ? 'Donnée à' : 'Reçue de'} {partner?.firstName} {partner?.lastName} · {formatDate(s.actualEndedAt)}</p>
+                            <p className="text-xs text-[#756B5B]">{isTeacher ? t('profile.transactions.givenTo') : t('profile.transactions.receivedFrom')} {partner?.firstName} {partner?.lastName} · {formatDate(s.actualEndedAt)}</p>
                           </div>
                         </div>
-                        <p className={`text-base font-black flex-shrink-0 ${isTeacher ? 'text-[#3D5C28]' : 'text-[#C8864B]'}`}>
+                        <p className={`text-base font-black flex-shrink-0 ${isTeacher ? 'text-[#3D5C28]' : 'text-[color:var(--warm-strong)]'}`}>
                           {delta > 0 ? '+' : ''}{delta} cr
                         </p>
                       </li>

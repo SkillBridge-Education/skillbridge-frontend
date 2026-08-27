@@ -1,17 +1,21 @@
 // src/pages/Feed.jsx — Fil communautaire nettoyé, posts réels uniquement
 import { useState } from 'react'
+import { Trans, useTranslation } from 'react-i18next'
+import useFocusTrap from '../hooks/useFocusTrap'
 import useAuthStore from '../store/authStore'
 import { useNavigate } from 'react-router-dom'
 
-const FILTERS = ['Tout', 'Langues', 'Musique', 'Tech', 'Sciences', 'Bien-être']
+const FILTERS = ['all', 'languages', 'music', 'tech', 'science', 'wellbeing']
 
 export default function Feed() {
   const { user } = useAuthStore()
+  const { t } = useTranslation()
   const navigate = useNavigate()
 
-  const [filter,      setFilter]   = useState('Tout')
+  const [filter,      setFilter]   = useState('all')
   const [posts,       setPosts]    = useState([])
   const [addOpen,     setAddOpen]  = useState(false)
+  const composerRef = useFocusTrap(addOpen, () => setAddOpen(false))
   const [newText,     setNewText]  = useState('')
   const [newTag,      setNewTag]   = useState('')
   const [liked,       setLiked]    = useState(new Set())
@@ -26,8 +30,8 @@ export default function Feed() {
       id:       Date.now(),
       initials,
       color:    '#252840',
-      author:   `${user?.firstName ?? ''} ${user?.lastName ?? ''}`.trim() || 'Moi',
-      time:     'À l\'instant',
+      author:   `${user?.firstName ?? ''} ${user?.lastName ?? ''}`.trim() || t('feed.me'),
+      time:     t('feed.justNow'),
       text:     newText.trim(),
       tags:     newTag.trim() ? [newTag.trim()] : [],
       likes:    0,
@@ -51,12 +55,12 @@ export default function Feed() {
 
       {/* Header */}
       <div className="bg-white border-b border-black/[0.09] px-8 md:px-20 py-10">
-        <p className="text-[11px] font-bold tracking-[1.2px] uppercase text-[#C8864B] mb-2">Communauté</p>
+        <p className="text-[11px] font-bold tracking-[1.2px] uppercase text-[color:var(--warm-strong)] mb-2">{t('feed.eyebrow')}</p>
         <h1 className="text-[38px] font-black tracking-[-1.5px] text-[#1A1410] leading-[1.05]">
-          Ce que les membres <span className="text-[#252840]">partagent</span>
+          <Trans i18nKey="feed.title" components={{ highlight: <span className="text-[#252840]" /> }} />
         </h1>
         <p className="text-[14px] text-[#7A6E5C] mt-2">
-          Progrès, découvertes et échanges de la communauté SkillBridge.
+          {t('feed.subtitle')}
         </p>
       </div>
 
@@ -65,12 +69,12 @@ export default function Feed() {
         {/* Filtres */}
         <div className="flex gap-2 flex-wrap mb-6">
           {FILTERS.map(f => (
-            <button key={f} onClick={() => setFilter(f)}
+            <button key={f} onClick={() => setFilter(f)} aria-pressed={filter === f}
               className={`px-4 py-2 rounded-full text-[13px] font-semibold border-[1.5px] cursor-pointer transition-all
                 ${filter === f
                   ? 'bg-[#252840] text-white border-[#252840]'
                   : 'bg-transparent text-[#7A6E5C] border-black/[0.09] hover:border-[#1A1410] hover:text-[#1A1410]'}`}>
-              {f}
+              {t(`feed.filters.${f}`)}
             </button>
           ))}
         </div>
@@ -82,7 +86,7 @@ export default function Feed() {
             <div className="w-9 h-9 rounded-full bg-[#252840] text-white flex items-center justify-center font-bold text-[13px] flex-shrink-0">
               {initials}
             </div>
-            <span className="text-[14px] text-[#B0A898]">Partagez une découverte, un progrès…</span>
+            <span className="text-[14px] text-[color:var(--muted-fg)]">{t('feed.composerPlaceholder')}</span>
             <svg className="ml-auto text-[#7A6E5C]" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round">
               <path d="M8 1v14M1 8h14"/>
             </svg>
@@ -93,35 +97,36 @@ export default function Feed() {
         {addOpen && (
           <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center p-4"
             onClick={e => e.target === e.currentTarget && setAddOpen(false)}>
-            <div className="bg-white rounded-2xl p-7 w-full max-w-[500px]">
+            <div ref={composerRef} role="dialog" aria-modal="true" aria-labelledby="new-post-title"
+              className="bg-white rounded-2xl p-7 w-full max-w-[500px]">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-[18px] font-black text-[#1A1410]">Nouveau post</h2>
-                <button onClick={() => setAddOpen(false)}
+                <h2 id="new-post-title" className="text-[18px] font-black text-[#1A1410]">{t('feed.newPost')}</h2>
+                <button onClick={() => setAddOpen(false)} aria-label={t('actions.close')}
                   className="w-8 h-8 rounded-full bg-black/[0.06] border-none cursor-pointer text-[#7A6E5C] flex items-center justify-center hover:bg-black/10 transition-all">
                   <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M1 1l10 10M11 1L1 11"/></svg>
                 </button>
               </div>
               <textarea
                 value={newText} onChange={e => setNewText(e.target.value)}
-                placeholder="Partagez votre progression, une astuce ou une pensée…"
+                placeholder={t('feed.textPlaceholder')}
                 className="w-full px-4 py-3 rounded-xl border-[1.5px] border-black/[0.09] bg-[#F8F8F8] text-[14px] outline-none focus:border-[#252840] transition-all resize-none h-28 mb-3"
                 autoFocus
               />
               <div className="mb-4">
                 <input
                   value={newTag} onChange={e => setNewTag(e.target.value)}
-                  placeholder="Compétence liée (ex: Python, Guitare…)"
+                  placeholder={t('feed.tagPlaceholder')}
                   className="w-full px-4 py-[10px] rounded-xl border-[1.5px] border-black/[0.09] bg-[#F8F8F8] text-[13px] outline-none focus:border-[#252840] transition-all"
                 />
               </div>
               <div className="flex gap-3">
                 <button onClick={() => setAddOpen(false)}
                   className="flex-1 py-3 rounded-xl border-[1.5px] border-black/[0.09] text-[13px] font-semibold text-[#7A6E5C] bg-transparent cursor-pointer hover:border-[#1A1410] transition-all">
-                  Annuler
+                  {t('actions.cancel')}
                 </button>
                 <button onClick={addPost} disabled={!newText.trim()}
                   className="flex-1 py-3 rounded-xl bg-[#252840] text-white text-[13px] font-bold border-none cursor-pointer hover:bg-[#363B6B] transition-all disabled:opacity-40">
-                  Publier
+                  {t('feed.publish')}
                 </button>
               </div>
             </div>
@@ -136,19 +141,19 @@ export default function Feed() {
                 <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
               </svg>
             </div>
-            <p className="text-[16px] font-semibold text-[#1A1410] mb-2">Aucun post pour l'instant</p>
+            <p className="text-[16px] font-semibold text-[#1A1410] mb-2">{t('feed.emptyTitle')}</p>
             <p className="text-[13px] text-[#7A6E5C] mb-5 max-w-[320px] mx-auto">
-              Soyez le premier à partager votre progression ou une découverte.
+              {t('feed.emptyText')}
             </p>
             {user ? (
               <button onClick={() => setAddOpen(true)}
                 className="px-5 py-3 rounded-xl bg-[#252840] text-white text-[13px] font-bold border-none cursor-pointer hover:bg-[#363B6B] transition-all">
-                Écrire un post
+                {t('feed.writePost')}
               </button>
             ) : (
               <button onClick={() => navigate('/')}
                 className="px-5 py-3 rounded-xl bg-[#252840] text-white text-[13px] font-bold border-none cursor-pointer hover:bg-[#363B6B] transition-all">
-                Rejoindre SkillBridge
+                {t('feed.join')}
               </button>
             )}
           </div>
@@ -180,16 +185,16 @@ export default function Feed() {
                 )}
 
                 <div className="flex items-center gap-4 pt-3 border-t border-black/[0.06]">
-                  <button onClick={() => toggleLike(post.id)}
+                  <button onClick={() => toggleLike(post.id)} aria-label={t('feed.like')} aria-pressed={liked.has(post.id)}
                     className={`flex items-center gap-2 text-[12px] font-semibold bg-transparent border-none cursor-pointer transition-all
-                      ${liked.has(post.id) ? 'text-[#C8864B]' : 'text-[#7A6E5C] hover:text-[#1A1410]'}`}>
+                      ${liked.has(post.id) ? 'text-[color:var(--warm-strong)]' : 'text-[#7A6E5C] hover:text-[#1A1410]'}`}>
                     <svg width="14" height="14" viewBox="0 0 14 14" fill={liked.has(post.id) ? '#C8864B' : 'none'} stroke="currentColor" strokeWidth="1.5">
                       <path d="M7 12S1 8.5 1 4.5a3 3 0 0 1 6-1 3 3 0 0 1 6 1C13 8.5 7 12 7 12z"/>
                     </svg>
                     {post.likes + (liked.has(post.id) ? 1 : 0)}
                   </button>
                   <span className="text-[12px] text-[#7A6E5C]">
-                    {post.comments} commentaire{post.comments !== 1 ? 's' : ''}
+                    {t('feed.comments', { count: post.comments })}
                   </span>
                 </div>
               </article>

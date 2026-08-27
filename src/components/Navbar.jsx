@@ -1,20 +1,23 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import {
-  Bell, LogOut, Menu, X, Download,
+  Bell, LogOut, Menu, X, Download, Settings,
   Home, Users, CalendarDays, MessageCircle, Coins,
   UserPlus, CheckCheck,
 } from 'lucide-react'
 import useAuthStore from '../store/authStore'
 import CreditIcon from './CreditIcon'
 import useNotifications from '../hooks/useNotifications'
+import useMediaQuery from '../hooks/useMediaQuery'
+import useFocusTrap from '../hooks/useFocusTrap'
 
 const NAV_LINKS = [
-  { to: '/',           label: 'Accueil',    public: true,  Icon: Home           },
-  { to: '/connection', label: 'Connexions', public: true,  Icon: Users          },
-  { to: '/sessions',   label: 'Sessions',   public: false, Icon: CalendarDays   },
-  { to: '/chat',       label: 'Messages',   public: false, Icon: MessageCircle  },
-  { to: '/credits',    label: 'Crédits',    public: false, Icon: Coins          },
+  { to: '/',           labelKey: 'nav.home',        public: true,  Icon: Home           },
+  { to: '/connection', labelKey: 'nav.connections', public: true,  Icon: Users          },
+  { to: '/sessions',   labelKey: 'nav.sessions',    public: false, Icon: CalendarDays   },
+  { to: '/chat',       labelKey: 'nav.messages',    public: false, Icon: MessageCircle  },
+  { to: '/credits',    labelKey: 'nav.credits',     public: false, Icon: Coins          },
 ]
 
 function Avatar({ user, size = 'md' }) {
@@ -34,21 +37,22 @@ function Avatar({ user, size = 'md' }) {
 }
 
 function CreditPopover({ balance, onClose, placement = 'below' }) {
+  const { t } = useTranslation()
   const cls = placement === 'left'
     ? 'animate-modal-in absolute top-0 right-full mr-3 w-72 rounded-2xl border border-[#E8DDC7] bg-white shadow-soft p-5 z-50'
     : 'animate-modal-in absolute top-full right-0 mt-2 w-72 rounded-2xl border border-[#E8DDC7] bg-white shadow-soft p-5 z-50'
   return (
     <div className={cls}>
-      <h3 className="text-sm font-black text-[#252840] mb-3">Comment fonctionnent les crédits</h3>
+      <h3 className="text-sm font-black text-[#252840] mb-3">{t('creditsPopover.title')}</h3>
       <div className="flex flex-col gap-3 mb-4">
         {[
-          { icon: <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"><circle cx="7" cy="7" r="5.5"/><path d="M7 4v3l1.5 1.5"/></svg>, text: '1 crédit = 1 minute de cours' },
-          { icon: <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"><rect x="1" y="4" width="12" height="8" rx="1.5"/><path d="M4 4V3a3 3 0 016 0v1"/></svg>, text: 'Quand tu réserves une session, les crédits sont mis de côté' },
-          { icon: <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"><path d="M7 12V2M2 7l5-5 5 5"/></svg>, text: "À la fin, l'enseignant les reçoit — et si la session est plus courte que prévu, la différence t'est remboursée" },
-          { icon: <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"><path d="M1 7h12M8 3l5 4-5 4"/></svg>, text: 'Plafond : 500 crédits. Au plafond, apprends pour les dépenser.' },
+          { icon: <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"><circle cx="7" cy="7" r="5.5"/><path d="M7 4v3l1.5 1.5"/></svg>, text: t('creditsPopover.rule1') },
+          { icon: <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"><rect x="1" y="4" width="12" height="8" rx="1.5"/><path d="M4 4V3a3 3 0 016 0v1"/></svg>, text: t('creditsPopover.rule2') },
+          { icon: <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"><path d="M7 12V2M2 7l5-5 5 5"/></svg>, text: t('creditsPopover.rule3') },
+          { icon: <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"><path d="M1 7h12M8 3l5 4-5 4"/></svg>, text: t('creditsPopover.rule4') },
         ].map((item, i) => (
           <div key={i} className="flex items-start gap-2.5">
-            <span className="mt-0.5 flex-shrink-0 text-[#C8864B]">{item.icon}</span>
+            <span className="mt-0.5 flex-shrink-0 text-[color:var(--warm-strong)]">{item.icon}</span>
             <p className="text-xs text-[#756B5B] leading-relaxed">{item.text}</p>
           </div>
         ))}
@@ -56,11 +60,11 @@ function CreditPopover({ balance, onClose, placement = 'below' }) {
       <div className="border-t border-[#F0EAE0] pt-3 flex items-center justify-between">
         <div className="flex items-center gap-1.5">
           <CreditIcon size="sm" />
-          <span className="text-sm font-black text-[#252840]">{balance} cr</span>
-          <span className="text-xs text-[#756B5B]">solde actuel</span>
+          <span className="text-sm font-black text-[#252840]">{balance} {t('creditsPopover.unit')}</span>
+          <span className="text-xs text-[#756B5B]">{t('creditsPopover.balance')}</span>
         </div>
-        <Link to="/credits" onClick={onClose} className="text-xs font-bold text-[#C8864B] no-underline hover:underline">
-          Voir mes crédits →
+        <Link to="/credits" onClick={onClose} className="text-xs font-bold text-[color:var(--warm-strong)] no-underline hover:underline">
+          {t('creditsPopover.seeCredits')}
         </Link>
       </div>
     </div>
@@ -75,19 +79,20 @@ function notifIcon(type) {
   return <Bell size={14} />
 }
 
-function fmtNotifDate(iso) {
+function fmtNotifDate(iso, t, locale) {
   if (!iso) return ''
   const d = new Date(iso)
   const now = new Date()
   const diff = Math.floor((now - d) / 1000)
-  if (diff < 60) return 'à l\'instant'
-  if (diff < 3600) return `il y a ${Math.floor(diff / 60)} min`
-  if (diff < 86400) return `il y a ${Math.floor(diff / 3600)} h`
-  return d.toLocaleDateString('fr', { day: '2-digit', month: 'short' })
+  if (diff < 60) return t('notifications.justNow')
+  if (diff < 3600) return t('notifications.minutesAgo', { count: Math.floor(diff / 60) })
+  if (diff < 86400) return t('notifications.hoursAgo', { count: Math.floor(diff / 3600) })
+  return d.toLocaleDateString(locale, { day: '2-digit', month: 'short' })
 }
 
 function NotifPanel({ notifications, dismiss, dismissAll, onClose, placement = 'below' }) {
   const navigate = useNavigate()
+  const { t, i18n } = useTranslation()
   const cls = placement === 'left'
     ? 'animate-modal-in absolute top-0 right-full mr-3 w-80 rounded-2xl border border-[#E8DDC7] bg-white shadow-soft z-50 overflow-hidden'
     : 'animate-modal-in absolute top-full right-0 mt-2 w-80 rounded-2xl border border-[#E8DDC7] bg-white shadow-soft z-50 overflow-hidden'
@@ -97,19 +102,19 @@ function NotifPanel({ notifications, dismiss, dismissAll, onClose, placement = '
   if (notifications.length === 0) {
     return (
       <div className={cls.replace('overflow-hidden', 'p-5')}>
-        <p className="text-sm font-bold text-[#252840] mb-1">Notifications</p>
-        <p className="text-xs text-[#756B5B]">Aucune notification.</p>
+        <p className="text-sm font-bold text-[#252840] mb-1">{t('notifications.title')}</p>
+        <p className="text-xs text-[#756B5B]">{t('notifications.empty')}</p>
       </div>
     )
   }
   return (
     <div className={cls}>
       <div className="flex items-center justify-between px-4 py-3 border-b border-[#F0EAE0]">
-        <p className="text-sm font-black text-[#252840]">Notifications</p>
+        <p className="text-sm font-black text-[#252840]">{t('notifications.title')}</p>
         {unread.length > 0 && (
           <button onClick={dismissAll}
             className="flex items-center gap-1 text-xs text-[#756B5B] bg-transparent border-none cursor-pointer hover:text-[#252840]">
-            <CheckCheck size={12} /> Tout lire
+            <CheckCheck size={12} /> {t('notifications.markAllRead')}
           </button>
         )}
       </div>
@@ -122,13 +127,13 @@ function NotifPanel({ notifications, dismiss, dismissAll, onClose, placement = '
             onClick={() => { dismiss(n.id); navigate(n.link); onClose() }}
           >
             <span className={`mt-0.5 flex-shrink-0 flex items-center justify-center h-7 w-7 rounded-full ${
-              n.read ? 'bg-[#F0EAE0] text-[#B0A898]' : 'bg-[rgba(200,134,75,0.15)] text-[#C8864B]'
+              n.read ? 'bg-[#F0EAE0] text-[color:var(--muted-fg)]' : 'bg-[rgba(200,134,75,0.15)] text-[color:var(--warm-strong)]'
             }`}>
               {notifIcon(n.type)}
             </span>
             <div className="flex-1 min-w-0">
               <p className="text-xs text-[#252840] leading-relaxed">{n.message}</p>
-              <p className="text-[10px] text-[#B0A898] mt-0.5">{fmtNotifDate(n.createdAt)}</p>
+              <p className="text-[10px] text-[color:var(--muted-fg)] mt-0.5">{fmtNotifDate(n.createdAt, t, i18n.language)}</p>
             </div>
             {!n.read && <span className="flex-shrink-0 mt-1.5 h-2 w-2 rounded-full bg-[#C8864B]" />}
           </button>
@@ -147,6 +152,8 @@ export default function Navbar() {
 
   const { user, openModal, logout } = useAuthStore()
   const { notifications, dismiss, dismissAll, unreadCount } = useNotifications()
+  const { t }     = useTranslation()
+  const isDesktop = useMediaQuery('(min-width: 1024px)')
   const location  = useLocation()
   const navigate  = useNavigate()
   const pathname  = location.pathname
@@ -198,11 +205,21 @@ export default function Navbar() {
   }
 
   const closeAll = () => { setShowCredits(false); setShowNotifs(false) }
+  const closeMenu = useCallback(() => setMenuOpen(false), [])
+  const drawerRef = useFocusTrap(menuOpen, closeMenu)
+
+  // La barre horizontale et le dock vertical se relaient au défilement en
+  // jouant sur l'opacité. Un élément à `opacity: 0` reste focusable et lu
+  // par les lecteurs d'écran : on neutralise donc celui qui est masqué.
+  const headerHidden = scrolled && isDesktop
+  const dockHidden   = !scrolled || !isDesktop
 
   return (
     <>
       {/* ── Horizontal navbar (fixed, full width) ── */}
       <header
+        inert={headerHidden ? '' : undefined}
+        aria-hidden={headerHidden || undefined}
         className={`fixed top-0 left-0 right-0 z-40 border-b border-[#E8DDC7] bg-[rgba(253,250,244,0.88)] backdrop-blur-md transition-all duration-300 ease-out ${
           scrolled ? 'lg:opacity-0 lg:pointer-events-none lg:-translate-y-1' : ''
         }`}
@@ -210,7 +227,7 @@ export default function Navbar() {
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6">
           {/* Logo */}
           <Link to="/" className="flex-shrink-0 flex items-center gap-2.5 no-underline" onClick={closeAll}>
-            <img src="/skillbridge-logo.webp" alt="SkillBridge" className="h-8 w-auto" />
+            <img src="/skillbridge-logo.webp" alt="" className="h-8 w-auto" />
             <span className="hidden sm:block text-xl font-black tracking-tight" style={{ color: 'var(--ink)' }}>
               SkillBridge
             </span>
@@ -218,13 +235,13 @@ export default function Navbar() {
 
           {/* Liens desktop */}
           <nav className="hidden items-center gap-1 lg:flex">
-            {visibleLinks.map(({ to, label }) => (
+            {visibleLinks.map(({ to, labelKey }) => (
               <Link key={to} to={to} onClick={closeAll}
                 className={`relative px-3 py-2 text-sm font-medium transition-colors duration-150 no-underline ${
-                  isActive(to) ? 'text-[#C8864B]' : 'text-[#252840] hover:text-[#C8864B]'
+                  isActive(to) ? 'text-[color:var(--warm-strong)]' : 'text-[#252840] hover:text-[color:var(--warm-strong)]'
                 }`}
               >
-                {label}
+                {t(labelKey)}
                 {isActive(to) && (
                   <span className="absolute -bottom-1 left-3 right-3 h-0.5 rounded-full bg-[#C8864B]" />
                 )}
@@ -236,19 +253,20 @@ export default function Navbar() {
           <div className="hidden items-center gap-2 lg:flex">
             {installPrompt && (
               <button onClick={handleInstall}
-                className="flex items-center gap-2 px-4 py-2 rounded-full bg-[#C8864B] text-white text-sm font-semibold border-none cursor-pointer hover:bg-[#B07030] transition-colors">
-                <Download size={14} /> Installer l'app
+                className="flex items-center gap-2 px-4 py-2 rounded-full bg-warm-strong text-white text-sm font-semibold border-none cursor-pointer hover:bg-warm-dk transition-colors">
+                <Download size={14} /> {t('nav.install')}
               </button>
             )}
             {user ? (
               <>
                 <div className="relative">
                   <button ref={notifBtnRef} onClick={() => { setShowNotifs(s => !s); setShowCredits(false) }}
-                    aria-label="Notifications"
+                    aria-label={t('a11y.notifications', { count: unreadCount })}
+                    aria-expanded={showNotifs}
                     className="relative h-9 w-9 grid place-items-center rounded-full bg-transparent border border-[#E8DDC7] text-[#756B5B] hover:border-[#252840] hover:text-[#252840] cursor-pointer transition-colors">
                     <Bell size={15} />
                     {unreadCount > 0 && (
-                      <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-[#C8864B] text-white text-[9px] font-black flex items-center justify-center">
+                      <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-warm-strong text-white text-[9px] font-black flex items-center justify-center">
                         {unreadCount > 9 ? '9+' : unreadCount}
                       </span>
                     )}
@@ -265,7 +283,11 @@ export default function Navbar() {
                 </div>
 
                 <Link to="/profile" className="no-underline" onClick={closeAll}><Avatar user={user} /></Link>
-                <button onClick={() => { logout(); navigate('/') }} aria-label="Se déconnecter"
+                <Link to="/settings" aria-label={t('nav.settings')} title={t('nav.settings')} onClick={closeAll}
+                  className="grid h-9 w-9 place-items-center rounded-full bg-transparent no-underline text-[#756B5B] hover:bg-[#F8F4EA] hover:text-[#252840] transition-colors">
+                  <Settings size={15} />
+                </Link>
+                <button onClick={() => { logout(); navigate('/') }} aria-label={t('nav.logout')}
                   className="grid h-9 w-9 place-items-center rounded-full bg-transparent border-none cursor-pointer text-[#756B5B] hover:bg-[#F8F4EA] hover:text-[#252840] transition-colors">
                   <LogOut size={15} />
                 </button>
@@ -274,11 +296,11 @@ export default function Navbar() {
               <>
                 <button onClick={() => openModal('login')}
                   className="px-4 py-2 rounded-full border border-[#252840] text-sm font-semibold text-[#252840] bg-transparent cursor-pointer hover:bg-[#252840] hover:text-white transition-colors">
-                  Se connecter
+                  {t('nav.login')}
                 </button>
                 <button onClick={() => navigate('/register')}
-                  className="px-4 py-2 rounded-full bg-[#C8864B] text-white text-sm font-bold border-none cursor-pointer hover:bg-[#B07030] transition-colors">
-                  S'inscrire
+                  className="px-4 py-2 rounded-full bg-warm-strong text-white text-sm font-bold border-none cursor-pointer hover:bg-warm-dk transition-colors">
+                  {t('nav.register')}
                 </button>
               </>
             )}
@@ -287,7 +309,10 @@ export default function Navbar() {
           {/* Hamburger mobile */}
           <div className="flex items-center gap-2 lg:hidden">
             {user && <Link to="/profile" className="no-underline" onClick={closeAll}><Avatar user={user} /></Link>}
-            <button onClick={() => setMenuOpen(o => !o)} aria-label="Menu"
+            <button onClick={() => setMenuOpen(o => !o)}
+              aria-label={menuOpen ? t('a11y.closeMenu') : t('a11y.openMenu')}
+              aria-expanded={menuOpen}
+              aria-controls="mobile-drawer"
               className="grid h-10 w-10 place-items-center rounded-full bg-transparent border-none cursor-pointer text-[#252840] hover:bg-[#F8F4EA] transition-colors">
               {menuOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
@@ -297,21 +322,23 @@ export default function Navbar() {
 
       {/* ── Vertical dock (fixed right, desktop only, scrolled) ── */}
       <aside
+        inert={dockHidden ? '' : undefined}
+        aria-hidden={dockHidden || undefined}
         className={`fixed right-4 top-1/2 z-40 hidden lg:flex flex-col items-center gap-1 p-2.5 rounded-2xl border border-[#E8DDC7] bg-[rgba(253,250,244,0.94)] backdrop-blur-md shadow-lg transition-all duration-300 ease-out origin-right ${
           scrolled ? 'opacity-100 scale-100' : 'opacity-0 pointer-events-none scale-90'
         }`}
         style={{ transform: scrolled ? 'translateY(-50%) scale(1)' : 'translateY(-50%) scale(0.9)' }}
       >
         {/* Logo mark */}
-        <Link to="/" className="no-underline mb-1" title="Accueil" onClick={closeAll}>
-          <img src="/skillbridge-logo.webp" alt="SkillBridge" className="h-7 w-auto" />
+        <Link to="/" className="no-underline mb-1" title={t('nav.home')} onClick={closeAll}>
+          <img src="/skillbridge-logo.webp" alt={t('a11y.logoHome')} className="h-7 w-auto" />
         </Link>
 
         <div className="w-5 h-px bg-[#E8DDC7] my-0.5" />
 
         {/* Nav links */}
-        {visibleLinks.map(({ to, label, Icon }) => (
-          <Link key={to} to={to} title={label} onClick={closeAll}
+        {visibleLinks.map(({ to, labelKey, Icon }) => (
+          <Link key={to} to={to} title={t(labelKey)} onClick={closeAll}
             className={`h-10 w-10 grid place-items-center rounded-xl no-underline transition-colors ${
               isActive(to) ? 'bg-[#252840] text-[#F8F4EA]' : 'text-[#756B5B] hover:bg-[#F0EAE0] hover:text-[#252840]'
             }`}
@@ -328,7 +355,7 @@ export default function Navbar() {
             <div className="relative">
               <button ref={creditsBtnRef}
                 onClick={() => { setShowCredits(s => !s); setShowNotifs(false) }}
-                title="Crédits"
+                title={t('nav.credits')}
                 className="flex flex-col items-center gap-0.5 rounded-xl p-1.5 cursor-pointer border-none bg-transparent hover:bg-[#F0EAE0] transition-colors"
               >
                 <CreditIcon size="sm" />
@@ -345,12 +372,12 @@ export default function Navbar() {
             <div className="relative">
               <button ref={notifBtnRef}
                 onClick={() => { setShowNotifs(s => !s); setShowCredits(false) }}
-                title="Notifications"
+                title={t('notifications.title')}
                 className="h-10 w-10 grid place-items-center rounded-xl text-[#756B5B] hover:bg-[#F0EAE0] hover:text-[#252840] border-none bg-transparent cursor-pointer transition-colors relative"
               >
                 <Bell size={18} />
                 {unreadCount > 0 && (
-                  <span className="absolute top-1 right-1 h-3.5 w-3.5 rounded-full bg-[#C8864B] text-white text-[8px] font-black flex items-center justify-center">
+                  <span className="absolute top-1 right-1 h-3.5 w-3.5 rounded-full bg-warm-strong text-white text-[8px] font-black flex items-center justify-center">
                     {unreadCount > 9 ? '9+' : unreadCount}
                   </span>
                 )}
@@ -363,12 +390,18 @@ export default function Navbar() {
             </div>
 
             {/* Avatar */}
-            <Link to="/profile" className="no-underline" title="Mon profil" onClick={closeAll}>
+            <Link to="/profile" className="no-underline" title={t('nav.myProfile')} onClick={closeAll}>
               <Avatar user={user} size="sm" />
             </Link>
 
+            {/* Paramètres */}
+            <Link to="/settings" title={t('nav.settings')} onClick={closeAll}
+              className="h-9 w-9 grid place-items-center rounded-xl text-[#756B5B] hover:bg-[#F0EAE0] hover:text-[#252840] no-underline transition-colors">
+              <Settings size={16} />
+            </Link>
+
             {/* Logout */}
-            <button onClick={() => { logout(); navigate('/') }} title="Se déconnecter"
+            <button onClick={() => { logout(); navigate('/') }} title={t('nav.logout')}
               className="h-9 w-9 grid place-items-center rounded-xl text-[#756B5B] hover:bg-red-50 hover:text-red-500 border-none bg-transparent cursor-pointer transition-colors">
               <LogOut size={16} />
             </button>
@@ -378,9 +411,9 @@ export default function Navbar() {
         {!user && (
           <>
             <div className="w-5 h-px bg-[#E8DDC7] my-0.5" />
-            <button onClick={() => openModal('login')} title="Se connecter"
+            <button onClick={() => openModal('login')} title={t('nav.login')}
               className="px-2 py-1.5 rounded-xl text-[9px] font-bold text-[#252840] bg-transparent border border-[#E8DDC7] cursor-pointer hover:border-[#252840] transition-colors leading-tight text-center">
-              Connexion
+              {t('nav.loginShort')}
             </button>
           </>
         )}
@@ -389,50 +422,68 @@ export default function Navbar() {
       {/* ── Mobile drawer ── */}
       {menuOpen && (
         <div className="fixed inset-0 z-30 lg:hidden" onClick={() => setMenuOpen(false)}>
-          <div className="absolute top-[65px] right-4 w-72 bg-[#FDFAF4] border border-[#E8DDC7] shadow-soft rounded-2xl p-5 animate-modal-in"
+          <div
+            id="mobile-drawer"
+            ref={drawerRef}
+            role="dialog"
+            aria-modal="true"
+            aria-label={t('nav.menu')}
+            className="absolute top-[65px] right-4 w-72 bg-[#FDFAF4] border border-[#E8DDC7] shadow-soft rounded-2xl p-5 animate-modal-in"
             onClick={e => e.stopPropagation()}>
             <nav className="flex flex-col gap-1 mb-6">
-              {visibleLinks.map(({ to, label }) => (
+              {visibleLinks.map(({ to, labelKey }) => (
                 <Link key={to} to={to} onClick={() => setMenuOpen(false)}
                   className={`rounded-xl px-4 py-3 text-base font-semibold no-underline transition-colors ${
                     isActive(to) ? 'bg-[#252840] text-[#F8F4EA]' : 'text-[#1A1410] hover:bg-[#F8F4EA]'
                   }`}>
-                  {label}
+                  {t(labelKey)}
                 </Link>
               ))}
               {user && (
                 <Link to="/profile" onClick={() => setMenuOpen(false)}
                   className="rounded-xl px-4 py-3 text-base font-semibold text-[#1A1410] hover:bg-[#F8F4EA] no-underline transition-colors">
-                  Mon profil
+                  {t('nav.myProfile')}
                 </Link>
               )}
+              <Link to="/settings" onClick={() => setMenuOpen(false)}
+                className={`rounded-xl px-4 py-3 text-base font-semibold no-underline transition-colors ${
+                  isActive('/settings') ? 'bg-[#252840] text-[#F8F4EA]' : 'text-[#1A1410] hover:bg-[#F8F4EA]'
+                }`}>
+                {t('nav.settings')}
+              </Link>
+              <Link to="/help" onClick={() => setMenuOpen(false)}
+                className={`rounded-xl px-4 py-3 text-base font-semibold no-underline transition-colors ${
+                  isActive('/help') ? 'bg-[#252840] text-[#F8F4EA]' : 'text-[#1A1410] hover:bg-[#F8F4EA]'
+                }`}>
+                {t('footer.helpCenter')}
+              </Link>
             </nav>
             {user ? (
               <div className="flex flex-col gap-2">
                 {unreadCount > 0 && (
-                  <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-[rgba(200,134,75,0.1)] text-sm font-semibold text-[#C8864B]">
-                    <span className="h-5 w-5 rounded-full bg-[#C8864B] text-white text-[10px] font-black flex items-center justify-center flex-shrink-0">{unreadCount}</span>
-                    notification{unreadCount > 1 ? 's' : ''} non lue{unreadCount > 1 ? 's' : ''}
+                  <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-[rgba(200,134,75,0.1)] text-sm font-semibold text-[color:var(--warm-strong)]">
+                    <span className="h-5 w-5 rounded-full bg-warm-strong text-white text-[10px] font-black flex items-center justify-center flex-shrink-0">{unreadCount}</span>
+                    {unreadCount > 1 ? t('nav.unreadOther') : t('nav.unreadOne')}
                   </div>
                 )}
                 <Link to="/credits" onClick={() => setMenuOpen(false)}
                   className="inline-flex items-center gap-2 rounded-full bg-[rgba(61,92,40,0.1)] px-3 py-2 text-sm font-semibold text-[#3D5C28] no-underline w-fit">
-                  <CreditIcon size="sm" /> {user.credits ?? 0} crédits
+                  <CreditIcon size="sm" /> {t('nav.creditsCount', { count: user.credits ?? 0 })}
                 </Link>
                 <button onClick={() => { logout(); navigate('/'); setMenuOpen(false) }}
                   className="flex items-center gap-2 px-4 py-3 rounded-xl border border-[#E8DDC7] text-sm font-semibold text-[#756B5B] bg-transparent cursor-pointer hover:border-red-300 hover:text-red-500 transition-colors">
-                  <LogOut size={14} /> Se déconnecter
+                  <LogOut size={14} /> {t('nav.logout')}
                 </button>
               </div>
             ) : (
               <div className="flex flex-col gap-2">
                 <button onClick={() => { openModal('login'); setMenuOpen(false) }}
                   className="px-4 py-3 rounded-xl border border-[#E8DDC7] text-sm font-semibold text-[#252840] bg-transparent cursor-pointer hover:border-[#252840] transition-colors">
-                  Se connecter
+                  {t('nav.login')}
                 </button>
                 <button onClick={() => { navigate('/register'); setMenuOpen(false) }}
-                  className="px-4 py-3 rounded-xl bg-[#C8864B] text-white text-sm font-bold border-none cursor-pointer hover:bg-[#B07030] transition-colors">
-                  S'inscrire gratuitement
+                  className="px-4 py-3 rounded-xl bg-warm-strong text-white text-sm font-bold border-none cursor-pointer hover:bg-warm-dk transition-colors">
+                  {t('nav.registerFree')}
                 </button>
               </div>
             )}
